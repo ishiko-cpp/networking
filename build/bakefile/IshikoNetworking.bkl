@@ -1,0 +1,35 @@
+toolsets = gnu vs2019 vs2017 vs2015 vs2013;
+
+gnu.makefile = ../gnumake/GNUmakefile;
+vs2019.solutionfile = ../vc16/IshikoNetworking.sln;
+vs2017.solutionfile = ../vc15/IshikoNetworking.sln;
+vs2015.solutionfile = ../vc14/IshikoNetworking.sln;
+vs2013.solutionfile = ../vc12/IshikoNetworking.sln;
+
+library IshikoNetworking
+{
+    archs = x86 x86_64;
+
+    includedirs += ../../include/Ishiko/Networking;
+
+    if ($(toolset) == gnu)
+    {
+        cxx-compiler-options = "-std=c++11";
+        outputdir = ../../lib;
+    }
+
+    if ($(toolset) != gnu)
+    {
+        outputdir = ../../lib/$(arch);
+    }
+
+    if ($(config) == Debug)
+    {
+        basename = IshikoNetworking-d;
+    }
+
+    headers
+    {
+        ../../include/Ishiko/Networking.h
+    }
+}
