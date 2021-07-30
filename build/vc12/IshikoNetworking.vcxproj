@@ -156,12 +156,12 @@
     <ClCompile Include="..\..\src\TCPServerSocket.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\Ishiko\linkoptions.h" />
     <ClInclude Include="..\..\include\Ishiko\Networking.h" />
-    <ClInclude Include="..\..\include\Ishiko\TCPAcceptor.h" />
-    <ClInclude Include="..\..\include\Ishiko\TCPClientSocket.h" />
-    <ClInclude Include="..\..\include\Ishiko\TCPConnector.h" />
-    <ClInclude Include="..\..\include\Ishiko\TCPServerSocket.h" />
+    <ClInclude Include="..\..\include\Ishiko\Networking\linkoptions.h" />
+    <ClInclude Include="..\..\include\Ishiko\Networking\TCPAcceptor.h" />
+    <ClInclude Include="..\..\include\Ishiko\Networking\TCPClientSocket.h" />
+    <ClInclude Include="..\..\include\Ishiko\Networking\TCPConnector.h" />
+    <ClInclude Include="..\..\include\Ishiko\Networking\TCPServerSocket.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

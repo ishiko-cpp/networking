@@ -17,22 +17,22 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\Ishiko\linkoptions.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\Ishiko\Networking.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Ishiko\TCPAcceptor.h">
+    <ClInclude Include="..\..\include\Ishiko\Networking\linkoptions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Ishiko\TCPClientSocket.h">
+    <ClInclude Include="..\..\include\Ishiko\Networking\TCPAcceptor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Ishiko\TCPConnector.h">
+    <ClInclude Include="..\..\include\Ishiko\Networking\TCPClientSocket.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Ishiko\TCPServerSocket.h">
+    <ClInclude Include="..\..\include\Ishiko\Networking\TCPConnector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Ishiko\Networking\TCPServerSocket.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
