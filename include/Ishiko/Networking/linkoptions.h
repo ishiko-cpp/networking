@@ -7,4 +7,10 @@
 #ifndef _ISHIKO_NETWORKING_LINKOPTIONS_H_
 #define _ISHIKO_NETWORKING_LINKOPTIONS_H_
 
+#ifdef _DEBUG
+#pragma comment(lib, "IshikoNetworking-d.lib")
+#else
+#pragma comment(lib, "IshikoNetworking.lib")
+#endif
+
 #endif

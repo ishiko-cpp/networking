@@ -19,8 +19,16 @@ program IshikoNetworkingTests : IshikoTestsCore
         libs += IshikoTestsCore IshikoProcess IshikoErrors boost_filesystem boost_system;
     }
 
+    headers
+    {
+        ../../src/TCPClientSocketTests.h
+        ../../src/TCPServerSocketTests.h
+    }
+
     sources
     {
         ../../src/main.cpp
+        ../../src/TCPClientSocketTests.cpp
+        ../../src/TCPServerSocketTests.cpp
     }
 }

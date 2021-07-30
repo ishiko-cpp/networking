@@ -153,6 +153,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\main.cpp" />
+    <ClCompile Include="..\..\src\TCPClientSocketTests.cpp" />
+    <ClCompile Include="..\..\src\TCPServerSocketTests.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\TCPClientSocketTests.h" />
+    <ClInclude Include="..\..\src\TCPServerSocketTests.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
