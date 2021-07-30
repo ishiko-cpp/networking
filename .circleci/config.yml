@@ -13,6 +13,9 @@ jobs:
           name: "Build: Ishiko/C++ Networking"
           command: cd /projects/ishiko/cpp/networking/build/gnumake && make
       - run:
+          name: "Install test dependency: Ishiko/C++ Process"
+          command: cd /projects/ishiko/cpp && git clone https://github.com/ishiko-cpp/process.git && cd process/build/gnumake && make
+      - run:
           name: "Install test dependency: Ishiko/C++ Tests"
           command: cd /projects/ishiko/cpp && git clone https://github.com/ishiko-cpp/tests.git && cd tests/core/build/gnumake && make
       - run:
