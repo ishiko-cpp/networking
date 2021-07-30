@@ -30,6 +30,19 @@ library IshikoNetworking
 
     headers
     {
+        ../../include/Ishiko/linkoptions.h
         ../../include/Ishiko/Networking.h
+        ../../include/Ishiko/TCPAcceptor.h
+        ../../include/Ishiko/TCPClientSocket.h
+        ../../include/Ishiko/TCPConnector.h
+        ../../include/Ishiko/TCPServerSocket.h
+    }
+
+    sources
+    {
+        ../../src/TCPAcceptor.cpp
+        ../../src/TCPClientSocket.cpp
+        ../../src/TCPConnector.cpp
+        ../../src/TCPServerSocket.cpp
     }
 }
