@@ -7,4 +7,16 @@
 #ifndef _ISHIKO_NETWORKING_TCPCLIENTSOCKET_H_
 #define _ISHIKO_NETWORKING_TCPCLIENTSOCKET_H_
 
+namespace Ishiko
+{
+namespace Networking
+{
+
+class TCPClientSocket
+{
+};
+
+}
+}
+
 #endif

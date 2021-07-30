@@ -1,0 +1,20 @@
+setting ISHIKO_CPP_NETWORKING_ROOT
+{
+    help = "Path to the Ishiko Networking installation";
+    default = '$(ISHIKO_CPP)/networking';
+}
+
+template IshikoNetworking
+{
+    includedirs += $(ISHIKO_CPP_NETWORKING_ROOT)/include;
+
+    if ($(toolset) == gnu)
+    {
+        libdirs += $(ISHIKO_CPP_NETWORKING_ROOT)/lib;
+    }
+
+    if ($(toolset) != gnu)
+    {
+        libdirs += $(ISHIKO_CPP_NETWORKING_ROOT)/lib/$(arch);
+    }
+}

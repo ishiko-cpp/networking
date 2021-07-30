@@ -5,7 +5,9 @@
 */
 
 #include "TCPServerSocketTests.h"
+#include "Ishiko/Networking/TCPServerSocket.h"
 
+using namespace Ishiko::Networking;
 using namespace Ishiko::Tests;
 
 TCPServerSocketTests::TCPServerSocketTests(const TestNumber& number, const TestEnvironment& environment)
@@ -16,4 +18,7 @@ TCPServerSocketTests::TCPServerSocketTests(const TestNumber& number, const TestE
 
 void TCPServerSocketTests::ConstructorTest1(Test& test)
 {
+    TCPServerSocket socket;
+
+    ISHIKO_PASS();
 }

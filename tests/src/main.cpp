@@ -6,6 +6,7 @@
 
 #include "TCPClientSocketTests.h"
 #include "TCPServerSocketTests.h"
+#include "Ishiko/Networking/linkoptions.h"
 #include <Ishiko/Tests/Core.h>
 
 using namespace Ishiko::Tests;
