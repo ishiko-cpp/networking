@@ -45,13 +45,39 @@ _false :=
 _not    = $(if $(1),$(_false),$(_true_))
 _equal  = $(and $(findstring $(1),$(2)),$(findstring $(2),$(1)))
 
+
+# The directory for the build files, may be overridden on make command line.
+builddir = .
+
+ifneq ($(builddir),.)
+_builddir := $(if $(findstring $(abspath $(builddir)),$(builddir)),,../../)$(builddir)/../gnumake/
+_builddir_error := $(shell mkdir -p $(_builddir) 2>&1)
+$(if $(_builddir_error),$(error Failed to create build directory: $(_builddir_error)))
+endif
 all: ../bakefile/../../lib/lib$(if $(call _equal,$(config),Debug),IshikoNetworking-d,IshikoNetworking).a
 
-../bakefile/../../lib/lib$(if $(call _equal,$(config),Debug),IshikoNetworking-d,IshikoNetworking).a:
-	$(AR) rc $@ 
+../bakefile/../../lib/lib$(if $(call _equal,$(config),Debug),IshikoNetworking-d,IshikoNetworking).a: $(_builddir)IshikoNetworking_TCPAcceptor.o $(_builddir)IshikoNetworking_TCPClientSocket.o $(_builddir)IshikoNetworking_TCPConnector.o $(_builddir)IshikoNetworking_TCPServerSocket.o
+	$(AR) rc $@ $(_builddir)IshikoNetworking_TCPAcceptor.o $(_builddir)IshikoNetworking_TCPClientSocket.o $(_builddir)IshikoNetworking_TCPConnector.o $(_builddir)IshikoNetworking_TCPServerSocket.o
 	$(RANLIB) $@
 
+$(_builddir)IshikoNetworking_TCPAcceptor.o: ../../src/TCPAcceptor.cpp
+	$(CXX) -c -o $@ $(CPPFLAGS) $(CXXFLAGS) -MD -MP -fPIC -DPIC -pthread -I../../include/Ishiko/Networking -std=c++11 ../../src/TCPAcceptor.cpp
+
+$(_builddir)IshikoNetworking_TCPClientSocket.o: ../../src/TCPClientSocket.cpp
+	$(CXX) -c -o $@ $(CPPFLAGS) $(CXXFLAGS) -MD -MP -fPIC -DPIC -pthread -I../../include/Ishiko/Networking -std=c++11 ../../src/TCPClientSocket.cpp
+
+$(_builddir)IshikoNetworking_TCPConnector.o: ../../src/TCPConnector.cpp
+	$(CXX) -c -o $@ $(CPPFLAGS) $(CXXFLAGS) -MD -MP -fPIC -DPIC -pthread -I../../include/Ishiko/Networking -std=c++11 ../../src/TCPConnector.cpp
+
+$(_builddir)IshikoNetworking_TCPServerSocket.o: ../../src/TCPServerSocket.cpp
+	$(CXX) -c -o $@ $(CPPFLAGS) $(CXXFLAGS) -MD -MP -fPIC -DPIC -pthread -I../../include/Ishiko/Networking -std=c++11 ../../src/TCPServerSocket.cpp
+
 clean:
+	rm -f $(_builddir)*.o
+	rm -f $(_builddir)*.d
 	rm -f ../bakefile/../../lib/lib$(if $(call _equal,$(config),Debug),IshikoNetworking-d,IshikoNetworking).a
 
 .PHONY: all clean
+
+# Dependencies tracking:
+-include $(_builddir)*.d

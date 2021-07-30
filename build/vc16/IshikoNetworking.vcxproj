@@ -150,7 +150,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\TCPAcceptor.cpp" />
+    <ClCompile Include="..\..\src\TCPClientSocket.cpp" />
+    <ClCompile Include="..\..\src\TCPConnector.cpp" />
+    <ClCompile Include="..\..\src\TCPServerSocket.cpp" />
+  </ItemGroup>
+  <ItemGroup>
     <ClInclude Include="..\..\include\Ishiko\Networking.h" />
+    <ClInclude Include="..\..\include\Ishiko\Networking\linkoptions.h" />
+    <ClInclude Include="..\..\include\Ishiko\Networking\TCPAcceptor.h" />
+    <ClInclude Include="..\..\include\Ishiko\Networking\TCPClientSocket.h" />
+    <ClInclude Include="..\..\include\Ishiko\Networking\TCPConnector.h" />
+    <ClInclude Include="..\..\include\Ishiko\Networking\TCPServerSocket.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
