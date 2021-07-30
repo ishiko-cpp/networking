@@ -31,6 +31,9 @@ library IshikoNetworking
     headers
     {
         ../../include/Ishiko/Networking.h
+        ../../include/Ishiko/Networking/IPAddress.h
+        ../../include/Ishiko/Networking/IPv4Address.h
+        ../../include/Ishiko/Networking/IPv6Address.h
         ../../include/Ishiko/Networking/linkoptions.h
         ../../include/Ishiko/Networking/TCPAcceptor.h
         ../../include/Ishiko/Networking/TCPClientSocket.h
@@ -40,6 +43,9 @@ library IshikoNetworking
 
     sources
     {
+        ../../src/IPAddress.cpp
+        ../../src/IPv4Address.cpp
+        ../../src/IPv6Address.cpp
         ../../src/TCPAcceptor.cpp
         ../../src/TCPClientSocket.cpp
         ../../src/TCPConnector.cpp
