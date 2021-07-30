@@ -7,4 +7,16 @@
 #ifndef _ISHIKO_NETWORKING_IPADDRESS_H_
 #define _ISHIKO_NETWORKING_IPADDRESS_H_
 
+namespace Ishiko
+{
+namespace Networking
+{
+
+class IPAddress
+{
+};
+
+}
+}
+
 #endif

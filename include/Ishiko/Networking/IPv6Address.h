@@ -7,4 +7,16 @@
 #ifndef _ISHIKO_NETWORKING_IPV6ADDRESS_H_
 #define _ISHIKO_NETWORKING_IPV6ADDRESS_H_
 
+namespace Ishiko
+{
+namespace Networking
+{
+
+class IPv6Address
+{
+};
+
+}
+}
+
 #endif
