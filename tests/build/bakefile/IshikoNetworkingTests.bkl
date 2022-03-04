@@ -22,12 +22,16 @@ program IshikoNetworkingTests : IshikoNetworking, IshikoTestsCore
 
     headers
     {
+        ../../src/IPAddressTests.h
+        ../../src/IPv4AddressTests.h
         ../../src/TCPClientSocketTests.h
         ../../src/TCPServerSocketTests.h
     }
 
     sources
     {
+        ../../src/IPAddressTests.cpp
+        ../../src/IPv4AddressTests.cpp
         ../../src/main.cpp
         ../../src/TCPClientSocketTests.cpp
         ../../src/TCPServerSocketTests.cpp

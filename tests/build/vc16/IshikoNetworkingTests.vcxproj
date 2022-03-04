@@ -152,11 +152,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\IPAddressTests.cpp" />
+    <ClCompile Include="..\..\src\IPv4AddressTests.cpp" />
     <ClCompile Include="..\..\src\main.cpp" />
     <ClCompile Include="..\..\src\TCPClientSocketTests.cpp" />
     <ClCompile Include="..\..\src\TCPServerSocketTests.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\src\IPAddressTests.h" />
+    <ClInclude Include="..\..\src\IPv4AddressTests.h" />
     <ClInclude Include="..\..\src\TCPClientSocketTests.h" />
     <ClInclude Include="..\..\src\TCPServerSocketTests.h" />
   </ItemGroup>
