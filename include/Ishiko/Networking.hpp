@@ -8,15 +8,15 @@
 #define _ISHIKO_CPP_NETWORKING_HPP_
 
 #include "Networking/ErrorCategory.hpp"
-#include "Networking/IPAddress.h"
-#include "Networking/IPv4Address.h"
-#include "Networking/IPv6Address.h"
+#include "Networking/IPAddress.hpp"
+#include "Networking/IPv4Address.hpp"
+#include "Networking/IPv6Address.hpp"
 #include "Networking/Port.h"
 #include "Networking/TCPAcceptor.h"
 #include "Networking/TCPClientSocket.h"
 #include "Networking/TCPConnector.h"
 #include "Networking/TCPServerSocket.h"
 
-#include "Networking/linkoptions.h"
+#include "Networking/linkoptions.hpp"
 
 #endif

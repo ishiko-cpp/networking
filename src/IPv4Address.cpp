@@ -4,7 +4,7 @@
     See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
 */
 
-#include "IPv4Address.h"
+#include "IPv4Address.hpp"
 #include "ErrorCategory.hpp"
 #include <Ishiko/Text.hpp>
 #include <cstring>

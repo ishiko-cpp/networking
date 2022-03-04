@@ -5,7 +5,7 @@
 */
 
 #include "IPv4AddressTests.h"
-#include "Ishiko/Networking/IPv4Address.h"
+#include "Ishiko/Networking/IPv4Address.hpp"
 
 using namespace Ishiko;
 using namespace Ishiko::Networking;
