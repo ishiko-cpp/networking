@@ -4,6 +4,8 @@
     See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
 */
 
+#include "IPAddressTests.h"
+#include "IPv4AddressTests.h"
 #include "TCPClientSocketTests.h"
 #include "TCPServerSocketTests.h"
 #include "Ishiko/Networking/linkoptions.h"
@@ -16,6 +18,8 @@ int main(int argc, char* argv[])
     TestHarness theTestHarness("IshikoNetworking");
 
     TestSequence& theTests = theTestHarness.tests();
+    theTests.append<IPv4AddressTests>();
+    theTests.append<IPAddressTests>();
     theTests.append<TCPClientSocketTests>();
     theTests.append<TCPServerSocketTests>();
 

@@ -150,6 +150,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\IPAddress.cpp" />
+    <ClCompile Include="..\..\src\IPv4Address.cpp" />
+    <ClCompile Include="..\..\src\IPv6Address.cpp" />
+    <ClCompile Include="..\..\src\Port.cpp" />
     <ClCompile Include="..\..\src\TCPAcceptor.cpp" />
     <ClCompile Include="..\..\src\TCPClientSocket.cpp" />
     <ClCompile Include="..\..\src\TCPConnector.cpp" />
@@ -157,7 +161,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\Ishiko\Networking.h" />
+    <ClInclude Include="..\..\include\Ishiko\Networking\IPAddress.h" />
+    <ClInclude Include="..\..\include\Ishiko\Networking\IPv4Address.h" />
+    <ClInclude Include="..\..\include\Ishiko\Networking\IPv6Address.h" />
     <ClInclude Include="..\..\include\Ishiko\Networking\linkoptions.h" />
+    <ClInclude Include="..\..\include\Ishiko\Networking\Port.h" />
     <ClInclude Include="..\..\include\Ishiko\Networking\TCPAcceptor.h" />
     <ClInclude Include="..\..\include\Ishiko\Networking\TCPClientSocket.h" />
     <ClInclude Include="..\..\include\Ishiko\Networking\TCPConnector.h" />
