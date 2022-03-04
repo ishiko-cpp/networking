@@ -45,6 +45,7 @@ library IshikoNetworking : IshikoText, IshikoErrors
         ../../include/Ishiko/Networking/TCPClientSocket.h
         ../../include/Ishiko/Networking/TCPConnector.h
         ../../include/Ishiko/Networking/TCPServerSocket.h
+        ../../src/windows/WindowsSocketLibraryInitialization.hpp
     }
 
     sources
@@ -58,5 +59,6 @@ library IshikoNetworking : IshikoText, IshikoErrors
         ../../src/TCPClientSocket.cpp
         ../../src/TCPConnector.cpp
         ../../src/TCPServerSocket.cpp
+        ../../src/windows/WindowsSocketLibraryInitialization.cpp
     }
 }

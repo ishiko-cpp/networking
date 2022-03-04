@@ -159,6 +159,7 @@
     <ClCompile Include="..\..\src\TCPClientSocket.cpp" />
     <ClCompile Include="..\..\src\TCPConnector.cpp" />
     <ClCompile Include="..\..\src\TCPServerSocket.cpp" />
+    <ClCompile Include="..\..\src\windows\WindowsSocketLibraryInitialization.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\Ishiko\Networking.hpp" />
@@ -172,6 +173,7 @@
     <ClInclude Include="..\..\include\Ishiko\Networking\TCPClientSocket.h" />
     <ClInclude Include="..\..\include\Ishiko\Networking\TCPConnector.h" />
     <ClInclude Include="..\..\include\Ishiko\Networking\TCPServerSocket.h" />
+    <ClInclude Include="..\..\src\windows\WindowsSocketLibraryInitialization.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
