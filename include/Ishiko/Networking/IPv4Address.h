@@ -18,7 +18,9 @@ namespace Networking
 class IPv4Address
 {
 public:
+    IPv4Address();
     IPv4Address(const std::string& address, Error& error);
+    static IPv4Address Any();
 
     std::string toString() const;
 

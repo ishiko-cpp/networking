@@ -16,6 +16,11 @@ namespace Ishiko
 namespace Networking
 {
     
+IPv4Address::IPv4Address()
+{
+    memset(m_address, 0, 4);
+}
+
 IPv4Address::IPv4Address(const string& address, Error& error)
 {
     string::const_iterator it = address.begin();
@@ -88,6 +93,11 @@ IPv4Address::IPv4Address(const string& address, Error& error)
     m_address[1] = byte2;
     m_address[2] = byte3;
     m_address[3] = byte4;
+}
+
+IPv4Address IPv4Address::Any()
+{
+    return IPv4Address();
 }
 
 string IPv4Address::toString() const
