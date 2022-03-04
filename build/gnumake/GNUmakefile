@@ -37,7 +37,9 @@ endif
 # Additionally, this makefile is customizable with the following
 # settings:
 #
-#      ISHIKO_CPP_ERRORS_ROOT  Path to the Ishiko Errors installation
+#      ISHIKO_CPP_ERRORS_ROOT        Path to the Ishiko Errors installation
+#      ISHIKO_CPP_BASEPLATFORM_ROOT  Path to the Ishiko BasePlatform installation
+#      ISHIKO_CPP_TEXT_ROOT          Path to the Ishiko/Text installation
 
 # Use "make RANLIB=''" for platforms without ranlib.
 RANLIB ?= ranlib
@@ -66,6 +68,10 @@ endif
 
 # Path to the Ishiko Errors installation
 ISHIKO_CPP_ERRORS_ROOT ?= $(ISHIKO_CPP)/errors
+# Path to the Ishiko BasePlatform installation
+ISHIKO_CPP_BASEPLATFORM_ROOT ?= $(ISHIKO_CPP)/base-platform
+# Path to the Ishiko/Text installation
+ISHIKO_CPP_TEXT_ROOT ?= $(ISHIKO_CPP)/text
 
 # ------------
 
@@ -76,31 +82,31 @@ all: ../bakefile/../../lib/lib$(if $(call _equal,$(config),Debug),IshikoNetworki
 	$(RANLIB) $@
 
 $(_builddir)IshikoNetworking_ErrorCategory.o: ../../src/ErrorCategory.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) $(CXXFLAGS) -MD -MP -fPIC -DPIC -pthread -I$(ISHIKO_CPP_ERRORS_ROOT)/include -I../../include/Ishiko/Networking -std=c++11 ../../src/ErrorCategory.cpp
+	$(CXX) -c -o $@ $(CPPFLAGS) $(CXXFLAGS) -MD -MP -fPIC -DPIC -pthread -I$(ISHIKO_CPP_ERRORS_ROOT)/include -I$(ISHIKO_CPP_BASEPLATFORM_ROOT)/include -I$(ISHIKO_CPP_TEXT_ROOT)/include -I../../include/Ishiko/Networking -std=c++11 ../../src/ErrorCategory.cpp
 
 $(_builddir)IshikoNetworking_IPAddress.o: ../../src/IPAddress.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) $(CXXFLAGS) -MD -MP -fPIC -DPIC -pthread -I$(ISHIKO_CPP_ERRORS_ROOT)/include -I../../include/Ishiko/Networking -std=c++11 ../../src/IPAddress.cpp
+	$(CXX) -c -o $@ $(CPPFLAGS) $(CXXFLAGS) -MD -MP -fPIC -DPIC -pthread -I$(ISHIKO_CPP_ERRORS_ROOT)/include -I$(ISHIKO_CPP_BASEPLATFORM_ROOT)/include -I$(ISHIKO_CPP_TEXT_ROOT)/include -I../../include/Ishiko/Networking -std=c++11 ../../src/IPAddress.cpp
 
 $(_builddir)IshikoNetworking_IPv4Address.o: ../../src/IPv4Address.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) $(CXXFLAGS) -MD -MP -fPIC -DPIC -pthread -I$(ISHIKO_CPP_ERRORS_ROOT)/include -I../../include/Ishiko/Networking -std=c++11 ../../src/IPv4Address.cpp
+	$(CXX) -c -o $@ $(CPPFLAGS) $(CXXFLAGS) -MD -MP -fPIC -DPIC -pthread -I$(ISHIKO_CPP_ERRORS_ROOT)/include -I$(ISHIKO_CPP_BASEPLATFORM_ROOT)/include -I$(ISHIKO_CPP_TEXT_ROOT)/include -I../../include/Ishiko/Networking -std=c++11 ../../src/IPv4Address.cpp
 
 $(_builddir)IshikoNetworking_IPv6Address.o: ../../src/IPv6Address.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) $(CXXFLAGS) -MD -MP -fPIC -DPIC -pthread -I$(ISHIKO_CPP_ERRORS_ROOT)/include -I../../include/Ishiko/Networking -std=c++11 ../../src/IPv6Address.cpp
+	$(CXX) -c -o $@ $(CPPFLAGS) $(CXXFLAGS) -MD -MP -fPIC -DPIC -pthread -I$(ISHIKO_CPP_ERRORS_ROOT)/include -I$(ISHIKO_CPP_BASEPLATFORM_ROOT)/include -I$(ISHIKO_CPP_TEXT_ROOT)/include -I../../include/Ishiko/Networking -std=c++11 ../../src/IPv6Address.cpp
 
 $(_builddir)IshikoNetworking_Port.o: ../../src/Port.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) $(CXXFLAGS) -MD -MP -fPIC -DPIC -pthread -I$(ISHIKO_CPP_ERRORS_ROOT)/include -I../../include/Ishiko/Networking -std=c++11 ../../src/Port.cpp
+	$(CXX) -c -o $@ $(CPPFLAGS) $(CXXFLAGS) -MD -MP -fPIC -DPIC -pthread -I$(ISHIKO_CPP_ERRORS_ROOT)/include -I$(ISHIKO_CPP_BASEPLATFORM_ROOT)/include -I$(ISHIKO_CPP_TEXT_ROOT)/include -I../../include/Ishiko/Networking -std=c++11 ../../src/Port.cpp
 
 $(_builddir)IshikoNetworking_TCPAcceptor.o: ../../src/TCPAcceptor.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) $(CXXFLAGS) -MD -MP -fPIC -DPIC -pthread -I$(ISHIKO_CPP_ERRORS_ROOT)/include -I../../include/Ishiko/Networking -std=c++11 ../../src/TCPAcceptor.cpp
+	$(CXX) -c -o $@ $(CPPFLAGS) $(CXXFLAGS) -MD -MP -fPIC -DPIC -pthread -I$(ISHIKO_CPP_ERRORS_ROOT)/include -I$(ISHIKO_CPP_BASEPLATFORM_ROOT)/include -I$(ISHIKO_CPP_TEXT_ROOT)/include -I../../include/Ishiko/Networking -std=c++11 ../../src/TCPAcceptor.cpp
 
 $(_builddir)IshikoNetworking_TCPClientSocket.o: ../../src/TCPClientSocket.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) $(CXXFLAGS) -MD -MP -fPIC -DPIC -pthread -I$(ISHIKO_CPP_ERRORS_ROOT)/include -I../../include/Ishiko/Networking -std=c++11 ../../src/TCPClientSocket.cpp
+	$(CXX) -c -o $@ $(CPPFLAGS) $(CXXFLAGS) -MD -MP -fPIC -DPIC -pthread -I$(ISHIKO_CPP_ERRORS_ROOT)/include -I$(ISHIKO_CPP_BASEPLATFORM_ROOT)/include -I$(ISHIKO_CPP_TEXT_ROOT)/include -I../../include/Ishiko/Networking -std=c++11 ../../src/TCPClientSocket.cpp
 
 $(_builddir)IshikoNetworking_TCPConnector.o: ../../src/TCPConnector.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) $(CXXFLAGS) -MD -MP -fPIC -DPIC -pthread -I$(ISHIKO_CPP_ERRORS_ROOT)/include -I../../include/Ishiko/Networking -std=c++11 ../../src/TCPConnector.cpp
+	$(CXX) -c -o $@ $(CPPFLAGS) $(CXXFLAGS) -MD -MP -fPIC -DPIC -pthread -I$(ISHIKO_CPP_ERRORS_ROOT)/include -I$(ISHIKO_CPP_BASEPLATFORM_ROOT)/include -I$(ISHIKO_CPP_TEXT_ROOT)/include -I../../include/Ishiko/Networking -std=c++11 ../../src/TCPConnector.cpp
 
 $(_builddir)IshikoNetworking_TCPServerSocket.o: ../../src/TCPServerSocket.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) $(CXXFLAGS) -MD -MP -fPIC -DPIC -pthread -I$(ISHIKO_CPP_ERRORS_ROOT)/include -I../../include/Ishiko/Networking -std=c++11 ../../src/TCPServerSocket.cpp
+	$(CXX) -c -o $@ $(CPPFLAGS) $(CXXFLAGS) -MD -MP -fPIC -DPIC -pthread -I$(ISHIKO_CPP_ERRORS_ROOT)/include -I$(ISHIKO_CPP_BASEPLATFORM_ROOT)/include -I$(ISHIKO_CPP_TEXT_ROOT)/include -I../../include/Ishiko/Networking -std=c++11 ../../src/TCPServerSocket.cpp
 
 clean:
 	rm -f $(_builddir)*.o
