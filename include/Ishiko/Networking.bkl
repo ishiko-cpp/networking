@@ -1,10 +1,14 @@
+ishikopath = envvar("ISHIKO_CPP");
+import $(ishikopath)/errors/include/Ishiko/Errors.bkl;
+import $(ishikopath)/text/include/Ishiko/Text.bkl;
+
 setting ISHIKO_CPP_NETWORKING_ROOT
 {
     help = "Path to the Ishiko Networking installation";
     default = '$(ISHIKO_CPP)/networking';
 }
 
-template IshikoNetworking
+template IshikoNetworking : IshikoText, IshikoErrors
 {
     includedirs += $(ISHIKO_CPP_NETWORKING_ROOT)/include;
 
