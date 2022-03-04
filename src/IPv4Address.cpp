@@ -7,6 +7,7 @@
 #include "IPv4Address.h"
 #include "ErrorCategory.hpp"
 #include <Ishiko/Text.hpp>
+#include <cstring>
 
 using namespace Ishiko::Text;
 using namespace std;
