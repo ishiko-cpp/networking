@@ -4,8 +4,8 @@
     See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
 */
 
-#ifndef _ISHIKO_NETWORKING_IPV4ADDRESS_H_
-#define _ISHIKO_NETWORKING_IPV4ADDRESS_H_
+#ifndef _ISHIKO_NETWORKING_IPV4ADDRESS_HPP_
+#define _ISHIKO_NETWORKING_IPV4ADDRESS_HPP_
 
 #include <Ishiko/Errors.hpp>
 #include <string>
