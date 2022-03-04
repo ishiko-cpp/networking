@@ -7,6 +7,7 @@
 #include "IPv4AddressTests.h"
 #include "Ishiko/Networking/IPv4Address.h"
 
+using namespace Ishiko;
 using namespace Ishiko::Networking;
 using namespace Ishiko::Tests;
 
@@ -18,7 +19,10 @@ IPv4AddressTests::IPv4AddressTests(const TestNumber& number, const TestContext& 
 
 void IPv4AddressTests::ConstructorTest1(Test& test)
 {
-    IPv4Address address;
+    Error error;
+    IPv4Address address("127.1.2.255", error);
 
+    ISHIKO_FAIL_IF(error);
+    ISHIKO_FAIL_IF_NEQ(address.toString(), "127.1.2.255");
     ISHIKO_PASS();
 }
