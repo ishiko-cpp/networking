@@ -8,7 +8,7 @@
 #include "IPv4AddressTests.h"
 #include "TCPClientSocketTests.h"
 #include "TCPServerSocketTests.h"
-#include "Ishiko/Networking/linkoptions.h"
+#include "Ishiko/Networking/linkoptions.hpp"
 #include <Ishiko/Tests/Core.hpp>
 
 using namespace Ishiko::Tests;
