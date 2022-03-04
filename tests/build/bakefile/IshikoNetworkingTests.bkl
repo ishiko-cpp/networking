@@ -17,7 +17,7 @@ program IshikoNetworkingTests : IshikoNetworking, IshikoTestsCore
     if ($(toolset) == gnu)
     {
         cxx-compiler-options = "-std=c++11";
-        libs += IshikoTestsCore IshikoProcess IshikoErrors boost_filesystem boost_system;
+        libs += IshikoNetworking IshikoTestsCore IshikoProcess IshikoErrors boost_filesystem boost_system;
     }
 
     headers
