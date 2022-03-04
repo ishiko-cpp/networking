@@ -4,7 +4,7 @@
     See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
 */
 
-#include "IPv4AddressTests.h"
+#include "IPv4AddressTests.hpp"
 #include "Ishiko/Networking/IPv4Address.hpp"
 
 using namespace Ishiko;

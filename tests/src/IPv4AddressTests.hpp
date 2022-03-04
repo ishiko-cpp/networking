@@ -4,8 +4,8 @@
     See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
 */
 
-#ifndef _ISHIKO_NETWORKING_TESTS_IPV4ADDRESSTESTS_H_
-#define _ISHIKO_NETWORKING_TESTS_IPV4ADDRESSTESTS_H_
+#ifndef _ISHIKO_CPP_NETWORKING_TESTS_IPV4ADDRESSTESTS_HPP_
+#define _ISHIKO_CPP_NETWORKING_TESTS_IPV4ADDRESSTESTS_HPP_
 
 #include <Ishiko/Tests/Core.hpp>
 
