@@ -163,10 +163,10 @@
   <ItemGroup>
     <ClInclude Include="..\..\include\Ishiko\Networking.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\ErrorCategory.hpp" />
-    <ClInclude Include="..\..\include\Ishiko\Networking\IPAddress.h" />
-    <ClInclude Include="..\..\include\Ishiko\Networking\IPv4Address.h" />
-    <ClInclude Include="..\..\include\Ishiko\Networking\IPv6Address.h" />
-    <ClInclude Include="..\..\include\Ishiko\Networking\linkoptions.h" />
+    <ClInclude Include="..\..\include\Ishiko\Networking\IPAddress.hpp" />
+    <ClInclude Include="..\..\include\Ishiko\Networking\IPv4Address.hpp" />
+    <ClInclude Include="..\..\include\Ishiko\Networking\IPv6Address.hpp" />
+    <ClInclude Include="..\..\include\Ishiko\Networking\linkoptions.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\Port.h" />
     <ClInclude Include="..\..\include\Ishiko\Networking\TCPAcceptor.h" />
     <ClInclude Include="..\..\include\Ishiko\Networking\TCPClientSocket.h" />

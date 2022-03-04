@@ -23,16 +23,16 @@
     <ClInclude Include="..\..\include\Ishiko\Networking\ErrorCategory.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Ishiko\Networking\IPAddress.h">
+    <ClInclude Include="..\..\include\Ishiko\Networking\IPAddress.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Ishiko\Networking\IPv4Address.h">
+    <ClInclude Include="..\..\include\Ishiko\Networking\IPv4Address.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Ishiko\Networking\IPv6Address.h">
+    <ClInclude Include="..\..\include\Ishiko\Networking\IPv6Address.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Ishiko\Networking\linkoptions.h">
+    <ClInclude Include="..\..\include\Ishiko\Networking\linkoptions.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Ishiko\Networking\Port.h">
