@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2021 Xavier Leclercq
+    Copyright (c) 2021-2022 Xavier Leclercq
     Released under the MIT License
     See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
 */
@@ -10,8 +10,8 @@
 using namespace Ishiko::Networking;
 using namespace Ishiko::Tests;
 
-IPAddressTests::IPAddressTests(const TestNumber& number, const TestEnvironment& environment)
-    : TestSequence(number, "IPAddress tests", environment)
+IPAddressTests::IPAddressTests(const TestNumber& number, const TestContext& context)
+    : TestSequence(number, "IPAddress tests", context)
 {
     append<HeapAllocationErrorsTest>("Constructor test 1", ConstructorTest1);
 }
