@@ -33,7 +33,8 @@ library IshikoNetworking : IshikoErrors
 
     headers
     {
-        ../../include/Ishiko/Networking.h
+        ../../include/Ishiko/Networking.hpp
+        ../../include/Ishiko/Networking/ErrorCategory.hpp
         ../../include/Ishiko/Networking/IPAddress.h
         ../../include/Ishiko/Networking/IPv4Address.h
         ../../include/Ishiko/Networking/IPv6Address.h
@@ -47,6 +48,7 @@ library IshikoNetworking : IshikoErrors
 
     sources
     {
+        ../../src/ErrorCategory.cpp
         ../../src/IPAddress.cpp
         ../../src/IPv4Address.cpp
         ../../src/IPv6Address.cpp

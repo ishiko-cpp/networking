@@ -150,6 +150,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\ErrorCategory.cpp" />
     <ClCompile Include="..\..\src\IPAddress.cpp" />
     <ClCompile Include="..\..\src\IPv4Address.cpp" />
     <ClCompile Include="..\..\src\IPv6Address.cpp" />
@@ -160,7 +161,8 @@
     <ClCompile Include="..\..\src\TCPServerSocket.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\Ishiko\Networking.h" />
+    <ClInclude Include="..\..\include\Ishiko\Networking.hpp" />
+    <ClInclude Include="..\..\include\Ishiko\Networking\ErrorCategory.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\IPAddress.h" />
     <ClInclude Include="..\..\include\Ishiko\Networking\IPv4Address.h" />
     <ClInclude Include="..\..\include\Ishiko\Networking\IPv6Address.h" />

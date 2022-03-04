@@ -71,9 +71,12 @@ ISHIKO_CPP_ERRORS_ROOT ?= $(ISHIKO_CPP)/errors
 
 all: ../bakefile/../../lib/lib$(if $(call _equal,$(config),Debug),IshikoNetworking-d,IshikoNetworking).a
 
-../bakefile/../../lib/lib$(if $(call _equal,$(config),Debug),IshikoNetworking-d,IshikoNetworking).a: $(_builddir)IshikoNetworking_IPAddress.o $(_builddir)IshikoNetworking_IPv4Address.o $(_builddir)IshikoNetworking_IPv6Address.o $(_builddir)IshikoNetworking_Port.o $(_builddir)IshikoNetworking_TCPAcceptor.o $(_builddir)IshikoNetworking_TCPClientSocket.o $(_builddir)IshikoNetworking_TCPConnector.o $(_builddir)IshikoNetworking_TCPServerSocket.o
-	$(AR) rc $@ $(_builddir)IshikoNetworking_IPAddress.o $(_builddir)IshikoNetworking_IPv4Address.o $(_builddir)IshikoNetworking_IPv6Address.o $(_builddir)IshikoNetworking_Port.o $(_builddir)IshikoNetworking_TCPAcceptor.o $(_builddir)IshikoNetworking_TCPClientSocket.o $(_builddir)IshikoNetworking_TCPConnector.o $(_builddir)IshikoNetworking_TCPServerSocket.o
+../bakefile/../../lib/lib$(if $(call _equal,$(config),Debug),IshikoNetworking-d,IshikoNetworking).a: $(_builddir)IshikoNetworking_ErrorCategory.o $(_builddir)IshikoNetworking_IPAddress.o $(_builddir)IshikoNetworking_IPv4Address.o $(_builddir)IshikoNetworking_IPv6Address.o $(_builddir)IshikoNetworking_Port.o $(_builddir)IshikoNetworking_TCPAcceptor.o $(_builddir)IshikoNetworking_TCPClientSocket.o $(_builddir)IshikoNetworking_TCPConnector.o $(_builddir)IshikoNetworking_TCPServerSocket.o
+	$(AR) rc $@ $(_builddir)IshikoNetworking_ErrorCategory.o $(_builddir)IshikoNetworking_IPAddress.o $(_builddir)IshikoNetworking_IPv4Address.o $(_builddir)IshikoNetworking_IPv6Address.o $(_builddir)IshikoNetworking_Port.o $(_builddir)IshikoNetworking_TCPAcceptor.o $(_builddir)IshikoNetworking_TCPClientSocket.o $(_builddir)IshikoNetworking_TCPConnector.o $(_builddir)IshikoNetworking_TCPServerSocket.o
 	$(RANLIB) $@
+
+$(_builddir)IshikoNetworking_ErrorCategory.o: ../../src/ErrorCategory.cpp
+	$(CXX) -c -o $@ $(CPPFLAGS) $(CXXFLAGS) -MD -MP -fPIC -DPIC -pthread -I$(ISHIKO_CPP_ERRORS_ROOT)/include -I../../include/Ishiko/Networking -std=c++11 ../../src/ErrorCategory.cpp
 
 $(_builddir)IshikoNetworking_IPAddress.o: ../../src/IPAddress.cpp
 	$(CXX) -c -o $@ $(CPPFLAGS) $(CXXFLAGS) -MD -MP -fPIC -DPIC -pthread -I$(ISHIKO_CPP_ERRORS_ROOT)/include -I../../include/Ishiko/Networking -std=c++11 ../../src/IPAddress.cpp
