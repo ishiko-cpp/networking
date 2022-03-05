@@ -101,6 +101,18 @@ IPv4Address IPv4Address::Any()
     return IPv4Address();
 }
 
+IPv4Address IPv4Address::Localhost()
+{
+    IPv4Address result;
+
+    result.m_address[0] = 127;
+    result.m_address[1] = 0;
+    result.m_address[2] = 0;
+    result.m_address[3] = 1;
+
+    return result;
+}
+
 string IPv4Address::toString() const
 {
     string result;

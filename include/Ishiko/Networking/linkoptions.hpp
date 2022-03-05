@@ -12,5 +12,6 @@
 #else
 #pragma comment(lib, "IshikoNetworking.lib")
 #endif
+#pragma comment(lib, "ws2_32.lib")
 
 #endif

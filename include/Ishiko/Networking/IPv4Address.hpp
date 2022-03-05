@@ -21,6 +21,7 @@ public:
     IPv4Address();
     IPv4Address(const std::string& address, Error& error);
     static IPv4Address Any();
+    static IPv4Address Localhost();
 
     std::string toString() const;
 
