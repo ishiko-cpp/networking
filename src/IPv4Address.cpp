@@ -7,7 +7,6 @@
 #include "IPv4Address.hpp"
 #include "ErrorCategory.hpp"
 #include <Ishiko/Text.hpp>
-#include <cstring>
 
 using namespace Ishiko::Text;
 using namespace std;
@@ -18,8 +17,8 @@ namespace Networking
 {
     
 IPv4Address::IPv4Address()
+    : m_address(0)
 {
-    memset(m_address, 0, 4);
 }
 
 IPv4Address::IPv4Address(const string& address, Error& error)
@@ -90,10 +89,7 @@ IPv4Address::IPv4Address(const string& address, Error& error)
         return;
     }
 
-    m_address[0] = byte1;
-    m_address[1] = byte2;
-    m_address[2] = byte3;
-    m_address[3] = byte4;
+    m_address = ((byte1 << 24) + (byte2 << 16) + (byte3 << 8) + byte4);
 }
 
 IPv4Address IPv4Address::Any()
@@ -104,25 +100,25 @@ IPv4Address IPv4Address::Any()
 IPv4Address IPv4Address::Localhost()
 {
     IPv4Address result;
-
-    result.m_address[0] = 127;
-    result.m_address[1] = 0;
-    result.m_address[2] = 0;
-    result.m_address[3] = 1;
-
+    result.m_address = ((127 << 24) + 1);
     return result;
+}
+
+uint32_t IPv4Address::value() const
+{
+    return m_address;
 }
 
 string IPv4Address::toString() const
 {
     string result;
-    result += to_string(m_address[0]);
+    result += to_string(m_address >> 24);
     result += '.';
-    result += to_string(m_address[1]);
+    result += to_string((m_address >> 16) & 0xFF);
     result += '.';
-    result += to_string(m_address[2]);
+    result += to_string((m_address >> 8) & 0xFF);
     result += '.';
-    result += to_string(m_address[3]);
+    result += to_string(m_address & 0xFF);
     return result;
 }
 

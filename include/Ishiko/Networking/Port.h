@@ -19,8 +19,9 @@ class Port
 public:
     Port(unsigned short number);
 
-    std::string toString() const;
+    unsigned short number() const;
 
+    std::string toString() const;
 
 private:
     unsigned short m_number;
