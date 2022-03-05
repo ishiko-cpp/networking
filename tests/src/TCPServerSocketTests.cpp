@@ -7,6 +7,7 @@
 #include "TCPServerSocketTests.h"
 #include "Ishiko/Networking/TCPServerSocket.h"
 
+using namespace Ishiko;
 using namespace Ishiko::Networking;
 using namespace Ishiko::Tests;
 
@@ -18,7 +19,9 @@ TCPServerSocketTests::TCPServerSocketTests(const TestNumber& number, const TestC
 
 void TCPServerSocketTests::ConstructorTest1(Test& test)
 {
-    TCPServerSocket socket;
+    Error error;
+    TCPServerSocket socket(IPv4Address::Localhost(), 8585, error);
 
+    ISHIKO_FAIL_IF(error);
     ISHIKO_PASS();
 }
