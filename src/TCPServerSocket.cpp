@@ -62,6 +62,17 @@ TCPServerSocket::TCPServerSocket(IPv4Address address, Port port, Error& error)
         Fail(error, ErrorCategory::Value::generic, "", __FILE__, __LINE__);
         return;
     }
+
+    err = listen(m_socket, SOMAXCONN);
+    if (err == SOCKET_ERROR)
+    {
+        closesocket(m_socket);
+        m_socket = INVALID_SOCKET;
+
+        // TODO: more detailed error
+        Fail(error, ErrorCategory::Value::generic, "", __FILE__, __LINE__);
+        return;
+    }
 }
 
 TCPServerSocket::~TCPServerSocket()
@@ -75,6 +86,17 @@ TCPServerSocket::~TCPServerSocket()
     // explicit after all since I have no way of handling this error.
     Error error;
     WindowsSocketLibraryInitialization::Cleanup(error);
+}
+
+TCPClientSocket TCPServerSocket::accept(Error& error)
+{
+    SOCKET clientSocket = WSAAccept(m_socket, NULL, NULL, NULL, NULL);
+    if (clientSocket == INVALID_SOCKET)
+    {
+        // TODO: more detailed error
+        Fail(error, ErrorCategory::Value::generic, "", __FILE__, __LINE__);
+    }
+    return TCPClientSocket(clientSocket);
 }
 
 }
