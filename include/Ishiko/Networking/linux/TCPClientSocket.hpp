@@ -7,6 +7,8 @@
 #ifndef _ISHIKO_CPP_NETWORKING_LINUX_TCPCLIENTSOCKET_HPP_
 #define _ISHIKO_CPP_NETWORKING_LINUX_TCPCLIENTSOCKET_HPP_
 
+#include <Ishiko/Errors.hpp>
+
 namespace Ishiko
 {
 namespace Networking
@@ -15,6 +17,9 @@ namespace Networking
 // TODO: forbid copy, allow moves
 class TCPClientSocket
 {
+public:
+    TCPClientSocket(Error& error);
+    ~TCPClientSocket();
 };
 
 }

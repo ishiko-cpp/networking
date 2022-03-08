@@ -7,6 +7,8 @@
 #ifndef _ISHIKO_CPP_NETWORKING_LINUX_LIBRARYINITIALIZATION_HPP_
 #define _ISHIKO_CPP_NETWORKING_LINUX_LIBRARYINITIALIZATION_HPP_
 
+#include <Ishiko/Errors.hpp>
+
 namespace Ishiko
 {
 namespace Networking
@@ -14,6 +16,9 @@ namespace Networking
 
 class LibraryInitialization
 {
+public:
+    LibraryInitialization(Error& error);
+    ~LibraryInitialization();
 };
 
 }

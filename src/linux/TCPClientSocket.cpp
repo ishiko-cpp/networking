@@ -5,3 +5,20 @@
 */
 
 #include "linux/TCPClientSocket.hpp"
+
+namespace Ishiko
+{
+namespace Networking
+{
+
+TCPClientSocket::TCPClientSocket(Error& error)
+{
+    // TODO
+}
+
+TCPClientSocket::~TCPClientSocket()
+{
+}
+
+}
+}
