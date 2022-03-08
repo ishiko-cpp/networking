@@ -156,10 +156,10 @@
     <ClCompile Include="..\..\src\IPv6Address.cpp" />
     <ClCompile Include="..\..\src\Port.cpp" />
     <ClCompile Include="..\..\src\TCPAcceptor.cpp" />
-    <ClCompile Include="..\..\src\TCPClientSocket.cpp" />
     <ClCompile Include="..\..\src\TCPConnector.cpp" />
-    <ClCompile Include="..\..\src\TCPServerSocket.cpp" />
-    <ClCompile Include="..\..\src\windows\WindowsSocketLibraryInitialization.cpp" />
+    <ClCompile Include="..\..\src\windows\LibraryInitialization.cpp" />
+    <ClCompile Include="..\..\src\windows\TCPClientSocket.cpp" />
+    <ClCompile Include="..\..\src\windows\TCPServerSocket.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\Ishiko\Networking.hpp" />
@@ -168,12 +168,14 @@
     <ClInclude Include="..\..\include\Ishiko\Networking\IPv4Address.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\IPv6Address.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\linkoptions.hpp" />
-    <ClInclude Include="..\..\include\Ishiko\Networking\Port.h" />
-    <ClInclude Include="..\..\include\Ishiko\Networking\TCPAcceptor.h" />
-    <ClInclude Include="..\..\include\Ishiko\Networking\TCPClientSocket.h" />
-    <ClInclude Include="..\..\include\Ishiko\Networking\TCPConnector.h" />
-    <ClInclude Include="..\..\include\Ishiko\Networking\TCPServerSocket.h" />
-    <ClInclude Include="..\..\src\windows\WindowsSocketLibraryInitialization.hpp" />
+    <ClInclude Include="..\..\include\Ishiko\Networking\Port.hpp" />
+    <ClInclude Include="..\..\include\Ishiko\Networking\TCPAcceptor.hpp" />
+    <ClInclude Include="..\..\include\Ishiko\Networking\TCPClientSocket.hpp" />
+    <ClInclude Include="..\..\include\Ishiko\Networking\TCPConnector.hpp" />
+    <ClInclude Include="..\..\include\Ishiko\Networking\TCPServerSocket.hpp" />
+    <ClInclude Include="..\..\include\Ishiko\Networking\windows\TCPClientSocket.hpp" />
+    <ClInclude Include="..\..\include\Ishiko\Networking\windows\TCPServerSocket.hpp" />
+    <ClInclude Include="..\..\src\windows\LibraryInitialization.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -77,8 +77,8 @@ ISHIKO_CPP_TEXT_ROOT ?= $(ISHIKO_CPP)/text
 
 all: ../bakefile/../../lib/lib$(if $(call _equal,$(config),Debug),IshikoNetworking-d,IshikoNetworking).a
 
-../bakefile/../../lib/lib$(if $(call _equal,$(config),Debug),IshikoNetworking-d,IshikoNetworking).a: $(_builddir)IshikoNetworking_ErrorCategory.o $(_builddir)IshikoNetworking_IPAddress.o $(_builddir)IshikoNetworking_IPv4Address.o $(_builddir)IshikoNetworking_IPv6Address.o $(_builddir)IshikoNetworking_Port.o $(_builddir)IshikoNetworking_TCPAcceptor.o $(_builddir)IshikoNetworking_TCPClientSocket.o $(_builddir)IshikoNetworking_TCPConnector.o $(_builddir)IshikoNetworking_TCPServerSocket.o $(_builddir)IshikoNetworking_WindowsSocketLibraryInitialization.o
-	$(AR) rc $@ $(_builddir)IshikoNetworking_ErrorCategory.o $(_builddir)IshikoNetworking_IPAddress.o $(_builddir)IshikoNetworking_IPv4Address.o $(_builddir)IshikoNetworking_IPv6Address.o $(_builddir)IshikoNetworking_Port.o $(_builddir)IshikoNetworking_TCPAcceptor.o $(_builddir)IshikoNetworking_TCPClientSocket.o $(_builddir)IshikoNetworking_TCPConnector.o $(_builddir)IshikoNetworking_TCPServerSocket.o $(_builddir)IshikoNetworking_WindowsSocketLibraryInitialization.o
+../bakefile/../../lib/lib$(if $(call _equal,$(config),Debug),IshikoNetworking-d,IshikoNetworking).a: $(_builddir)IshikoNetworking_ErrorCategory.o $(_builddir)IshikoNetworking_IPAddress.o $(_builddir)IshikoNetworking_IPv4Address.o $(_builddir)IshikoNetworking_IPv6Address.o $(_builddir)IshikoNetworking_Port.o $(_builddir)IshikoNetworking_TCPAcceptor.o $(_builddir)IshikoNetworking_TCPConnector.o $(_builddir)IshikoNetworking_LibraryInitialization.o $(_builddir)IshikoNetworking_TCPClientSocket.o $(_builddir)IshikoNetworking_TCPServerSocket.o
+	$(AR) rc $@ $(_builddir)IshikoNetworking_ErrorCategory.o $(_builddir)IshikoNetworking_IPAddress.o $(_builddir)IshikoNetworking_IPv4Address.o $(_builddir)IshikoNetworking_IPv6Address.o $(_builddir)IshikoNetworking_Port.o $(_builddir)IshikoNetworking_TCPAcceptor.o $(_builddir)IshikoNetworking_TCPConnector.o $(_builddir)IshikoNetworking_LibraryInitialization.o $(_builddir)IshikoNetworking_TCPClientSocket.o $(_builddir)IshikoNetworking_TCPServerSocket.o
 	$(RANLIB) $@
 
 $(_builddir)IshikoNetworking_ErrorCategory.o: ../../src/ErrorCategory.cpp
@@ -99,17 +99,17 @@ $(_builddir)IshikoNetworking_Port.o: ../../src/Port.cpp
 $(_builddir)IshikoNetworking_TCPAcceptor.o: ../../src/TCPAcceptor.cpp
 	$(CXX) -c -o $@ $(CPPFLAGS) $(CXXFLAGS) -MD -MP -fPIC -DPIC -pthread -I$(ISHIKO_CPP_ERRORS_ROOT)/include -I$(ISHIKO_CPP_BASEPLATFORM_ROOT)/include -I$(ISHIKO_CPP_TEXT_ROOT)/include -I../../include/Ishiko/Networking -std=c++11 ../../src/TCPAcceptor.cpp
 
-$(_builddir)IshikoNetworking_TCPClientSocket.o: ../../src/TCPClientSocket.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) $(CXXFLAGS) -MD -MP -fPIC -DPIC -pthread -I$(ISHIKO_CPP_ERRORS_ROOT)/include -I$(ISHIKO_CPP_BASEPLATFORM_ROOT)/include -I$(ISHIKO_CPP_TEXT_ROOT)/include -I../../include/Ishiko/Networking -std=c++11 ../../src/TCPClientSocket.cpp
-
 $(_builddir)IshikoNetworking_TCPConnector.o: ../../src/TCPConnector.cpp
 	$(CXX) -c -o $@ $(CPPFLAGS) $(CXXFLAGS) -MD -MP -fPIC -DPIC -pthread -I$(ISHIKO_CPP_ERRORS_ROOT)/include -I$(ISHIKO_CPP_BASEPLATFORM_ROOT)/include -I$(ISHIKO_CPP_TEXT_ROOT)/include -I../../include/Ishiko/Networking -std=c++11 ../../src/TCPConnector.cpp
 
-$(_builddir)IshikoNetworking_TCPServerSocket.o: ../../src/TCPServerSocket.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) $(CXXFLAGS) -MD -MP -fPIC -DPIC -pthread -I$(ISHIKO_CPP_ERRORS_ROOT)/include -I$(ISHIKO_CPP_BASEPLATFORM_ROOT)/include -I$(ISHIKO_CPP_TEXT_ROOT)/include -I../../include/Ishiko/Networking -std=c++11 ../../src/TCPServerSocket.cpp
+$(_builddir)IshikoNetworking_LibraryInitialization.o: ../../src/linux/LibraryInitialization.cpp
+	$(CXX) -c -o $@ $(CPPFLAGS) $(CXXFLAGS) -MD -MP -fPIC -DPIC -pthread -I$(ISHIKO_CPP_ERRORS_ROOT)/include -I$(ISHIKO_CPP_BASEPLATFORM_ROOT)/include -I$(ISHIKO_CPP_TEXT_ROOT)/include -I../../include/Ishiko/Networking -std=c++11 ../../src/linux/LibraryInitialization.cpp
 
-$(_builddir)IshikoNetworking_WindowsSocketLibraryInitialization.o: ../../src/windows/WindowsSocketLibraryInitialization.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) $(CXXFLAGS) -MD -MP -fPIC -DPIC -pthread -I$(ISHIKO_CPP_ERRORS_ROOT)/include -I$(ISHIKO_CPP_BASEPLATFORM_ROOT)/include -I$(ISHIKO_CPP_TEXT_ROOT)/include -I../../include/Ishiko/Networking -std=c++11 ../../src/windows/WindowsSocketLibraryInitialization.cpp
+$(_builddir)IshikoNetworking_TCPClientSocket.o: ../../src/linux/TCPClientSocket.cpp
+	$(CXX) -c -o $@ $(CPPFLAGS) $(CXXFLAGS) -MD -MP -fPIC -DPIC -pthread -I$(ISHIKO_CPP_ERRORS_ROOT)/include -I$(ISHIKO_CPP_BASEPLATFORM_ROOT)/include -I$(ISHIKO_CPP_TEXT_ROOT)/include -I../../include/Ishiko/Networking -std=c++11 ../../src/linux/TCPClientSocket.cpp
+
+$(_builddir)IshikoNetworking_TCPServerSocket.o: ../../src/linux/TCPServerSocket.cpp
+	$(CXX) -c -o $@ $(CPPFLAGS) $(CXXFLAGS) -MD -MP -fPIC -DPIC -pthread -I$(ISHIKO_CPP_ERRORS_ROOT)/include -I$(ISHIKO_CPP_BASEPLATFORM_ROOT)/include -I$(ISHIKO_CPP_TEXT_ROOT)/include -I../../include/Ishiko/Networking -std=c++11 ../../src/linux/TCPServerSocket.cpp
 
 clean:
 	rm -f $(_builddir)*.o

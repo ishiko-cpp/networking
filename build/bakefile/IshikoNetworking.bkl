@@ -40,12 +40,11 @@ library IshikoNetworking : IshikoText, IshikoErrors
         ../../include/Ishiko/Networking/IPv4Address.hpp
         ../../include/Ishiko/Networking/IPv6Address.hpp
         ../../include/Ishiko/Networking/linkoptions.hpp
-        ../../include/Ishiko/Networking/Port.h
-        ../../include/Ishiko/Networking/TCPAcceptor.h
-        ../../include/Ishiko/Networking/TCPClientSocket.h
-        ../../include/Ishiko/Networking/TCPConnector.h
-        ../../include/Ishiko/Networking/TCPServerSocket.h
-        ../../src/windows/WindowsSocketLibraryInitialization.hpp
+        ../../include/Ishiko/Networking/Port.hpp
+        ../../include/Ishiko/Networking/TCPAcceptor.hpp
+        ../../include/Ishiko/Networking/TCPClientSocket.hpp
+        ../../include/Ishiko/Networking/TCPConnector.hpp
+        ../../include/Ishiko/Networking/TCPServerSocket.hpp
     }
 
     sources
@@ -56,9 +55,40 @@ library IshikoNetworking : IshikoText, IshikoErrors
         ../../src/IPv6Address.cpp
         ../../src/Port.cpp
         ../../src/TCPAcceptor.cpp
-        ../../src/TCPClientSocket.cpp
         ../../src/TCPConnector.cpp
-        ../../src/TCPServerSocket.cpp
-        ../../src/windows/WindowsSocketLibraryInitialization.cpp
+    }
+
+    if ($(toolset) == gnu)
+    {
+        headers
+        {
+            ../../include/Ishiko/Networking/linux/TCPClientSocket.hpp
+            ../../include/Ishiko/Networking/linux/TCPServerSocket.hpp
+            ../../src/linux/LibraryInitialization.hpp
+        }
+
+        sources
+        {
+            ../../src/linux/LibraryInitialization.cpp
+            ../../src/linux/TCPClientSocket.cpp
+            ../../src/linux/TCPServerSocket.cpp
+        }
+    }
+
+    if ($(toolset) != gnu)
+    {
+        headers
+        {
+           ../../include/Ishiko/Networking/windows/TCPClientSocket.hpp
+           ../../include/Ishiko/Networking/windows/TCPServerSocket.hpp
+           ../../src/windows/LibraryInitialization.hpp
+        }
+
+        sources
+        {
+            ../../src/windows/LibraryInitialization.cpp
+            ../../src/windows/TCPClientSocket.cpp
+            ../../src/windows/TCPServerSocket.cpp
+        }
     }
 }

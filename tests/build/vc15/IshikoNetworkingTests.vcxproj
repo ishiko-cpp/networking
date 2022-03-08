@@ -163,8 +163,8 @@
     <ClInclude Include="..\..\src\IPAddressTests.hpp" />
     <ClInclude Include="..\..\src\IPv4AddressTests.hpp" />
     <ClInclude Include="..\..\src\PortTests.hpp" />
-    <ClInclude Include="..\..\src\TCPClientSocketTests.h" />
-    <ClInclude Include="..\..\src\TCPServerSocketTests.h" />
+    <ClInclude Include="..\..\src\TCPClientSocketTests.hpp" />
+    <ClInclude Include="..\..\src\TCPServerSocketTests.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
