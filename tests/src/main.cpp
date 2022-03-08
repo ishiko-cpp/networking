@@ -7,8 +7,8 @@
 #include "IPAddressTests.hpp"
 #include "IPv4AddressTests.hpp"
 #include "PortTests.hpp"
-#include "TCPClientSocketTests.h"
-#include "TCPServerSocketTests.h"
+#include "TCPClientSocketTests.hpp"
+#include "TCPServerSocketTests.hpp"
 #include "Ishiko/Networking/linkoptions.hpp"
 #include <Ishiko/Tests/Core.hpp>
 

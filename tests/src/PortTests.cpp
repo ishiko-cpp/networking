@@ -5,7 +5,7 @@
 */
 
 #include "PortTests.hpp"
-#include "Ishiko/Networking/Port.h"
+#include "Ishiko/Networking/Port.hpp"
 
 using namespace Ishiko::Networking;
 using namespace Ishiko::Tests;
