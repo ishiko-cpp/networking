@@ -5,3 +5,20 @@
 */
 
 #include "linux/LibraryInitialization.hpp"
+
+namespace Ishiko
+{
+namespace Networking
+{
+
+LibraryInitialization::LibraryInitialization(Error& error)
+{
+    // No initialization is required on Linux
+}
+
+LibraryInitialization::~LibraryInitialization()
+{
+}
+
+}
+}

@@ -13,6 +13,25 @@ namespace Ishiko
 namespace Networking
 {
 
+LibraryInitialization::LibraryInitialization(Error& error)
+{
+    Startup(error);
+    if (!error)
+    {
+        m_cleanup = true;
+    }
+}
+
+LibraryInitialization::~LibraryInitialization()
+{
+    if (m_cleanup)
+    {
+        // In practice this shouldn't fail if WSAStartup was successful and there isn't any recovery possible anyway.
+        Error ignoredError;
+        Cleanup(ignoredError);
+    }
+}
+
 void LibraryInitialization::Startup(Error& error)
 {
     WORD version = MAKEWORD(2, 2);

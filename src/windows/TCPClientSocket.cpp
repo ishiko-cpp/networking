@@ -6,19 +6,14 @@
 
 #include "windows/TCPClientSocket.hpp"
 #include "ErrorCategory.hpp"
-#include "windows/LibraryInitialization.hpp"
 
 namespace Ishiko
 {
 namespace Networking
 {
 
-TCPClientSocket::TCPClientSocket()
+TCPClientSocket::TCPClientSocket(Error& error)
 {
-    // TODO: handle error
-    Error error;
-    LibraryInitialization::Startup(error);
-
     m_socket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
     if (m_socket == INVALID_SOCKET)
     {
@@ -31,9 +26,6 @@ TCPClientSocket::TCPClientSocket()
 TCPClientSocket::TCPClientSocket(SOCKET socket)
     : m_socket(socket)
 {
-    // TODO: handle error
-    Error error;
-    LibraryInitialization::Startup(error);
 }
 
 TCPClientSocket::~TCPClientSocket()
@@ -42,11 +34,6 @@ TCPClientSocket::~TCPClientSocket()
     {
         closesocket(m_socket);
     }
-
-    // TODO: this doesn't work if the Startup call was unsuccessful. Seems I may need to make the initialization
-    // explicit after all since I have no way of handling this error.
-    Error error;
-    LibraryInitialization::Cleanup(error);
 }
 
 void TCPClientSocket::connect(IPv4Address address, Port port, Error& error)
