@@ -39,6 +39,7 @@ library IshikoNetworking : IshikoText, IshikoErrors
         ../../include/Ishiko/Networking/IPAddress.hpp
         ../../include/Ishiko/Networking/IPv4Address.hpp
         ../../include/Ishiko/Networking/IPv6Address.hpp
+        ../../include/Ishiko/Networking/LibraryInitialization.hpp
         ../../include/Ishiko/Networking/linkoptions.hpp
         ../../include/Ishiko/Networking/Port.hpp
         ../../include/Ishiko/Networking/TCPAcceptor.hpp
@@ -62,9 +63,9 @@ library IshikoNetworking : IshikoText, IshikoErrors
     {
         headers
         {
+            ../../include/Ishiko/Networking/linux/LibraryInitialization.hpp
             ../../include/Ishiko/Networking/linux/TCPClientSocket.hpp
             ../../include/Ishiko/Networking/linux/TCPServerSocket.hpp
-            ../../src/linux/LibraryInitialization.hpp
         }
 
         sources
@@ -79,9 +80,9 @@ library IshikoNetworking : IshikoText, IshikoErrors
     {
         headers
         {
+           ../../include/Ishiko/Networking/windows/LibraryInitialization.hpp
            ../../include/Ishiko/Networking/windows/TCPClientSocket.hpp
            ../../include/Ishiko/Networking/windows/TCPServerSocket.hpp
-           ../../src/windows/LibraryInitialization.hpp
         }
 
         sources

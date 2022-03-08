@@ -32,6 +32,9 @@
     <ClInclude Include="..\..\include\Ishiko\Networking\IPv6Address.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\Ishiko\Networking\LibraryInitialization.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\Ishiko\Networking\linkoptions.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -50,13 +53,13 @@
     <ClInclude Include="..\..\include\Ishiko\Networking\TCPServerSocket.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\Ishiko\Networking\windows\LibraryInitialization.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\Ishiko\Networking\windows\TCPClientSocket.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Ishiko\Networking\windows\TCPServerSocket.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\windows\LibraryInitialization.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
