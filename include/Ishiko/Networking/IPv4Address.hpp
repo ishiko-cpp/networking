@@ -4,10 +4,11 @@
     See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
 */
 
-#ifndef _ISHIKO_NETWORKING_IPV4ADDRESS_H_
-#define _ISHIKO_NETWORKING_IPV4ADDRESS_H_
+#ifndef _ISHIKO_NETWORKING_IPV4ADDRESS_HPP_
+#define _ISHIKO_NETWORKING_IPV4ADDRESS_HPP_
 
 #include <Ishiko/Errors.hpp>
+#include <cstdint>
 #include <string>
 
 namespace Ishiko
@@ -21,11 +22,14 @@ public:
     IPv4Address();
     IPv4Address(const std::string& address, Error& error);
     static IPv4Address Any();
+    static IPv4Address Localhost();
+
+    uint32_t value() const;
 
     std::string toString() const;
 
 private:
-    unsigned char m_address[4];
+    uint32_t m_address;
 };
 
 }
