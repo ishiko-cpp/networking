@@ -4,7 +4,7 @@
     See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
 */
 
-#include "WindowsSocketLibraryInitialization.hpp"
+#include "windows/LibraryInitialization.hpp"
 #include "ErrorCategory.hpp"
 #include <winsock2.h>
 
@@ -13,7 +13,7 @@ namespace Ishiko
 namespace Networking
 {
 
-void WindowsSocketLibraryInitialization::Startup(Error& error)
+void LibraryInitialization::Startup(Error& error)
 {
     WORD version = MAKEWORD(2, 2);
     WSADATA data;
@@ -29,7 +29,7 @@ void WindowsSocketLibraryInitialization::Startup(Error& error)
     }
 }
 
-void WindowsSocketLibraryInitialization::Cleanup(Error& error)
+void LibraryInitialization::Cleanup(Error& error)
 {
     if (WSACleanup() == SOCKET_ERROR)
     {
