@@ -17,8 +17,14 @@ namespace Networking
 class LibraryInitialization
 {
 public:
+    LibraryInitialization(Error& error);
+    ~LibraryInitialization();
+
     static void Startup(Error& error);
     static void Cleanup(Error& error);
+
+private:
+    bool m_cleanup;
 };
 
 }

@@ -21,7 +21,7 @@ namespace Networking
 class TCPClientSocket
 {
 public:
-    TCPClientSocket();
+    TCPClientSocket(Error& error);
     TCPClientSocket(SOCKET socket);
     ~TCPClientSocket();
 
