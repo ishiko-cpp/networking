@@ -8,6 +8,7 @@
 #define _ISHIKO_CPP_NETWORKING_LINUX_TCPSERVERSOCKET_HPP_
 
 #include "../IPv4Address.hpp"
+#include "../linux/TCPClientSocket.hpp"
 #include "../Port.hpp"
 #include <Ishiko/Errors.hpp>
 
@@ -22,6 +23,8 @@ class TCPServerSocket
 public:
     TCPServerSocket(IPv4Address address, Port port, Error& error);
     ~TCPServerSocket();
+
+    TCPClientSocket accept(Error& error);
 };
 
 }

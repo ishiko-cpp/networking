@@ -20,5 +20,10 @@ TCPClientSocket::~TCPClientSocket()
 {
 }
 
+void TCPClientSocket::connect(IPv4Address address, Port port, Error& error)
+{
+    // TODO
+}
+
 }
 }

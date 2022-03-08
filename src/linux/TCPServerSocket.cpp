@@ -20,5 +20,11 @@ TCPServerSocket::~TCPServerSocket()
 {
 }
 
+TCPClientSocket TCPServerSocket::accept(Error& error)
+{
+    // TODO
+    return TCPClientSocket(error);
+}
+
 }
 }
