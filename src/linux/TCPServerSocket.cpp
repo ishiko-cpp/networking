@@ -5,3 +5,26 @@
 */
 
 #include "linux/TCPServerSocket.hpp"
+
+namespace Ishiko
+{
+namespace Networking
+{
+
+TCPServerSocket::TCPServerSocket(IPv4Address address, Port port, Error& error)
+{
+    // TODO
+}
+
+TCPServerSocket::~TCPServerSocket()
+{
+}
+
+TCPClientSocket TCPServerSocket::accept(Error& error)
+{
+    // TODO
+    return TCPClientSocket(error);
+}
+
+}
+}
