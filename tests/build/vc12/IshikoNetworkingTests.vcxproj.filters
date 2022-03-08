@@ -26,10 +26,10 @@
     <ClInclude Include="..\..\src\PortTests.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\TCPClientSocketTests.h">
+    <ClInclude Include="..\..\src\TCPClientSocketTests.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\TCPServerSocketTests.h">
+    <ClInclude Include="..\..\src\TCPServerSocketTests.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
