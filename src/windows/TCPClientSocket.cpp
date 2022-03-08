@@ -4,9 +4,9 @@
     See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
 */
 
-#include "TCPClientSocket.h"
+#include "windows/TCPClientSocket.hpp"
 #include "ErrorCategory.hpp"
-#include "windows/WindowsSocketLibraryInitialization.hpp"
+#include "windows/LibraryInitialization.hpp"
 
 namespace Ishiko
 {
@@ -17,7 +17,7 @@ TCPClientSocket::TCPClientSocket()
 {
     // TODO: handle error
     Error error;
-    WindowsSocketLibraryInitialization::Startup(error);
+    LibraryInitialization::Startup(error);
 
     m_socket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
     if (m_socket == INVALID_SOCKET)
@@ -33,7 +33,7 @@ TCPClientSocket::TCPClientSocket(SOCKET socket)
 {
     // TODO: handle error
     Error error;
-    WindowsSocketLibraryInitialization::Startup(error);
+    LibraryInitialization::Startup(error);
 }
 
 TCPClientSocket::~TCPClientSocket()
@@ -46,7 +46,7 @@ TCPClientSocket::~TCPClientSocket()
     // TODO: this doesn't work if the Startup call was unsuccessful. Seems I may need to make the initialization
     // explicit after all since I have no way of handling this error.
     Error error;
-    WindowsSocketLibraryInitialization::Cleanup(error);
+    LibraryInitialization::Cleanup(error);
 }
 
 void TCPClientSocket::connect(IPv4Address address, Port port, Error& error)

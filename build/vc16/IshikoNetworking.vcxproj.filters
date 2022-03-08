@@ -32,25 +32,34 @@
     <ClInclude Include="..\..\include\Ishiko\Networking\IPv6Address.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\Ishiko\Networking\LibraryInitialization.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\Ishiko\Networking\linkoptions.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Ishiko\Networking\Port.h">
+    <ClInclude Include="..\..\include\Ishiko\Networking\Port.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Ishiko\Networking\TCPAcceptor.h">
+    <ClInclude Include="..\..\include\Ishiko\Networking\TCPAcceptor.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Ishiko\Networking\TCPClientSocket.h">
+    <ClInclude Include="..\..\include\Ishiko\Networking\TCPClientSocket.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Ishiko\Networking\TCPConnector.h">
+    <ClInclude Include="..\..\include\Ishiko\Networking\TCPConnector.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Ishiko\Networking\TCPServerSocket.h">
+    <ClInclude Include="..\..\include\Ishiko\Networking\TCPServerSocket.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\windows\WindowsSocketLibraryInitialization.hpp">
+    <ClInclude Include="..\..\include\Ishiko\Networking\windows\LibraryInitialization.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Ishiko\Networking\windows\TCPClientSocket.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Ishiko\Networking\windows\TCPServerSocket.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -73,16 +82,16 @@
     <ClCompile Include="..\..\src\TCPAcceptor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\TCPClientSocket.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\TCPConnector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\TCPServerSocket.cpp">
+    <ClCompile Include="..\..\src\windows\LibraryInitialization.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\windows\WindowsSocketLibraryInitialization.cpp">
+    <ClCompile Include="..\..\src\windows\TCPClientSocket.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\windows\TCPServerSocket.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

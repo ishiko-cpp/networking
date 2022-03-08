@@ -25,8 +25,8 @@ program IshikoNetworkingTests : IshikoNetworking, IshikoTestsCore
         ../../src/IPAddressTests.hpp
         ../../src/IPv4AddressTests.hpp
         ../../src/PortTests.hpp
-        ../../src/TCPClientSocketTests.h
-        ../../src/TCPServerSocketTests.h
+        ../../src/TCPClientSocketTests.hpp
+        ../../src/TCPServerSocketTests.hpp
     }
 
     sources

@@ -4,12 +4,11 @@
     See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
 */
 
-#ifndef _ISHIKO_CPP_NETWORKING_TCPSERVERSOCKET_H_
-#define _ISHIKO_CPP_NETWORKING_TCPSERVERSOCKET_H_
+#ifndef _ISHIKO_CPP_NETWORKING_WINDOWS_TCPCLIENTSOCKET_HPP_
+#define _ISHIKO_CPP_NETWORKING_WINDOWS_TCPCLIENTSOCKET_HPP_
 
 #include "IPv4Address.hpp"
-#include "Port.h"
-#include "TCPClientSocket.h"
+#include "Port.hpp"
 #include <Ishiko/Errors.hpp>
 #include <winsock2.h>
 
@@ -19,17 +18,16 @@ namespace Networking
 {
 
 // TODO: forbid copy, allow moves
-class TCPServerSocket
+class TCPClientSocket
 {
 public:
-    TCPServerSocket(IPv4Address address, Port port, Error& error);
-    ~TCPServerSocket();
+    TCPClientSocket();
+    TCPClientSocket(SOCKET socket);
+    ~TCPClientSocket();
 
-    TCPClientSocket accept(Error& error);
+    void connect(IPv4Address address, Port port, Error& error);
 
 private:
-    IPv4Address m_address;
-    Port m_port;
     SOCKET m_socket;
 };
 

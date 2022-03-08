@@ -4,9 +4,9 @@
     See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
 */
 
-#include "TCPServerSocketTests.h"
-#include "Ishiko/Networking/TCPClientSocket.h"
-#include "Ishiko/Networking/TCPServerSocket.h"
+#include "TCPServerSocketTests.hpp"
+#include "Ishiko/Networking/TCPClientSocket.hpp"
+#include "Ishiko/Networking/TCPServerSocket.hpp"
 #include <thread>
 
 using namespace Ishiko;

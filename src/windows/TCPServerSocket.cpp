@@ -4,9 +4,9 @@
     See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
 */
 
-#include "TCPServerSocket.h"
+#include "windows/TCPServerSocket.hpp"
 #include "ErrorCategory.hpp"
-#include "windows/WindowsSocketLibraryInitialization.hpp"
+#include "windows/LibraryInitialization.hpp"
 
 using namespace std;
 
@@ -19,7 +19,7 @@ TCPServerSocket::TCPServerSocket(IPv4Address address, Port port, Error& error)
     : m_address(move(address)), m_port(move(port)), m_socket(INVALID_SOCKET)
 {
     // TODO: handle error
-    WindowsSocketLibraryInitialization::Startup(error);
+    LibraryInitialization::Startup(error);
 
     m_socket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
     if (m_socket == INVALID_SOCKET)
@@ -85,7 +85,7 @@ TCPServerSocket::~TCPServerSocket()
     // TODO: this doesn't work if the Startup call was unsuccessful. Seems I may need to make the initialization
     // explicit after all since I have no way of handling this error.
     Error error;
-    WindowsSocketLibraryInitialization::Cleanup(error);
+    LibraryInitialization::Cleanup(error);
 }
 
 TCPClientSocket TCPServerSocket::accept(Error& error)
