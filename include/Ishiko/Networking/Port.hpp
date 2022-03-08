@@ -4,8 +4,8 @@
     See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
 */
 
-#ifndef _ISHIKO_NETWORKING_PORT_H_
-#define _ISHIKO_NETWORKING_PORT_H_
+#ifndef _ISHIKO_CPP_NETWORKING_PORT_HPP_
+#define _ISHIKO_CPP_NETWORKING_PORT_HPP_
 
 #include <string>
 
