@@ -4,8 +4,8 @@
     See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
 */
 
-#ifndef _ISHIKO_NETWORKING_TESTS_TCPSERVERSOCKETTESTS_H_
-#define _ISHIKO_NETWORKING_TESTS_TCPSERVERSOCKETTESTS_H_
+#ifndef _ISHIKO_CPP_NETWORKING_TESTS_TCPSERVERSOCKETTESTS_H_
+#define _ISHIKO_CPP_NETWORKING_TESTS_TCPSERVERSOCKETTESTS_H_
 
 #include <Ishiko/Tests/Core.hpp>
 
@@ -16,6 +16,7 @@ public:
 
 private:
     static void ConstructorTest1(Ishiko::Tests::Test& test);
+    static void AcceptTest1(Ishiko::Tests::Test& test);
 };
 
 #endif

@@ -36,15 +36,16 @@ library IshikoNetworking : IshikoText, IshikoErrors
     {
         ../../include/Ishiko/Networking.hpp
         ../../include/Ishiko/Networking/ErrorCategory.hpp
-        ../../include/Ishiko/Networking/IPAddress.h
-        ../../include/Ishiko/Networking/IPv4Address.h
-        ../../include/Ishiko/Networking/IPv6Address.h
-        ../../include/Ishiko/Networking/linkoptions.h
+        ../../include/Ishiko/Networking/IPAddress.hpp
+        ../../include/Ishiko/Networking/IPv4Address.hpp
+        ../../include/Ishiko/Networking/IPv6Address.hpp
+        ../../include/Ishiko/Networking/linkoptions.hpp
         ../../include/Ishiko/Networking/Port.h
         ../../include/Ishiko/Networking/TCPAcceptor.h
         ../../include/Ishiko/Networking/TCPClientSocket.h
         ../../include/Ishiko/Networking/TCPConnector.h
         ../../include/Ishiko/Networking/TCPServerSocket.h
+        ../../src/windows/WindowsSocketLibraryInitialization.hpp
     }
 
     sources
@@ -58,5 +59,6 @@ library IshikoNetworking : IshikoText, IshikoErrors
         ../../src/TCPClientSocket.cpp
         ../../src/TCPConnector.cpp
         ../../src/TCPServerSocket.cpp
+        ../../src/windows/WindowsSocketLibraryInitialization.cpp
     }
 }

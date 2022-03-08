@@ -4,11 +4,12 @@
     See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
 */
 
-#include "IPAddressTests.h"
-#include "IPv4AddressTests.h"
+#include "IPAddressTests.hpp"
+#include "IPv4AddressTests.hpp"
+#include "PortTests.hpp"
 #include "TCPClientSocketTests.h"
 #include "TCPServerSocketTests.h"
-#include "Ishiko/Networking/linkoptions.h"
+#include "Ishiko/Networking/linkoptions.hpp"
 #include <Ishiko/Tests/Core.hpp>
 
 using namespace Ishiko::Tests;
@@ -20,6 +21,7 @@ int main(int argc, char* argv[])
     TestSequence& theTests = theTestHarness.tests();
     theTests.append<IPv4AddressTests>();
     theTests.append<IPAddressTests>();
+    theTests.append<PortTests>();
     theTests.append<TCPClientSocketTests>();
     theTests.append<TCPServerSocketTests>();
 

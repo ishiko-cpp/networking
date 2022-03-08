@@ -4,8 +4,8 @@
     See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
 */
 
-#include "IPAddressTests.h"
-#include "Ishiko/Networking/IPAddress.h"
+#include "IPAddressTests.hpp"
+#include "Ishiko/Networking/IPAddress.hpp"
 
 using namespace Ishiko::Networking;
 using namespace Ishiko::Tests;

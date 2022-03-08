@@ -22,8 +22,9 @@ program IshikoNetworkingTests : IshikoNetworking, IshikoTestsCore
 
     headers
     {
-        ../../src/IPAddressTests.h
-        ../../src/IPv4AddressTests.h
+        ../../src/IPAddressTests.hpp
+        ../../src/IPv4AddressTests.hpp
+        ../../src/PortTests.hpp
         ../../src/TCPClientSocketTests.h
         ../../src/TCPServerSocketTests.h
     }
@@ -33,6 +34,7 @@ program IshikoNetworkingTests : IshikoNetworking, IshikoTestsCore
         ../../src/IPAddressTests.cpp
         ../../src/IPv4AddressTests.cpp
         ../../src/main.cpp
+        ../../src/PortTests.cpp
         ../../src/TCPClientSocketTests.cpp
         ../../src/TCPServerSocketTests.cpp
     }
