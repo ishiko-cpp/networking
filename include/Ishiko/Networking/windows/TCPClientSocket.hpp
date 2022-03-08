@@ -7,8 +7,8 @@
 #ifndef _ISHIKO_CPP_NETWORKING_WINDOWS_TCPCLIENTSOCKET_HPP_
 #define _ISHIKO_CPP_NETWORKING_WINDOWS_TCPCLIENTSOCKET_HPP_
 
-#include "IPv4Address.hpp"
-#include "Port.hpp"
+#include "../IPv4Address.hpp"
+#include "../Port.hpp"
 #include <Ishiko/Errors.hpp>
 #include <winsock2.h>
 
