@@ -26,6 +26,9 @@ public:
 
     TCPClientSocket accept(Error& error);
 
+    IPv4Address address() const;
+    Port port() const;
+
 private:
     IPv4Address m_address;
     Port m_port;

@@ -20,6 +20,9 @@ namespace Networking
 TCPServerSocket::TCPServerSocket(IPv4Address address, Port port, Error& error)
     : m_address(move(address)), m_port(move(port))
 {
+    // TODO: the address and port may not be what was passed in! Port could be 0 and so could be address, 
+    // we need to get them after the bind
+
     m_socket = socket(AF_INET, SOCK_STREAM, 0);
     if (m_socket == -1)
     {
@@ -74,6 +77,16 @@ TCPClientSocket TCPServerSocket::accept(Error& error)
         Fail(error, ErrorCategory::Value::generic, "", __FILE__, __LINE__);
     }
     return TCPClientSocket(clientSocket);
+}
+
+IPv4Address TCPServerSocket::address() const
+{
+    return m_address;
+}
+
+Port TCPServerSocket::port() const
+{
+    return m_port;
 }
 
 }
