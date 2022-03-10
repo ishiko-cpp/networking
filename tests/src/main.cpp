@@ -29,8 +29,8 @@ int main(int argc, char* argv[])
     theTests.append<IPv4AddressTests>();
     theTests.append<IPAddressTests>();
     theTests.append<PortTests>();
-    theTests.append<TCPClientSocketTests>();
     theTests.append<TCPServerSocketTests>();
+    theTests.append<TCPClientSocketTests>();
 
     return theTestHarness.run();
 }

@@ -39,7 +39,6 @@ void TCPServerSocketTests::AcceptTest1(Test& test)
 
     thread client([]()
         {
-            this_thread::sleep_for(chrono::seconds(1));
             Error error;
             TCPClientSocket clientSocket(error);
             clientSocket.connect(IPv4Address::Localhost(), 8585, error);

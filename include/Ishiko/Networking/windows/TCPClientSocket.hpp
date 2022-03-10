@@ -27,6 +27,13 @@ public:
 
     void connect(IPv4Address address, Port port, Error& error);
 
+    // TODO: should length be size_t, same for return value
+    int read(char* buffer, int length, Error& error);
+    // TODO: always blocking at the moment, if this is non-blocking then would need to return the actual number of
+    // bytes sent
+    // TODO: should length be size_t
+    void write(const char* buffer, int length, Error& error);
+
 private:
     SOCKET m_socket;
 };
