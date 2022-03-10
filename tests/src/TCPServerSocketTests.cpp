@@ -33,16 +33,15 @@ void TCPServerSocketTests::ConstructorTest1(Test& test)
 void TCPServerSocketTests::AcceptTest1(Test& test)
 {
     Error error;
-    TCPServerSocket socket(IPv4Address::Localhost(), 8585, error);
+    TCPServerSocket socket(IPv4Address::Localhost(), 8586, error);
 
     ISHIKO_ABORT_IF(error);
 
     thread client([]()
         {
-            this_thread::sleep_for(chrono::seconds(1));
             Error error;
             TCPClientSocket clientSocket(error);
-            clientSocket.connect(IPv4Address::Localhost(), 8585, error);
+            clientSocket.connect(IPv4Address::Localhost(), 8586, error);
         }
     );
 
