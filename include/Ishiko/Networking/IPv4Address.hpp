@@ -26,6 +26,8 @@ public:
 
     uint32_t value() const;
 
+    bool operator==(IPv4Address other) const;
+    bool operator!=(IPv4Address other) const;
     std::string toString() const;
 
 private:

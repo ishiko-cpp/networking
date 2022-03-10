@@ -23,6 +23,16 @@ unsigned short Port::number() const
     return m_number;
 }
 
+bool Port::operator==(Port other) const
+{
+    return (m_number == other.m_number);
+}
+
+bool Port::operator!=(Port other) const
+{
+    return (m_number != other.m_number);
+}
+
 string Port::toString() const
 {
     return to_string(m_number);

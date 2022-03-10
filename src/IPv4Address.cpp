@@ -109,6 +109,16 @@ uint32_t IPv4Address::value() const
     return m_address;
 }
 
+bool IPv4Address::operator==(IPv4Address other) const
+{
+    return (m_address == other.m_address);
+}
+
+bool IPv4Address::operator!=(IPv4Address other) const
+{
+    return (m_address != other.m_address);
+}
+
 string IPv4Address::toString() const
 {
     string result;

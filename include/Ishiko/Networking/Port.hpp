@@ -21,6 +21,8 @@ public:
 
     unsigned short number() const;
 
+    bool operator==(Port other) const;
+    bool operator!=(Port other) const;
     std::string toString() const;
 
 private:

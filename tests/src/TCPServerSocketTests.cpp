@@ -27,6 +27,8 @@ void TCPServerSocketTests::ConstructorTest1(Test& test)
     TCPServerSocket socket(IPv4Address::Localhost(), 8585, error);
 
     ISHIKO_FAIL_IF(error);
+    ISHIKO_FAIL_IF_NEQ(socket.address(), IPv4Address::Localhost());
+    ISHIKO_FAIL_IF_NEQ(socket.port(), 8585);
     ISHIKO_PASS();
 }
 
