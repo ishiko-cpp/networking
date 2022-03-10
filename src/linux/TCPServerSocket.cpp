@@ -5,12 +5,15 @@
 */
 
 #include "linux/TCPServerSocket.hpp"
+<<<<<<< HEAD
 #include "ErrorCategory.hpp"
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <unistd.h>
 
 using namespace std;
+=======
+>>>>>>> origin/develop
 
 namespace Ishiko
 {
@@ -18,6 +21,7 @@ namespace Networking
 {
 
 TCPServerSocket::TCPServerSocket(IPv4Address address, Port port, Error& error)
+<<<<<<< HEAD
     : m_address(move(address)), m_port(move(port))
 {
     m_socket = socket(AF_INET, SOCK_STREAM, 0);
@@ -55,18 +59,26 @@ TCPServerSocket::TCPServerSocket(IPv4Address address, Port port, Error& error)
         Fail(error, ErrorCategory::Value::generic, "", __FILE__, __LINE__);
         return;
     }
+=======
+{
+    // TODO
+>>>>>>> origin/develop
 }
 
 TCPServerSocket::~TCPServerSocket()
 {
+<<<<<<< HEAD
     if (m_socket != -1)
     {
         close(m_socket);
     }
+=======
+>>>>>>> origin/develop
 }
 
 TCPClientSocket TCPServerSocket::accept(Error& error)
 {
+<<<<<<< HEAD
     int clientSocket = ::accept(m_socket, NULL, NULL);
     if (clientSocket == -1)
     {
@@ -74,6 +86,10 @@ TCPClientSocket TCPServerSocket::accept(Error& error)
         Fail(error, ErrorCategory::Value::generic, "", __FILE__, __LINE__);
     }
     return TCPClientSocket(clientSocket);
+=======
+    // TODO
+    return TCPClientSocket(error);
+>>>>>>> origin/develop
 }
 
 }
