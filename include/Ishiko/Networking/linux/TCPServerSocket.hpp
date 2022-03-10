@@ -25,6 +25,11 @@ public:
     ~TCPServerSocket();
 
     TCPClientSocket accept(Error& error);
+
+private:
+    IPv4Address m_address;
+    Port m_port;
+    int m_socket;
 };
 
 }

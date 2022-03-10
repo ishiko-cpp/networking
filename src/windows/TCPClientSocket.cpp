@@ -38,8 +38,6 @@ TCPClientSocket::~TCPClientSocket()
 
 void TCPClientSocket::connect(IPv4Address address, Port port, Error& error)
 {
-    // TODO
-
     SOCKADDR_IN winsockAddress;
     winsockAddress.sin_family = AF_INET;
     winsockAddress.sin_port = htons(port.number());
