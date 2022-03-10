@@ -53,5 +53,28 @@ void TCPClientSocket::connect(IPv4Address address, Port port, Error& error)
     }
 }
 
+int TCPClientSocket::read(char* buffer, int length, Error& error)
+{
+    int err = recv(m_socket, buffer, length, 0);
+    if (err == SOCKET_ERROR)
+    {
+        int lastError = WSAGetLastError();
+        // TODO: more detailed error
+        Fail(error, ErrorCategory::Value::generic, "", __FILE__, __LINE__);
+    }
+    return err;
+}
+
+void TCPClientSocket::write(const char* buffer, int length, Error& error)
+{
+    int err = send(m_socket, buffer, length, 0);
+    if (err == SOCKET_ERROR)
+    {
+        int lastError = WSAGetLastError();
+        // TODO: more detailed error
+        Fail(error, ErrorCategory::Value::generic, "", __FILE__, __LINE__);
+    }
+}
+
 }
 }
