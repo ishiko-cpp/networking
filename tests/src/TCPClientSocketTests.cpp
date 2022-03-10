@@ -8,6 +8,7 @@
 #include "Ishiko/Networking/TCPClientSocket.hpp"
 #include "Ishiko/Networking/TCPServerSocket.hpp"
 #include <thread>
+#include <iostream>
 
 using namespace Ishiko;
 using namespace Ishiko::Networking;
@@ -39,7 +40,7 @@ void TCPClientSocketTests::WriteTest1(Test& test)
         [&buffer]()
         {
             Error error;
-            TCPServerSocket socket(IPv4Address::Localhost(), 8585, error);
+            TCPServerSocket socket(IPv4Address::Localhost(), 8685, error);
             TCPClientSocket clientSocket = socket.accept(error);
 
             // This will also make sure the server stays alive until the client writes the data
@@ -47,12 +48,15 @@ void TCPClientSocketTests::WriteTest1(Test& test)
         }
     );
 
+    // TODO: this is flaky, should be able to fix once I get async server
+    this_thread::sleep_for(chrono::seconds(1));
+
     Error error;
     TCPClientSocket socket(error);
 
     ISHIKO_FAIL_IF(error);
 
-    socket.connect(IPv4Address::Localhost(), 8585, error);
+    socket.connect(IPv4Address::Localhost(), 8685, error);
     
     ISHIKO_FAIL_IF(error);
 
@@ -72,18 +76,21 @@ void TCPClientSocketTests::ReadTest1(Test& test)
         []()
         {
             Error error;
-            TCPServerSocket socket(IPv4Address::Localhost(), 8585, error);
+            TCPServerSocket socket(IPv4Address::Localhost(), 8686, error);
             TCPClientSocket clientSocket = socket.accept(error);
             clientSocket.write("a", 1, error);
         }
     );
 
+    // TODO: this is flaky, should be able to fix once I get async server
+    this_thread::sleep_for(chrono::seconds(1));
+    
     Error error;
     TCPClientSocket socket(error);
 
     ISHIKO_FAIL_IF(error);
 
-    socket.connect(IPv4Address::Localhost(), 8585, error);
+    socket.connect(IPv4Address::Localhost(), 8686, error);
     
     ISHIKO_FAIL_IF(error);
 
