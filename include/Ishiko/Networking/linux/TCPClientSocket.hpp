@@ -21,9 +21,13 @@ class TCPClientSocket
 {
 public:
     TCPClientSocket(Error& error);
+    TCPClientSocket(int socket);
     ~TCPClientSocket();
 
     void connect(IPv4Address address, Port port, Error& error);
+
+private:
+    int m_socket;
 };
 
 }

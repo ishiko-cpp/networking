@@ -15,7 +15,7 @@ namespace Networking
 {
 
 TCPServerSocket::TCPServerSocket(IPv4Address address, Port port, Error& error)
-    : m_address(move(address)), m_port(move(port)), m_socket(INVALID_SOCKET)
+    : m_address(move(address)), m_port(move(port))
 {
     m_socket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
     if (m_socket == INVALID_SOCKET)
@@ -59,6 +59,7 @@ TCPServerSocket::TCPServerSocket(IPv4Address address, Port port, Error& error)
         return;
     }
 
+    // TODO: make backlog explicit and configurable
     err = listen(m_socket, SOMAXCONN);
     if (err == SOCKET_ERROR)
     {
