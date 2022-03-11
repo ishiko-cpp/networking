@@ -19,6 +19,10 @@ TCPClientSocketTests::TCPClientSocketTests(const TestNumber& number, const TestC
     : TestSequence(number, "TCPClientSocket tests", context)
 {
     append<HeapAllocationErrorsTest>("Constructor test 1", ConstructorTest1);
+    append<HeapAllocationErrorsTest>("getLocalAddress test 1", GetLocalIPAddressTest1);
+    append<HeapAllocationErrorsTest>("getLocalPort test 1", GetLocalPortTest1);
+    append<HeapAllocationErrorsTest>("getPeerAddress test 1", GetPeerIPAddressTest1);
+    append<HeapAllocationErrorsTest>("getPeerPort test 1", GetPeerPortTest1);
     append<HeapAllocationErrorsTest>("write test 1", WriteTest1);
     append<HeapAllocationErrorsTest>("read test 1", ReadTest1);
 }
@@ -29,6 +33,58 @@ void TCPClientSocketTests::ConstructorTest1(Test& test)
     TCPClientSocket socket(error);
 
     ISHIKO_FAIL_IF(error);
+    ISHIKO_PASS();
+}
+
+void TCPClientSocketTests::GetLocalIPAddressTest1(Test& test)
+{
+    Error error;
+    TCPClientSocket socket(error);
+
+    ISHIKO_FAIL_IF(error);
+
+    IPv4Address address = socket.getLocalIPAddress(error);
+
+    ISHIKO_FAIL_IF_NOT(error);
+    ISHIKO_PASS();
+}
+
+void TCPClientSocketTests::GetLocalPortTest1(Test& test)
+{
+    Error error;
+    TCPClientSocket socket(error);
+
+    ISHIKO_FAIL_IF(error);
+
+    Port port = socket.getLocalPort(error);
+
+    ISHIKO_FAIL_IF_NOT(error);
+    ISHIKO_PASS();
+}
+
+void TCPClientSocketTests::GetPeerIPAddressTest1(Test& test)
+{
+    Error error;
+    TCPClientSocket socket(error);
+
+    ISHIKO_FAIL_IF(error);
+
+    IPv4Address address = socket.getPeerIPAddress(error);
+
+    ISHIKO_FAIL_IF_NOT(error);
+    ISHIKO_PASS();
+}
+
+void TCPClientSocketTests::GetPeerPortTest1(Test& test)
+{
+    Error error;
+    TCPClientSocket socket(error);
+
+    ISHIKO_FAIL_IF(error);
+
+    Port port = socket.getPeerPort(error);
+
+    ISHIKO_FAIL_IF_NOT(error);
     ISHIKO_PASS();
 }
 
@@ -59,6 +115,26 @@ void TCPClientSocketTests::WriteTest1(Test& test)
     socket.connect(IPv4Address::Localhost(), 8685, error);
     
     ISHIKO_FAIL_IF(error);
+
+    IPv4Address localAddress = socket.getLocalIPAddress(error);
+
+    ISHIKO_FAIL_IF(error);
+    ISHIKO_FAIL_IF_NEQ(localAddress, IPv4Address::Localhost());
+
+    Port localPort = socket.getLocalPort(error);
+
+    ISHIKO_FAIL_IF(error);
+    ISHIKO_FAIL_IF_EQ(localPort, 0);
+
+    IPv4Address peerAddress = socket.getPeerIPAddress(error);
+
+    ISHIKO_FAIL_IF(error);
+    ISHIKO_FAIL_IF_NEQ(peerAddress, IPv4Address::Localhost());
+
+    Port peerPort = socket.getPeerPort(error);
+
+    ISHIKO_FAIL_IF(error);
+    ISHIKO_FAIL_IF_NEQ(peerPort, 8685);
 
     socket.write("a", 1, error);
 

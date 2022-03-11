@@ -15,7 +15,7 @@ namespace Networking
 {
 
 TCPServerSocket::TCPServerSocket(IPv4Address address, Port port, Error& error)
-    : m_address(address), m_port(port)
+    : m_ipAddress(address), m_port(port)
 {
     m_socket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
     if (m_socket == INVALID_SOCKET)
@@ -54,7 +54,7 @@ TCPServerSocket::TCPServerSocket(IPv4Address address, Port port, Error& error)
         return;
     }
 
-    m_address = IPv4Address(ntohl(boundAddress.sin_addr.s_addr));
+    m_ipAddress = IPv4Address(ntohl(boundAddress.sin_addr.s_addr));
     m_port = Port(ntohs(boundAddress.sin_port));
 
     // TODO: make backlog explicit and configurable
@@ -89,9 +89,9 @@ TCPClientSocket TCPServerSocket::accept(Error& error)
     return TCPClientSocket(clientSocket);
 }
 
-IPv4Address TCPServerSocket::address() const
+IPv4Address TCPServerSocket::ipAddress() const
 {
-    return m_address;
+    return m_ipAddress;
 }
 
 Port TCPServerSocket::port() const

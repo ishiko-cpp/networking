@@ -76,5 +76,61 @@ void TCPClientSocket::write(const char* buffer, int length, Error& error)
     }
 }
 
+IPv4Address TCPClientSocket::getLocalIPAddress(Error& error) const
+{
+    SOCKADDR_IN boundAddress;
+    int boundAddressLength = sizeof(boundAddress);
+    int err = getsockname(m_socket, (sockaddr*)&boundAddress, &boundAddressLength);
+    if (err == SOCKET_ERROR)
+    {
+        // TODO: more detailed error
+        Fail(error, ErrorCategory::Value::generic, "", __FILE__, __LINE__);
+    }
+
+    return IPv4Address(ntohl(boundAddress.sin_addr.s_addr));
+}
+
+Port TCPClientSocket::getLocalPort(Error& error) const
+{
+    SOCKADDR_IN boundAddress;
+    int boundAddressLength = sizeof(boundAddress);
+    int err = getsockname(m_socket, (sockaddr*)&boundAddress, &boundAddressLength);
+    if (err == SOCKET_ERROR)
+    {
+        // TODO: more detailed error
+        Fail(error, ErrorCategory::Value::generic, "", __FILE__, __LINE__);
+    }
+
+    return Port(ntohs(boundAddress.sin_port));
+}
+
+IPv4Address TCPClientSocket::getPeerIPAddress(Error& error) const
+{
+    SOCKADDR_IN boundAddress;
+    int boundAddressLength = sizeof(boundAddress);
+    int err = getpeername(m_socket, (sockaddr*)&boundAddress, &boundAddressLength);
+    if (err == SOCKET_ERROR)
+    {
+        // TODO: more detailed error
+        Fail(error, ErrorCategory::Value::generic, "", __FILE__, __LINE__);
+    }
+
+    return IPv4Address(ntohl(boundAddress.sin_addr.s_addr));
+}
+
+Port TCPClientSocket::getPeerPort(Error& error) const
+{
+    SOCKADDR_IN boundAddress;
+    int boundAddressLength = sizeof(boundAddress);
+    int err = getpeername(m_socket, (sockaddr*)&boundAddress, &boundAddressLength);
+    if (err == SOCKET_ERROR)
+    {
+        // TODO: more detailed error
+        Fail(error, ErrorCategory::Value::generic, "", __FILE__, __LINE__);
+    }
+
+    return Port(ntohs(boundAddress.sin_port));
+}
+
 }
 }
