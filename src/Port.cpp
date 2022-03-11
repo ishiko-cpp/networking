@@ -13,12 +13,17 @@ namespace Ishiko
 namespace Networking
 {
     
-Port::Port(unsigned short number)
+Port::Port(uint16_t number)
     : m_number(number)
 {
 }
 
-unsigned short Port::number() const
+Port Port::Any()
+{
+    return Port(0);
+}
+
+uint16_t Port::number() const
 {
     return m_number;
 }

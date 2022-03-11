@@ -17,7 +17,8 @@ namespace Networking
 class Port
 {
 public:
-    Port(unsigned short number);
+    Port(uint16_t number);
+    static Port Any();
 
     unsigned short number() const;
 
@@ -26,7 +27,7 @@ public:
     std::string toString() const;
 
 private:
-    unsigned short m_number;
+    uint16_t m_number;
 };
 
 }

@@ -21,6 +21,11 @@ IPv4Address::IPv4Address()
 {
 }
 
+IPv4Address::IPv4Address(uint32_t address)
+    : m_address(address)
+{
+}
+
 IPv4Address::IPv4Address(const string& address, Error& error)
 {
     string::const_iterator it = address.begin();

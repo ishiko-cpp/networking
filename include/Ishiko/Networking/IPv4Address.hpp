@@ -20,6 +20,7 @@ class IPv4Address
 {
 public:
     IPv4Address();
+    IPv4Address(uint32_t address);
     IPv4Address(const std::string& address, Error& error);
     static IPv4Address Any();
     static IPv4Address Localhost();
