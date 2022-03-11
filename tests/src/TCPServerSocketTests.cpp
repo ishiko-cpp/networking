@@ -28,7 +28,7 @@ void TCPServerSocketTests::ConstructorTest1(Test& test)
     TCPServerSocket socket(IPv4Address::Localhost(), 8585, error);
 
     ISHIKO_FAIL_IF(error);
-    ISHIKO_FAIL_IF_NEQ(socket.address(), IPv4Address::Localhost());
+    ISHIKO_FAIL_IF_NEQ(socket.ipAddress(), IPv4Address::Localhost());
     ISHIKO_FAIL_IF_NEQ(socket.port(), 8585);
     ISHIKO_PASS();
 }
@@ -39,7 +39,7 @@ void TCPServerSocketTests::ConstructorTest2(Test& test)
     TCPServerSocket socket(IPv4Address::Any(), Port::Any(), error);
 
     ISHIKO_FAIL_IF(error);
-    ISHIKO_FAIL_IF_NEQ(socket.address(), IPv4Address::Any());
+    ISHIKO_FAIL_IF_NEQ(socket.ipAddress(), IPv4Address::Any());
     ISHIKO_FAIL_IF_EQ(socket.port(), Port::Any());   // A specific port should have been assigned by the OS
     ISHIKO_PASS();
 }

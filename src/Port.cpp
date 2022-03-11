@@ -12,7 +12,7 @@ namespace Ishiko
 {
 namespace Networking
 {
-    
+
 Port::Port(uint16_t number)
     : m_number(number)
 {
