@@ -15,7 +15,7 @@ namespace Networking
 {
 
 TCPServerSocket::TCPServerSocket(IPv4Address address, Port port, Error& error)
-    : m_address(move(address)), m_port(move(port))
+    : m_address(address), m_port(port)
 {
     m_socket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
     if (m_socket == INVALID_SOCKET)
@@ -27,7 +27,10 @@ TCPServerSocket::TCPServerSocket(IPv4Address address, Port port, Error& error)
 
     SOCKADDR_IN winsockAddress;
     winsockAddress.sin_family = AF_INET;
-    int err = WSAHtons(m_socket, port.number(), &winsockAddress.sin_port);
+    winsockAddress.sin_addr.s_addr = htonl(address.value());
+    winsockAddress.sin_port = htons(port.number());
+    
+    int err = bind(m_socket, (sockaddr*)&winsockAddress, sizeof(winsockAddress));
     if (err == SOCKET_ERROR)
     {
         closesocket(m_socket);
@@ -37,27 +40,22 @@ TCPServerSocket::TCPServerSocket(IPv4Address address, Port port, Error& error)
         Fail(error, ErrorCategory::Value::generic, "", __FILE__, __LINE__);
         return;
     }
-    err = WSAHtonl(m_socket, address.value(), &winsockAddress.sin_addr.s_addr);
+
+    SOCKADDR_IN boundAddress;
+    int boundAddressLength = sizeof(boundAddress);
+    err = getsockname(m_socket, (sockaddr*)&boundAddress, &boundAddressLength);
     if (err == SOCKET_ERROR)
     {
         closesocket(m_socket);
-        m_socket = INVALID_SOCKET;
+        m_socket = INVALID_SOCKET;\
 
         // TODO: more detailed error
         Fail(error, ErrorCategory::Value::generic, "", __FILE__, __LINE__);
         return;
     }
 
-    err = bind(m_socket, (sockaddr*)&winsockAddress, sizeof(winsockAddress));
-    if (err == SOCKET_ERROR)
-    {
-        closesocket(m_socket);
-        m_socket = INVALID_SOCKET;
-
-        // TODO: more detailed error
-        Fail(error, ErrorCategory::Value::generic, "", __FILE__, __LINE__);
-        return;
-    }
+    m_address = IPv4Address(ntohl(boundAddress.sin_addr.s_addr));
+    m_port = Port(ntohs(boundAddress.sin_port));
 
     // TODO: make backlog explicit and configurable
     err = listen(m_socket, SOMAXCONN);
@@ -89,6 +87,16 @@ TCPClientSocket TCPServerSocket::accept(Error& error)
         Fail(error, ErrorCategory::Value::generic, "", __FILE__, __LINE__);
     }
     return TCPClientSocket(clientSocket);
+}
+
+IPv4Address TCPServerSocket::address() const
+{
+    return m_address;
+}
+
+Port TCPServerSocket::port() const
+{
+    return m_port;
 }
 
 }

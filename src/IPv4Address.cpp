@@ -21,6 +21,11 @@ IPv4Address::IPv4Address()
 {
 }
 
+IPv4Address::IPv4Address(uint32_t address)
+    : m_address(address)
+{
+}
+
 IPv4Address::IPv4Address(const string& address, Error& error)
 {
     string::const_iterator it = address.begin();
@@ -107,6 +112,16 @@ IPv4Address IPv4Address::Localhost()
 uint32_t IPv4Address::value() const
 {
     return m_address;
+}
+
+bool IPv4Address::operator==(IPv4Address other) const
+{
+    return (m_address == other.m_address);
+}
+
+bool IPv4Address::operator!=(IPv4Address other) const
+{
+    return (m_address != other.m_address);
 }
 
 string IPv4Address::toString() const

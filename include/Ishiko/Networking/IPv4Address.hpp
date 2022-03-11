@@ -20,12 +20,15 @@ class IPv4Address
 {
 public:
     IPv4Address();
+    IPv4Address(uint32_t address);
     IPv4Address(const std::string& address, Error& error);
     static IPv4Address Any();
     static IPv4Address Localhost();
 
     uint32_t value() const;
 
+    bool operator==(IPv4Address other) const;
+    bool operator!=(IPv4Address other) const;
     std::string toString() const;
 
 private:

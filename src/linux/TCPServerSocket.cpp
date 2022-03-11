@@ -44,6 +44,22 @@ TCPServerSocket::TCPServerSocket(IPv4Address address, Port port, Error& error)
         return;
     }
 
+    sockaddr_in boundAddress;
+    socklen_t boundAddressLength = sizeof(boundAddress);
+    err = getsockname(m_socket, (sockaddr*)&boundAddress, &boundAddressLength);
+    if (err == -1)
+    {
+        close(m_socket);
+        m_socket = -1;
+
+        // TODO: more detailed error
+        Fail(error, ErrorCategory::Value::generic, "", __FILE__, __LINE__);
+        return;
+    }
+
+    m_address = IPv4Address(ntohl(boundAddress.sin_addr.s_addr));
+    m_port = Port(ntohs(boundAddress.sin_port));
+
     // TODO: make backlog explicit and configurable
     err = listen(m_socket, 128);
     if (err == -1)
@@ -74,6 +90,16 @@ TCPClientSocket TCPServerSocket::accept(Error& error)
         Fail(error, ErrorCategory::Value::generic, "", __FILE__, __LINE__);
     }
     return TCPClientSocket(clientSocket);
+}
+
+IPv4Address TCPServerSocket::address() const
+{
+    return m_address;
+}
+
+Port TCPServerSocket::port() const
+{
+    return m_port;
 }
 
 }
