@@ -17,14 +17,17 @@ namespace Networking
 class Port
 {
 public:
-    Port(unsigned short number);
+    Port(uint16_t number);
+    static Port Any();
 
     unsigned short number() const;
 
+    bool operator==(Port other) const;
+    bool operator!=(Port other) const;
     std::string toString() const;
 
 private:
-    unsigned short m_number;
+    uint16_t m_number;
 };
 
 }
