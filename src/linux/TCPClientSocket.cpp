@@ -109,7 +109,7 @@ IPv4Address TCPClientSocket::getPeerIPAddress(Error& error) const
 {
     sockaddr_in boundAddress;
     socklen_t boundAddressLength = sizeof(boundAddress);
-    int err = getsockname(m_socket, (sockaddr*)&boundAddress, &boundAddressLength);
+    int err = getpeername(m_socket, (sockaddr*)&boundAddress, &boundAddressLength);
     if (err == -1)
     {
         // TODO: more detailed error
@@ -123,7 +123,7 @@ Port TCPClientSocket::getPeerPort(Error& error) const
 {
     sockaddr_in boundAddress;
     socklen_t boundAddressLength = sizeof(boundAddress);
-    int err = getsockname(m_socket, (sockaddr*)&boundAddress, &boundAddressLength);
+    int err = getpeername(m_socket, (sockaddr*)&boundAddress, &boundAddressLength);
     if (err == -1)
     {
         // TODO: more detailed error
