@@ -17,9 +17,6 @@ namespace Networking
 TCPServerSocket::TCPServerSocket(IPv4Address address, Port port, Error& error)
     : m_address(address), m_port(port)
 {
-    // TODO: the address and port may not be what was passed in! Port could be 0 and so could be address, 
-    // we need to get them after the bind
-
     m_socket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
     if (m_socket == INVALID_SOCKET)
     {
