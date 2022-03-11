@@ -8,7 +8,6 @@
 #include "Ishiko/Networking/TCPClientSocket.hpp"
 #include "Ishiko/Networking/TCPServerSocket.hpp"
 #include <thread>
-#include <iostream>
 
 using namespace Ishiko;
 using namespace Ishiko::Networking;
