@@ -41,6 +41,11 @@ public:
     // an error. And it also means some headache with exception version of functions. So we may have to keep track of
     // socket state inside the class.
 
+    IPv4Address getLocalIPAddress(Error& error) const;
+    Port getLocalPort(Error& error) const;
+    IPv4Address getPeerIPAddress(Error& error) const;
+    Port getPeerPort(Error& error) const;
+
 private:
     SOCKET m_socket;
 };

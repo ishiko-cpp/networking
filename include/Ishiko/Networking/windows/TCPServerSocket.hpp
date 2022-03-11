@@ -27,11 +27,11 @@ public:
 
     TCPClientSocket accept(Error& error);
 
-    IPv4Address address() const;
+    IPv4Address ipAddress() const;
     Port port() const;
 
 private:
-    IPv4Address m_address;
+    IPv4Address m_ipAddress;
     Port m_port;
     SOCKET m_socket;
 };

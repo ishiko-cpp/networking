@@ -18,7 +18,7 @@ namespace Networking
 {
 
 TCPServerSocket::TCPServerSocket(IPv4Address address, Port port, Error& error)
-    : m_address(move(address)), m_port(move(port))
+    : m_ipAddress(move(address)), m_port(move(port))
 {
     m_socket = socket(AF_INET, SOCK_STREAM, 0);
     if (m_socket == -1)
@@ -57,7 +57,7 @@ TCPServerSocket::TCPServerSocket(IPv4Address address, Port port, Error& error)
         return;
     }
 
-    m_address = IPv4Address(ntohl(boundAddress.sin_addr.s_addr));
+    m_ipAddress = IPv4Address(ntohl(boundAddress.sin_addr.s_addr));
     m_port = Port(ntohs(boundAddress.sin_port));
 
     // TODO: make backlog explicit and configurable
@@ -92,9 +92,9 @@ TCPClientSocket TCPServerSocket::accept(Error& error)
     return TCPClientSocket(clientSocket);
 }
 
-IPv4Address TCPServerSocket::address() const
+IPv4Address TCPServerSocket::ipAddress() const
 {
-    return m_address;
+    return m_ipAddress;
 }
 
 Port TCPServerSocket::port() const
