@@ -33,6 +33,11 @@ public:
     // TODO: should length be size_t
     void write(const char* buffer, int length, Error& error);
 
+    IPv4Address getLocalIPAddress(Error& error) const;
+    Port getLocalPort(Error& error) const;
+    IPv4Address getPeerIPAddress(Error& error) const;
+    Port getPeerPort(Error& error) const;
+
 private:
     int m_socket;
 };
