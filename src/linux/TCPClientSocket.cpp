@@ -82,7 +82,8 @@ IPv4Address TCPClientSocket::getLocalIPAddress(Error& error) const
     sockaddr_in boundAddress;
     socklen_t boundAddressLength = sizeof(boundAddress);
     int err = getsockname(m_socket, (sockaddr*)&boundAddress, &boundAddressLength);
-    if (err == -1)
+    // On Linux an unconnected socket will return 0.0.0.0 while on Windows it will return an error
+    if ((err == -1) || (boundAddress.sin_addr.s_addr == 0))
     {
         // TODO: more detailed error
         Fail(error, ErrorCategory::Value::generic, "", __FILE__, __LINE__);
@@ -96,7 +97,8 @@ Port TCPClientSocket::getLocalPort(Error& error) const
     sockaddr_in boundAddress;
     socklen_t boundAddressLength = sizeof(boundAddress);
     int err = getsockname(m_socket, (sockaddr*)&boundAddress, &boundAddressLength);
-    if (err == -1)
+    // On Linux an unconnected socket will return 0.0.0.0 while on Windows it will return an error
+    if ((err == -1) || (boundAddress.sin_addr.s_addr == 0))
     {
         // TODO: more detailed error
         Fail(error, ErrorCategory::Value::generic, "", __FILE__, __LINE__);
