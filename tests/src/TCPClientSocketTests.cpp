@@ -45,6 +45,8 @@ void TCPClientSocketTests::GetLocalIPAddressTest1(Test& test)
 
     IPv4Address address = socket.getLocalIPAddress(error);
 
+    cout << address.toString() << endl;
+
     ISHIKO_FAIL_IF_NOT(error);
     ISHIKO_PASS();
 }
@@ -57,6 +59,8 @@ void TCPClientSocketTests::GetLocalPortTest1(Test& test)
     ISHIKO_FAIL_IF(error);
 
     Port port = socket.getLocalPort(error);
+
+    cout << port.toString() << endl;
 
     ISHIKO_FAIL_IF_NOT(error);
     ISHIKO_PASS();
