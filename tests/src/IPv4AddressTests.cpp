@@ -16,7 +16,6 @@ IPv4AddressTests::IPv4AddressTests(const TestNumber& number, const TestContext& 
 {
     append<HeapAllocationErrorsTest>("Constructor test 1", ConstructorTest1);
     append<HeapAllocationErrorsTest>("Constructor test 2", ConstructorTest2);
-    append<HeapAllocationErrorsTest>("Any test 1", AnyTest1);
     append<HeapAllocationErrorsTest>("Localhost test 1", LocalhostTest1);
 }
 
@@ -37,15 +36,6 @@ void IPv4AddressTests::ConstructorTest2(Test& test)
     ISHIKO_FAIL_IF(error);
     ISHIKO_FAIL_IF_NEQ(address.value(), 0x7F0102FF);
     ISHIKO_FAIL_IF_NEQ(address.toString(), "127.1.2.255");
-    ISHIKO_PASS();
-}
-
-void IPv4AddressTests::AnyTest1(Test& test)
-{
-    IPv4Address address = IPv4Address::Any();
-
-    ISHIKO_FAIL_IF_NEQ(address.value(), 0);
-    ISHIKO_FAIL_IF_NEQ(address.toString(), "0.0.0.0");
     ISHIKO_PASS();
 }
 
