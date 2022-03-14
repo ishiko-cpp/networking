@@ -22,6 +22,9 @@ namespace Networking
 class TCPServerSocket
 {
 public:
+    static const IPv4Address AllInterfaces;
+    static const Port AnyPort;
+
     TCPServerSocket(IPv4Address address, Port port, Error& error);
     ~TCPServerSocket();
 

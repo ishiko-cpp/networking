@@ -97,11 +97,6 @@ IPv4Address::IPv4Address(const string& address, Error& error)
     m_address = ((byte1 << 24) + (byte2 << 16) + (byte3 << 8) + byte4);
 }
 
-IPv4Address IPv4Address::Any()
-{
-    return IPv4Address();
-}
-
 IPv4Address IPv4Address::Localhost()
 {
     IPv4Address result;

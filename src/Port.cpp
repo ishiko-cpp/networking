@@ -18,11 +18,6 @@ Port::Port(uint16_t number)
 {
 }
 
-Port Port::Any()
-{
-    return Port(0);
-}
-
 uint16_t Port::number() const
 {
     return m_number;
