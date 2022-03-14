@@ -14,6 +14,9 @@ namespace Ishiko
 namespace Networking
 {
 
+const IPv4Address TCPServerSocket::AllInterfaces = IPv4Address(0);
+const Port TCPServerSocket::AnyPort = Port(0);
+
 TCPServerSocket::TCPServerSocket(IPv4Address address, Port port, Error& error)
     : m_ipAddress(address), m_port(port)
 {

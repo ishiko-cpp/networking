@@ -36,18 +36,19 @@ void TCPServerSocketTests::ConstructorTest1(Test& test)
 void TCPServerSocketTests::ConstructorTest2(Test& test)
 {
     Error error;
-    TCPServerSocket socket(IPv4Address::Any(), Port::Any(), error);
+    TCPServerSocket socket(TCPServerSocket::AllInterfaces, TCPServerSocket::AnyPort, error);
 
     ISHIKO_FAIL_IF(error);
-    ISHIKO_FAIL_IF_NEQ(socket.ipAddress(), IPv4Address::Any());
-    ISHIKO_FAIL_IF_EQ(socket.port(), Port::Any());   // A specific port should have been assigned by the OS
+    ISHIKO_FAIL_IF_NEQ(socket.ipAddress(), IPv4Address(0));
+    // A specific port should have been assigned by the OS
+    ISHIKO_FAIL_IF_EQ(socket.port(), 0);
     ISHIKO_PASS();
 }
 
 void TCPServerSocketTests::AcceptTest1(Test& test)
 {
     Error error;
-    TCPServerSocket socket(IPv4Address::Localhost(), Port::Any(), error);
+    TCPServerSocket socket(IPv4Address::Localhost(), TCPServerSocket::AnyPort, error);
 
     ISHIKO_ABORT_IF(error);
 

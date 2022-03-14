@@ -17,8 +17,12 @@ namespace Networking
 class Port
 {
 public:
+    enum class WellKnown
+    {
+        http
+    };
+
     Port(uint16_t number);
-    static Port Any();
 
     unsigned short number() const;
 
