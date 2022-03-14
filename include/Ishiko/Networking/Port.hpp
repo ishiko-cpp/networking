@@ -17,9 +17,10 @@ namespace Networking
 class Port
 {
 public:
-    enum class WellKnown
+    // TODO: not a class enum because we need straightforward conversion to a port number
+    enum WellKnownPort
     {
-        http
+        http = 80
     };
 
     Port(uint16_t number);
