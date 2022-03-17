@@ -7,7 +7,7 @@
 #include "PortTests.hpp"
 #include "Ishiko/Networking/Port.hpp"
 
-using namespace Ishiko::Networking;
+using namespace Ishiko;
 using namespace Ishiko::Tests;
 
 PortTests::PortTests(const TestNumber& number, const TestContext& context)

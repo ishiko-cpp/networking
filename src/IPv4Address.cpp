@@ -13,8 +13,6 @@ using namespace std;
 
 namespace Ishiko
 {
-namespace Networking
-{
     
 IPv4Address::IPv4Address()
     : m_address(0)
@@ -132,5 +130,4 @@ string IPv4Address::toString() const
     return result;
 }
 
-}
 }
