@@ -9,19 +9,18 @@
 #include "PortTests.hpp"
 #include "TCPClientSocketTests.hpp"
 #include "TCPServerSocketTests.hpp"
-#include "Ishiko/Networking/LibraryInitialization.hpp"
+#include "Ishiko/Networking/NetworkingLibraryInitialization.hpp"
 #include "Ishiko/Networking/linkoptions.hpp"
 #include <Ishiko/Tests/Core.hpp>
 
 using namespace Ishiko;
-using namespace Ishiko::Networking;
 using namespace Ishiko::Tests;
 
 int main(int argc, char* argv[])
 {
     // TODO: handle the error
     Error error;
-    LibraryInitialization networkingLibraryInitilization(error);
+    NetworkingLibraryInitialization networkingLibraryInitilization(error);
 
     TestHarness theTestHarness("IshikoNetworking");
 

@@ -5,15 +5,13 @@
 */
 
 #include "IPv4Address.hpp"
-#include "ErrorCategory.hpp"
+#include "NetworkingErrorCategory.hpp"
 #include <Ishiko/Text.hpp>
 
 using namespace Ishiko::Text;
 using namespace std;
 
 namespace Ishiko
-{
-namespace Networking
 {
     
 IPv4Address::IPv4Address()
@@ -36,7 +34,7 @@ IPv4Address::IPv4Address(const string& address, Error& error)
     if (*it != '.')
     {
         // TODO: more detailed error
-        Fail(error, ErrorCategory::Value::generic, "", __FILE__, __LINE__);
+        Fail(error, NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
         return;
     }
     unsigned char byte1 = 0;
@@ -54,7 +52,7 @@ IPv4Address::IPv4Address(const string& address, Error& error)
     if (*it != '.')
     {
         // TODO: more detailed error
-        Fail(error, ErrorCategory::Value::generic, "", __FILE__, __LINE__);
+        Fail(error, NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
         return;
     }
     unsigned char byte2 = 0;
@@ -72,7 +70,7 @@ IPv4Address::IPv4Address(const string& address, Error& error)
     if (*it != '.')
     {
         // TODO: more detailed error
-        Fail(error, ErrorCategory::Value::generic, "", __FILE__, __LINE__);
+        Fail(error, NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
         return;
     }
     unsigned char byte3 = 0;
@@ -132,5 +130,4 @@ string IPv4Address::toString() const
     return result;
 }
 
-}
 }

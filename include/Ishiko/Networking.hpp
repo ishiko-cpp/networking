@@ -7,10 +7,11 @@
 #ifndef _ISHIKO_CPP_NETWORKING_HPP_
 #define _ISHIKO_CPP_NETWORKING_HPP_
 
-#include "Networking/ErrorCategory.hpp"
 #include "Networking/IPAddress.hpp"
 #include "Networking/IPv4Address.hpp"
 #include "Networking/IPv6Address.hpp"
+#include "Networking/NetworkingErrorCategory.hpp"
+#include "Networking/NetworkingLibraryInitialization.hpp"
 #include "Networking/Port.hpp"
 #include "Networking/TCPAcceptor.hpp"
 #include "Networking/TCPClientSocket.hpp"

@@ -10,8 +10,6 @@ using namespace std;
 
 namespace Ishiko
 {
-namespace Networking
-{
 
 Port::Port(uint16_t number)
     : m_number(number)
@@ -38,5 +36,4 @@ string Port::toString() const
     return to_string(m_number);
 }
 
-}
 }

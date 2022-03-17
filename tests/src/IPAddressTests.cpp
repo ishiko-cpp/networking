@@ -7,7 +7,7 @@
 #include "IPAddressTests.hpp"
 #include "Ishiko/Networking/IPAddress.hpp"
 
-using namespace Ishiko::Networking;
+using namespace Ishiko;
 using namespace Ishiko::Tests;
 
 IPAddressTests::IPAddressTests(const TestNumber& number, const TestContext& context)

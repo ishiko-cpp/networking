@@ -11,8 +11,6 @@
 
 namespace Ishiko
 {
-namespace Networking
-{
 
 class Port
 {
@@ -35,7 +33,6 @@ private:
     uint16_t m_number;
 };
 
-}
 }
 
 #endif
