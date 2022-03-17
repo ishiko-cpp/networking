@@ -43,7 +43,7 @@ TCPServerSocket::TCPServerSocket(IPv4Address address, Port port, Error& error)
         m_socket = -1;
 
         // TODO: more detailed error
-        Fail(error, ErrorCategory::Value::generic, "", __FILE__, __LINE__);
+        Fail(error, NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
         return;
     }
 
@@ -56,7 +56,7 @@ TCPServerSocket::TCPServerSocket(IPv4Address address, Port port, Error& error)
         m_socket = -1;
 
         // TODO: more detailed error
-        Fail(error, ErrorCategory::Value::generic, "", __FILE__, __LINE__);
+        Fail(error, NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
         return;
     }
 
