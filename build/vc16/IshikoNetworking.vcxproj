@@ -157,7 +157,7 @@
     <ClCompile Include="..\..\src\Port.cpp" />
     <ClCompile Include="..\..\src\TCPAcceptor.cpp" />
     <ClCompile Include="..\..\src\TCPConnector.cpp" />
-    <ClCompile Include="..\..\src\windows\LibraryInitialization.cpp" />
+    <ClCompile Include="..\..\src\windows\NetworkingLibraryInitialization.cpp" />
     <ClCompile Include="..\..\src\windows\TCPClientSocket.cpp" />
     <ClCompile Include="..\..\src\windows\TCPServerSocket.cpp" />
   </ItemGroup>
@@ -166,15 +166,15 @@
     <ClInclude Include="..\..\include\Ishiko\Networking\IPAddress.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\IPv4Address.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\IPv6Address.hpp" />
-    <ClInclude Include="..\..\include\Ishiko\Networking\LibraryInitialization.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\linkoptions.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\NetworkingErrorCategory.hpp" />
+    <ClInclude Include="..\..\include\Ishiko\Networking\NetworkingLibraryInitialization.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\Port.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\TCPAcceptor.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\TCPClientSocket.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\TCPConnector.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\TCPServerSocket.hpp" />
-    <ClInclude Include="..\..\include\Ishiko\Networking\windows\LibraryInitialization.hpp" />
+    <ClInclude Include="..\..\include\Ishiko\Networking\windows\NetworkingLibraryInitialization.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\windows\TCPClientSocket.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\windows\TCPServerSocket.hpp" />
   </ItemGroup>

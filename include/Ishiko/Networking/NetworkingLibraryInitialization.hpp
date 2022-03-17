@@ -4,15 +4,15 @@
     See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
 */
 
-#ifndef _ISHIKO_CPP_NETWORKING_LIBRARYINITIALIZATION_HPP_
-#define _ISHIKO_CPP_NETWORKING_LIBRARYINITIALIZATION_HPP_
+#ifndef _ISHIKO_CPP_NETWORKING_NETWORKINGLIBRARYINITIALIZATION_HPP_
+#define _ISHIKO_CPP_NETWORKING_NETWORKINGLIBRARYINITIALIZATION_HPP_
 
 #include <Ishiko/BasePlatform.h>
 
 #if ISHIKO_OS == ISHIKO_OS_LINUX
-    #include "linux/LibraryInitialization.hpp"
+    #include "linux/NetworkingLibraryInitialization.hpp"
 #elif ISHIKO_OS == ISHIKO_OS_WINDOWS
-    #include "windows/LibraryInitialization.hpp"
+    #include "windows/NetworkingLibraryInitialization.hpp"
 #else
     #error Unsupported or unrecognized OS
 #endif

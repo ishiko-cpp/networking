@@ -4,16 +4,14 @@
     See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
 */
 
-#include "windows/LibraryInitialization.hpp"
+#include "windows/NetworkingLibraryInitialization.hpp"
 #include "NetworkingErrorCategory.hpp"
 #include <winsock2.h>
 
 namespace Ishiko
 {
-namespace Networking
-{
 
-LibraryInitialization::LibraryInitialization(Error& error)
+NetworkingLibraryInitialization::NetworkingLibraryInitialization(Error& error)
 {
     Startup(error);
     if (!error)
@@ -22,7 +20,7 @@ LibraryInitialization::LibraryInitialization(Error& error)
     }
 }
 
-LibraryInitialization::~LibraryInitialization()
+NetworkingLibraryInitialization::~NetworkingLibraryInitialization()
 {
     if (m_cleanup)
     {
@@ -32,7 +30,7 @@ LibraryInitialization::~LibraryInitialization()
     }
 }
 
-void LibraryInitialization::Startup(Error& error)
+void NetworkingLibraryInitialization::Startup(Error& error)
 {
     WORD version = MAKEWORD(2, 2);
     WSADATA data;
@@ -48,7 +46,7 @@ void LibraryInitialization::Startup(Error& error)
     }
 }
 
-void LibraryInitialization::Cleanup(Error& error)
+void NetworkingLibraryInitialization::Cleanup(Error& error)
 {
     if (WSACleanup() == SOCKET_ERROR)
     {
@@ -57,5 +55,4 @@ void LibraryInitialization::Cleanup(Error& error)
     }
 }
 
-}
 }

@@ -29,13 +29,13 @@
     <ClInclude Include="..\..\include\Ishiko\Networking\IPv6Address.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Ishiko\Networking\LibraryInitialization.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\Ishiko\Networking\linkoptions.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Ishiko\Networking\NetworkingErrorCategory.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Ishiko\Networking\NetworkingLibraryInitialization.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Ishiko\Networking\Port.hpp">
@@ -53,7 +53,7 @@
     <ClInclude Include="..\..\include\Ishiko\Networking\TCPServerSocket.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Ishiko\Networking\windows\LibraryInitialization.hpp">
+    <ClInclude Include="..\..\include\Ishiko\Networking\windows\NetworkingLibraryInitialization.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Ishiko\Networking\windows\TCPClientSocket.hpp">
@@ -85,7 +85,7 @@
     <ClCompile Include="..\..\src\TCPConnector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\windows\LibraryInitialization.cpp">
+    <ClCompile Include="..\..\src\windows\NetworkingLibraryInitialization.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\windows\TCPClientSocket.cpp">
