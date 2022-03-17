@@ -36,12 +36,12 @@ library IshikoNetworking : IshikoText, IshikoErrors, IshikoBasePlatform
     headers
     {
         ../../include/Ishiko/Networking.hpp
-        ../../include/Ishiko/Networking/ErrorCategory.hpp
         ../../include/Ishiko/Networking/IPAddress.hpp
         ../../include/Ishiko/Networking/IPv4Address.hpp
         ../../include/Ishiko/Networking/IPv6Address.hpp
         ../../include/Ishiko/Networking/LibraryInitialization.hpp
         ../../include/Ishiko/Networking/linkoptions.hpp
+        ../../include/Ishiko/Networking/NetworkingErrorCategory.hpp
         ../../include/Ishiko/Networking/Port.hpp
         ../../include/Ishiko/Networking/TCPAcceptor.hpp
         ../../include/Ishiko/Networking/TCPClientSocket.hpp
@@ -51,10 +51,10 @@ library IshikoNetworking : IshikoText, IshikoErrors, IshikoBasePlatform
 
     sources
     {
-        ../../src/ErrorCategory.cpp
         ../../src/IPAddress.cpp
         ../../src/IPv4Address.cpp
         ../../src/IPv6Address.cpp
+        ../../src/NetworkingErrorCategory.cpp
         ../../src/Port.cpp
         ../../src/TCPAcceptor.cpp
         ../../src/TCPConnector.cpp

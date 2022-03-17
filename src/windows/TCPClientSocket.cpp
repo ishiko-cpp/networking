@@ -5,7 +5,7 @@
 */
 
 #include "windows/TCPClientSocket.hpp"
-#include "ErrorCategory.hpp"
+#include "NetworkingErrorCategory.hpp"
 
 namespace Ishiko
 {
@@ -18,7 +18,7 @@ TCPClientSocket::TCPClientSocket(Error& error)
     if (m_socket == INVALID_SOCKET)
     {
         // TODO: more detailed error
-        Fail(error, ErrorCategory::Value::generic, "", __FILE__, __LINE__);
+        Fail(error, NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
         return;
     }
 }
@@ -49,7 +49,7 @@ void TCPClientSocket::connect(IPv4Address address, Port port, Error& error)
     {
         int lastError = WSAGetLastError();
         // TODO: more detailed error
-        Fail(error, ErrorCategory::Value::generic, "", __FILE__, __LINE__);
+        Fail(error, NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
     }
 }
 
@@ -60,7 +60,7 @@ int TCPClientSocket::read(char* buffer, int length, Error& error)
     {
         int lastError = WSAGetLastError();
         // TODO: more detailed error
-        Fail(error, ErrorCategory::Value::generic, "", __FILE__, __LINE__);
+        Fail(error, NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
     }
     return err;
 }
@@ -72,7 +72,7 @@ void TCPClientSocket::write(const char* buffer, int length, Error& error)
     {
         int lastError = WSAGetLastError();
         // TODO: more detailed error
-        Fail(error, ErrorCategory::Value::generic, "", __FILE__, __LINE__);
+        Fail(error, NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
     }
 }
 
@@ -84,7 +84,7 @@ IPv4Address TCPClientSocket::getLocalIPAddress(Error& error) const
     if (err == SOCKET_ERROR)
     {
         // TODO: more detailed error
-        Fail(error, ErrorCategory::Value::generic, "", __FILE__, __LINE__);
+        Fail(error, NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
     }
 
     return IPv4Address(ntohl(boundAddress.sin_addr.s_addr));
@@ -98,7 +98,7 @@ Port TCPClientSocket::getLocalPort(Error& error) const
     if (err == SOCKET_ERROR)
     {
         // TODO: more detailed error
-        Fail(error, ErrorCategory::Value::generic, "", __FILE__, __LINE__);
+        Fail(error, NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
     }
 
     return Port(ntohs(boundAddress.sin_port));
@@ -112,7 +112,7 @@ IPv4Address TCPClientSocket::getPeerIPAddress(Error& error) const
     if (err == SOCKET_ERROR)
     {
         // TODO: more detailed error
-        Fail(error, ErrorCategory::Value::generic, "", __FILE__, __LINE__);
+        Fail(error, NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
     }
 
     return IPv4Address(ntohl(boundAddress.sin_addr.s_addr));
@@ -126,7 +126,7 @@ Port TCPClientSocket::getPeerPort(Error& error) const
     if (err == SOCKET_ERROR)
     {
         // TODO: more detailed error
-        Fail(error, ErrorCategory::Value::generic, "", __FILE__, __LINE__);
+        Fail(error, NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
     }
 
     return Port(ntohs(boundAddress.sin_port));

@@ -150,10 +150,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\ErrorCategory.cpp" />
     <ClCompile Include="..\..\src\IPAddress.cpp" />
     <ClCompile Include="..\..\src\IPv4Address.cpp" />
     <ClCompile Include="..\..\src\IPv6Address.cpp" />
+    <ClCompile Include="..\..\src\NetworkingErrorCategory.cpp" />
     <ClCompile Include="..\..\src\Port.cpp" />
     <ClCompile Include="..\..\src\TCPAcceptor.cpp" />
     <ClCompile Include="..\..\src\TCPConnector.cpp" />
@@ -163,12 +163,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\Ishiko\Networking.hpp" />
-    <ClInclude Include="..\..\include\Ishiko\Networking\ErrorCategory.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\IPAddress.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\IPv4Address.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\IPv6Address.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\LibraryInitialization.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\linkoptions.hpp" />
+    <ClInclude Include="..\..\include\Ishiko\Networking\NetworkingErrorCategory.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\Port.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\TCPAcceptor.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\TCPClientSocket.hpp" />

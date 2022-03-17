@@ -5,7 +5,7 @@
 */
 
 #include "windows/LibraryInitialization.hpp"
-#include "ErrorCategory.hpp"
+#include "NetworkingErrorCategory.hpp"
 #include <winsock2.h>
 
 namespace Ishiko
@@ -39,12 +39,12 @@ void LibraryInitialization::Startup(Error& error)
     if (WSAStartup(version, &data) == SOCKET_ERROR)
     {
         // TODO: more detailed error
-        Fail(error, ErrorCategory::Value::generic, "", __FILE__, __LINE__);
+        Fail(error, NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
     }
     else if ((LOBYTE(data.wVersion) != 2) || (HIBYTE(data.wVersion) != 2))
     {
         // TODO: more detailed error
-        Fail(error, ErrorCategory::Value::generic, "", __FILE__, __LINE__);
+        Fail(error, NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
     }
 }
 
@@ -53,7 +53,7 @@ void LibraryInitialization::Cleanup(Error& error)
     if (WSACleanup() == SOCKET_ERROR)
     {
         // TODO: more detailed error
-        Fail(error, ErrorCategory::Value::generic, "", __FILE__, __LINE__);
+        Fail(error, NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
     }
 }
 
