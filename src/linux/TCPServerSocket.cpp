@@ -5,7 +5,7 @@
 */
 
 #include "linux/TCPServerSocket.hpp"
-#include "ErrorCategory.hpp"
+#include "NetworkingErrorCategory.hpp"
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <unistd.h>
