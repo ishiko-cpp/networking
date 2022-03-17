@@ -4,16 +4,14 @@
     See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
 */
 
-#ifndef _ISHIKO_NETWORKING_IPV4ADDRESS_HPP_
-#define _ISHIKO_NETWORKING_IPV4ADDRESS_HPP_
+#ifndef _ISHIKO_CPP_NETWORKING_IPV4ADDRESS_HPP_
+#define _ISHIKO_CPP_NETWORKING_IPV4ADDRESS_HPP_
 
 #include <Ishiko/Errors.hpp>
 #include <cstdint>
 #include <string>
 
 namespace Ishiko
-{
-namespace Networking
 {
 
 class IPv4Address
@@ -34,7 +32,6 @@ private:
     uint32_t m_address;
 };
 
-}
 }
 
 #endif

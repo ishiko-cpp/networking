@@ -14,8 +14,6 @@
 
 namespace Ishiko
 {
-namespace Networking
-{
 
 // TODO: forbid copy, allow moves
 class TCPClientSocket
@@ -50,7 +48,6 @@ private:
     SOCKET m_socket;
 };
 
-}
 }
 
 #endif

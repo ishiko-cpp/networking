@@ -4,19 +4,16 @@
     See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
 */
 
-#ifndef _ISHIKO_NETWORKING_IPV6ADDRESS_HPP_
-#define _ISHIKO_NETWORKING_IPV6ADDRESS_HPP_
+#ifndef _ISHIKO_CPP_NETWORKING_IPV6ADDRESS_HPP_
+#define _ISHIKO_CPP_NETWORKING_IPV6ADDRESS_HPP_
 
 namespace Ishiko
-{
-namespace Networking
 {
 
 class IPv6Address
 {
 };
 
-}
 }
 
 #endif

@@ -4,21 +4,18 @@
     See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
 */
 
-#include "linux/LibraryInitialization.hpp"
+#include "linux/NetworkingLibraryInitialization.hpp"
 
 namespace Ishiko
 {
-namespace Networking
-{
 
-LibraryInitialization::LibraryInitialization(Error& error)
+NetworkingLibraryInitialization::NetworkingLibraryInitialization(Error& error)
 {
     // No initialization is required on Linux
 }
 
-LibraryInitialization::~LibraryInitialization()
+NetworkingLibraryInitialization::~NetworkingLibraryInitialization()
 {
 }
 
-}
 }

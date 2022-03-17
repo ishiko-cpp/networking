@@ -10,7 +10,6 @@
 #include <thread>
 
 using namespace Ishiko;
-using namespace Ishiko::Networking;
 using namespace Ishiko::Tests;
 using namespace std;
 

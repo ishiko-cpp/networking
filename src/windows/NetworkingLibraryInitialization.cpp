@@ -4,16 +4,14 @@
     See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
 */
 
-#include "windows/LibraryInitialization.hpp"
-#include "ErrorCategory.hpp"
+#include "windows/NetworkingLibraryInitialization.hpp"
+#include "NetworkingErrorCategory.hpp"
 #include <winsock2.h>
 
 namespace Ishiko
 {
-namespace Networking
-{
 
-LibraryInitialization::LibraryInitialization(Error& error)
+NetworkingLibraryInitialization::NetworkingLibraryInitialization(Error& error)
 {
     Startup(error);
     if (!error)
@@ -22,7 +20,7 @@ LibraryInitialization::LibraryInitialization(Error& error)
     }
 }
 
-LibraryInitialization::~LibraryInitialization()
+NetworkingLibraryInitialization::~NetworkingLibraryInitialization()
 {
     if (m_cleanup)
     {
@@ -32,30 +30,29 @@ LibraryInitialization::~LibraryInitialization()
     }
 }
 
-void LibraryInitialization::Startup(Error& error)
+void NetworkingLibraryInitialization::Startup(Error& error)
 {
     WORD version = MAKEWORD(2, 2);
     WSADATA data;
     if (WSAStartup(version, &data) == SOCKET_ERROR)
     {
         // TODO: more detailed error
-        Fail(error, ErrorCategory::Value::generic, "", __FILE__, __LINE__);
+        Fail(error, NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
     }
     else if ((LOBYTE(data.wVersion) != 2) || (HIBYTE(data.wVersion) != 2))
     {
         // TODO: more detailed error
-        Fail(error, ErrorCategory::Value::generic, "", __FILE__, __LINE__);
+        Fail(error, NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
     }
 }
 
-void LibraryInitialization::Cleanup(Error& error)
+void NetworkingLibraryInitialization::Cleanup(Error& error)
 {
     if (WSACleanup() == SOCKET_ERROR)
     {
         // TODO: more detailed error
-        Fail(error, ErrorCategory::Value::generic, "", __FILE__, __LINE__);
+        Fail(error, NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
     }
 }
 
-}
 }
