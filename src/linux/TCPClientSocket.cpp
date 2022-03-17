@@ -12,8 +12,6 @@
 
 namespace Ishiko
 {
-namespace Networking
-{
 
 TCPClientSocket::TCPClientSocket(Error& error)
 {
@@ -135,5 +133,4 @@ Port TCPClientSocket::getPeerPort(Error& error) const
     return Port(ntohs(boundAddress.sin_port));
 }
 
-}
 }

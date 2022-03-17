@@ -14,8 +14,6 @@ using namespace std;
 
 namespace Ishiko
 {
-namespace Networking
-{
 
 const IPv4Address TCPServerSocket::AllInterfaces = IPv4Address(0);
 const Port TCPServerSocket::AnyPort = Port(0);
@@ -105,5 +103,4 @@ Port TCPServerSocket::port() const
     return m_port;
 }
 
-}
 }
