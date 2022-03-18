@@ -9,13 +9,13 @@
 
 #include <Ishiko/Tests/Core.hpp>
 
-class IPAddressTests : public Ishiko::Tests::TestSequence
+class IPAddressTests : public Ishiko::TestSequence
 {
 public:
-    IPAddressTests(const Ishiko::Tests::TestNumber& number, const Ishiko::Tests::TestContext& context);
+    IPAddressTests(const Ishiko::TestNumber& number, const Ishiko::TestContext& context);
 
 private:
-    static void ConstructorTest1(Ishiko::Tests::Test& test);
+    static void ConstructorTest1(Ishiko::Test& test);
 };
 
 #endif

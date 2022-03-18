@@ -8,7 +8,6 @@
 #include "Ishiko/Networking/Port.hpp"
 
 using namespace Ishiko;
-using namespace Ishiko::Tests;
 
 PortTests::PortTests(const TestNumber& number, const TestContext& context)
     : TestSequence(number, "Port tests", context)
@@ -20,6 +19,6 @@ void PortTests::ConstructorTest1(Test& test)
 {
     Port port(0);
 
-    ISHIKO_FAIL_IF_NEQ(port.toString(), "0");
-    ISHIKO_PASS();
+    ISHIKO_TEST_FAIL_IF_NEQ(port.toString(), "0");
+    ISHIKO_TEST_PASS();
 }

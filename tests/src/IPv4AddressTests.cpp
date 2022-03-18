@@ -22,9 +22,9 @@ void IPv4AddressTests::ConstructorTest1(Test& test)
 {
     IPv4Address address;
 
-    ISHIKO_FAIL_IF_NEQ(address.value(), 0);
-    ISHIKO_FAIL_IF_NEQ(address.toString(), "0.0.0.0");
-    ISHIKO_PASS();
+    ISHIKO_TEST_FAIL_IF_NEQ(address.value(), 0);
+    ISHIKO_TEST_FAIL_IF_NEQ(address.toString(), "0.0.0.0");
+    ISHIKO_TEST_PASS();
 }
 
 void IPv4AddressTests::ConstructorTest2(Test& test)
@@ -32,17 +32,17 @@ void IPv4AddressTests::ConstructorTest2(Test& test)
     Error error;
     IPv4Address address("127.1.2.255", error);
 
-    ISHIKO_FAIL_IF(error);
-    ISHIKO_FAIL_IF_NEQ(address.value(), 0x7F0102FF);
-    ISHIKO_FAIL_IF_NEQ(address.toString(), "127.1.2.255");
-    ISHIKO_PASS();
+    ISHIKO_TEST_FAIL_IF(error);
+    ISHIKO_TEST_FAIL_IF_NEQ(address.value(), 0x7F0102FF);
+    ISHIKO_TEST_FAIL_IF_NEQ(address.toString(), "127.1.2.255");
+    ISHIKO_TEST_PASS();
 }
 
 void IPv4AddressTests::LocalhostTest1(Test& test)
 {
     IPv4Address address = IPv4Address::Localhost();
 
-    ISHIKO_FAIL_IF_NEQ(address.value(), 0x7F000001);
-    ISHIKO_FAIL_IF_NEQ(address.toString(), "127.0.0.1");
-    ISHIKO_PASS();
+    ISHIKO_TEST_FAIL_IF_NEQ(address.value(), 0x7F000001);
+    ISHIKO_TEST_FAIL_IF_NEQ(address.toString(), "127.0.0.1");
+    ISHIKO_TEST_PASS();
 }
