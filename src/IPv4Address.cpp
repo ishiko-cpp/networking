@@ -8,7 +8,7 @@
 #include "NetworkingErrorCategory.hpp"
 #include <Ishiko/Text.hpp>
 
-using namespace Ishiko::Text;
+using namespace Ishiko;
 using namespace std;
 
 namespace Ishiko
