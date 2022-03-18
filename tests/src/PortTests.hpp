@@ -9,13 +9,13 @@
 
 #include <Ishiko/Tests/Core.hpp>
 
-class PortTests : public Ishiko::Tests::TestSequence
+class PortTests : public Ishiko::TestSequence
 {
 public:
-    PortTests(const Ishiko::Tests::TestNumber& number, const Ishiko::Tests::TestContext& context);
+    PortTests(const Ishiko::TestNumber& number, const Ishiko::TestContext& context);
 
 private:
-    static void ConstructorTest1(Ishiko::Tests::Test& test);
+    static void ConstructorTest1(Ishiko::Test& test);
 };
 
 #endif

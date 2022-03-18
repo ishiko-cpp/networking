@@ -30,8 +30,8 @@ void TCPClientSocketTests::ConstructorTest1(Test& test)
     Error error;
     TCPClientSocket socket(error);
 
-    ISHIKO_FAIL_IF(error);
-    ISHIKO_PASS();
+    ISHIKO_TEST_FAIL_IF(error);
+    ISHIKO_TEST_PASS();
 }
 
 void TCPClientSocketTests::GetLocalIPAddressTest1(Test& test)
@@ -39,12 +39,12 @@ void TCPClientSocketTests::GetLocalIPAddressTest1(Test& test)
     Error error;
     TCPClientSocket socket(error);
 
-    ISHIKO_FAIL_IF(error);
+    ISHIKO_TEST_FAIL_IF(error);
 
     IPv4Address address = socket.getLocalIPAddress(error);
 
-    ISHIKO_FAIL_IF_NOT(error);
-    ISHIKO_PASS();
+    ISHIKO_TEST_FAIL_IF_NOT(error);
+    ISHIKO_TEST_PASS();
 }
 
 void TCPClientSocketTests::GetLocalPortTest1(Test& test)
@@ -52,12 +52,12 @@ void TCPClientSocketTests::GetLocalPortTest1(Test& test)
     Error error;
     TCPClientSocket socket(error);
 
-    ISHIKO_FAIL_IF(error);
+    ISHIKO_TEST_FAIL_IF(error);
 
     Port port = socket.getLocalPort(error);
 
-    ISHIKO_FAIL_IF_NOT(error);
-    ISHIKO_PASS();
+    ISHIKO_TEST_FAIL_IF_NOT(error);
+    ISHIKO_TEST_PASS();
 }
 
 void TCPClientSocketTests::GetPeerIPAddressTest1(Test& test)
@@ -65,12 +65,12 @@ void TCPClientSocketTests::GetPeerIPAddressTest1(Test& test)
     Error error;
     TCPClientSocket socket(error);
 
-    ISHIKO_FAIL_IF(error);
+    ISHIKO_TEST_FAIL_IF(error);
 
     IPv4Address address = socket.getPeerIPAddress(error);
 
-    ISHIKO_FAIL_IF_NOT(error);
-    ISHIKO_PASS();
+    ISHIKO_TEST_FAIL_IF_NOT(error);
+    ISHIKO_TEST_PASS();
 }
 
 void TCPClientSocketTests::GetPeerPortTest1(Test& test)
@@ -78,12 +78,12 @@ void TCPClientSocketTests::GetPeerPortTest1(Test& test)
     Error error;
     TCPClientSocket socket(error);
 
-    ISHIKO_FAIL_IF(error);
+    ISHIKO_TEST_FAIL_IF(error);
 
     Port port = socket.getPeerPort(error);
 
-    ISHIKO_FAIL_IF_NOT(error);
-    ISHIKO_PASS();
+    ISHIKO_TEST_FAIL_IF_NOT(error);
+    ISHIKO_TEST_PASS();
 }
 
 void TCPClientSocketTests::WriteTest1(Test& test)
@@ -108,40 +108,40 @@ void TCPClientSocketTests::WriteTest1(Test& test)
     Error error;
     TCPClientSocket socket(error);
 
-    ISHIKO_FAIL_IF(error);
+    ISHIKO_TEST_FAIL_IF(error);
 
     socket.connect(IPv4Address::Localhost(), 8685, error);
     
-    ISHIKO_FAIL_IF(error);
+    ISHIKO_TEST_FAIL_IF(error);
 
     IPv4Address localAddress = socket.getLocalIPAddress(error);
 
-    ISHIKO_FAIL_IF(error);
-    ISHIKO_FAIL_IF_NEQ(localAddress, IPv4Address::Localhost());
+    ISHIKO_TEST_FAIL_IF(error);
+    ISHIKO_TEST_FAIL_IF_NEQ(localAddress, IPv4Address::Localhost());
 
     Port localPort = socket.getLocalPort(error);
 
-    ISHIKO_FAIL_IF(error);
-    ISHIKO_FAIL_IF_EQ(localPort, 0);
+    ISHIKO_TEST_FAIL_IF(error);
+    ISHIKO_TEST_FAIL_IF_EQ(localPort, 0);
 
     IPv4Address peerAddress = socket.getPeerIPAddress(error);
 
-    ISHIKO_FAIL_IF(error);
-    ISHIKO_FAIL_IF_NEQ(peerAddress, IPv4Address::Localhost());
+    ISHIKO_TEST_FAIL_IF(error);
+    ISHIKO_TEST_FAIL_IF_NEQ(peerAddress, IPv4Address::Localhost());
 
     Port peerPort = socket.getPeerPort(error);
 
-    ISHIKO_FAIL_IF(error);
-    ISHIKO_FAIL_IF_NEQ(peerPort, 8685);
+    ISHIKO_TEST_FAIL_IF(error);
+    ISHIKO_TEST_FAIL_IF_NEQ(peerPort, 8685);
 
     socket.write("a", 1, error);
 
-    ISHIKO_FAIL_IF(error);
+    ISHIKO_TEST_FAIL_IF(error);
 
     serverThread.join();
 
-    ISHIKO_FAIL_IF_NEQ(buffer[0], 'a');
-    ISHIKO_PASS();
+    ISHIKO_TEST_FAIL_IF_NEQ(buffer[0], 'a');
+    ISHIKO_TEST_PASS();
 }
 
 void TCPClientSocketTests::ReadTest1(Test& test)
@@ -162,25 +162,25 @@ void TCPClientSocketTests::ReadTest1(Test& test)
     Error error;
     TCPClientSocket socket(error);
 
-    ISHIKO_FAIL_IF(error);
+    ISHIKO_TEST_FAIL_IF(error);
 
     socket.connect(IPv4Address::Localhost(), 8686, error);
     
-    ISHIKO_FAIL_IF(error);
+    ISHIKO_TEST_FAIL_IF(error);
 
     char buffer1[1];
     int n1 = socket.read(buffer1, 1, error);
 
-    ISHIKO_FAIL_IF(error);
-    ISHIKO_FAIL_IF_NEQ(n1, 1);
-    ISHIKO_FAIL_IF_NEQ(buffer1[0], 'a');
+    ISHIKO_TEST_FAIL_IF(error);
+    ISHIKO_TEST_FAIL_IF_NEQ(n1, 1);
+    ISHIKO_TEST_FAIL_IF_NEQ(buffer1[0], 'a');
 
     serverThread.join();
 
     char buffer2[1];
     int n2 = socket.read(buffer2, 1, error);
 
-    ISHIKO_FAIL_IF(error);
-    ISHIKO_FAIL_IF_NEQ(n2, 0);
-    ISHIKO_PASS();
+    ISHIKO_TEST_FAIL_IF(error);
+    ISHIKO_TEST_FAIL_IF_NEQ(n2, 0);
+    ISHIKO_TEST_PASS();
 }
