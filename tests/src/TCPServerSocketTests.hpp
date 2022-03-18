@@ -9,15 +9,15 @@
 
 #include <Ishiko/Tests/Core.hpp>
 
-class TCPServerSocketTests : public Ishiko::Tests::TestSequence
+class TCPServerSocketTests : public Ishiko::TestSequence
 {
 public:
-    TCPServerSocketTests(const Ishiko::Tests::TestNumber& number, const Ishiko::Tests::TestContext& context);
+    TCPServerSocketTests(const Ishiko::TestNumber& number, const Ishiko::TestContext& context);
 
 private:
-    static void ConstructorTest1(Ishiko::Tests::Test& test);
-    static void ConstructorTest2(Ishiko::Tests::Test& test);
-    static void AcceptTest1(Ishiko::Tests::Test& test);
+    static void ConstructorTest1(Ishiko::Test& test);
+    static void ConstructorTest2(Ishiko::Test& test);
+    static void AcceptTest1(Ishiko::Test& test);
 };
 
 #endif

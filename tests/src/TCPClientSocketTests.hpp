@@ -9,19 +9,19 @@
 
 #include <Ishiko/Tests/Core.hpp>
 
-class TCPClientSocketTests : public Ishiko::Tests::TestSequence
+class TCPClientSocketTests : public Ishiko::TestSequence
 {
 public:
-    TCPClientSocketTests(const Ishiko::Tests::TestNumber& number, const Ishiko::Tests::TestContext& context);
+    TCPClientSocketTests(const Ishiko::TestNumber& number, const Ishiko::TestContext& context);
 
 private:
-    static void ConstructorTest1(Ishiko::Tests::Test& test);
-    static void GetLocalIPAddressTest1(Ishiko::Tests::Test& test);
-    static void GetLocalPortTest1(Ishiko::Tests::Test& test);
-    static void GetPeerIPAddressTest1(Ishiko::Tests::Test& test);
-    static void GetPeerPortTest1(Ishiko::Tests::Test& test);
-    static void WriteTest1(Ishiko::Tests::Test& test);
-    static void ReadTest1(Ishiko::Tests::Test& test);
+    static void ConstructorTest1(Ishiko::Test& test);
+    static void GetLocalIPAddressTest1(Ishiko::Test& test);
+    static void GetLocalPortTest1(Ishiko::Test& test);
+    static void GetPeerIPAddressTest1(Ishiko::Test& test);
+    static void GetPeerPortTest1(Ishiko::Test& test);
+    static void WriteTest1(Ishiko::Test& test);
+    static void ReadTest1(Ishiko::Test& test);
 };
 
 #endif

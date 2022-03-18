@@ -9,15 +9,15 @@
 
 #include <Ishiko/Tests/Core.hpp>
 
-class IPv4AddressTests : public Ishiko::Tests::TestSequence
+class IPv4AddressTests : public Ishiko::TestSequence
 {
 public:
-    IPv4AddressTests(const Ishiko::Tests::TestNumber& number, const Ishiko::Tests::TestContext& context);
+    IPv4AddressTests(const Ishiko::TestNumber& number, const Ishiko::TestContext& context);
 
 private:
-    static void ConstructorTest1(Ishiko::Tests::Test& test);
-    static void ConstructorTest2(Ishiko::Tests::Test& test);
-    static void LocalhostTest1(Ishiko::Tests::Test& test);
+    static void ConstructorTest1(Ishiko::Test& test);
+    static void ConstructorTest2(Ishiko::Test& test);
+    static void LocalhostTest1(Ishiko::Test& test);
 };
 
 #endif

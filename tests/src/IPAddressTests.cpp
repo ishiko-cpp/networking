@@ -8,7 +8,6 @@
 #include "Ishiko/Networking/IPAddress.hpp"
 
 using namespace Ishiko;
-using namespace Ishiko::Tests;
 
 IPAddressTests::IPAddressTests(const TestNumber& number, const TestContext& context)
     : TestSequence(number, "IPAddress tests", context)
@@ -20,5 +19,5 @@ void IPAddressTests::ConstructorTest1(Test& test)
 {
     IPAddress address;
 
-    ISHIKO_PASS();
+    ISHIKO_TEST_PASS();
 }
