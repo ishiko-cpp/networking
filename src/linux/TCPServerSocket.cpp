@@ -71,6 +71,13 @@ TCPServerSocket::TCPServerSocket(IPv4Address address, Port port, Error& error)
     }
 }
 
+TCPServerSocket::TCPServerSocket(TCPServerSocket&& other)
+    : m_ipAddress(other.m_ipAddress), m_port(other.m_port), m_socket(other.m_socket)
+{
+    // TODO: not sure what I should do with the IP address and port
+    m_socket = -1;
+}
+
 TCPServerSocket::~TCPServerSocket()
 {
     close();
