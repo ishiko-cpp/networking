@@ -26,6 +26,12 @@ TCPClientSocket::TCPClientSocket(SOCKET socket)
 {
 }
 
+TCPClientSocket::TCPClientSocket(TCPClientSocket&& other)
+    : m_socket(other.m_socket)
+{
+    other.m_socket = INVALID_SOCKET;
+}
+
 TCPClientSocket::~TCPClientSocket()
 {
     if (m_socket != INVALID_SOCKET)

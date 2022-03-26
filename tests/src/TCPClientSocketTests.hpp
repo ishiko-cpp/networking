@@ -16,6 +16,7 @@ public:
 
 private:
     static void ConstructorTest1(Ishiko::Test& test);
+    static void ConstructorTest2(Ishiko::Test& test);
     static void GetLocalIPAddressTest1(Ishiko::Test& test);
     static void GetLocalPortTest1(Ishiko::Test& test);
     static void GetPeerIPAddressTest1(Ishiko::Test& test);

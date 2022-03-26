@@ -17,6 +17,7 @@ TCPClientSocketTests::TCPClientSocketTests(const TestNumber& number, const TestC
     : TestSequence(number, "TCPClientSocket tests", context)
 {
     append<HeapAllocationErrorsTest>("Constructor test 1", ConstructorTest1);
+    append<HeapAllocationErrorsTest>("Constructor test 2", ConstructorTest2);
     append<HeapAllocationErrorsTest>("getLocalAddress test 1", GetLocalIPAddressTest1);
     append<HeapAllocationErrorsTest>("getLocalPort test 1", GetLocalPortTest1);
     append<HeapAllocationErrorsTest>("getPeerAddress test 1", GetPeerIPAddressTest1);
@@ -29,6 +30,17 @@ void TCPClientSocketTests::ConstructorTest1(Test& test)
 {
     Error error;
     TCPClientSocket socket(error);
+
+    ISHIKO_TEST_FAIL_IF(error);
+    ISHIKO_TEST_PASS();
+}
+
+void TCPClientSocketTests::ConstructorTest2(Test& test)
+{
+    Error error;
+    TCPClientSocket socket(error);
+
+    TCPClientSocket movedSocket = move(socket);
 
     ISHIKO_TEST_FAIL_IF(error);
     ISHIKO_TEST_PASS();

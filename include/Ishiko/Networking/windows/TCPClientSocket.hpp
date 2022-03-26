@@ -15,12 +15,13 @@
 namespace Ishiko
 {
 
-// TODO: forbid copy, allow moves
 class TCPClientSocket
 {
 public:
     TCPClientSocket(Error& error);
     TCPClientSocket(SOCKET socket);
+    TCPClientSocket(const TCPClientSocket& other) = delete;
+    TCPClientSocket(TCPClientSocket&& other);
     ~TCPClientSocket();
 
     void connect(IPv4Address address, Port port, Error& error);
