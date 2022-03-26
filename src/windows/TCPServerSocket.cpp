@@ -34,8 +34,7 @@ TCPServerSocket::TCPServerSocket(IPv4Address address, Port port, Error& error)
     int err = bind(m_socket, (sockaddr*)&winsockAddress, sizeof(winsockAddress));
     if (err == SOCKET_ERROR)
     {
-        closesocket(m_socket);
-        m_socket = INVALID_SOCKET;
+        close();
 
         // TODO: more detailed error
         Fail(error, NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
@@ -47,8 +46,7 @@ TCPServerSocket::TCPServerSocket(IPv4Address address, Port port, Error& error)
     err = getsockname(m_socket, (sockaddr*)&boundAddress, &boundAddressLength);
     if (err == SOCKET_ERROR)
     {
-        closesocket(m_socket);
-        m_socket = INVALID_SOCKET;\
+        close();
 
         // TODO: more detailed error
         Fail(error, NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
@@ -62,8 +60,7 @@ TCPServerSocket::TCPServerSocket(IPv4Address address, Port port, Error& error)
     err = listen(m_socket, SOMAXCONN);
     if (err == SOCKET_ERROR)
     {
-        closesocket(m_socket);
-        m_socket = INVALID_SOCKET;
+        close();
 
         // TODO: more detailed error
         Fail(error, NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
