@@ -94,7 +94,7 @@ void TCPServerSocket::close()
 {
     if (m_socket != -1)
     {
-        close(m_socket);
+        ::close(m_socket);
         m_socket = -1;
     }
 }
