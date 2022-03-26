@@ -20,6 +20,8 @@ class TCPClientSocket
 public:
     TCPClientSocket(Error& error);
     TCPClientSocket(int socket);
+    TCPClientSocket(const TCPClientSocket& other) = delete;
+    TCPClientSocket(TCPClientSocket&& other);
     ~TCPClientSocket();
 
     void connect(IPv4Address address, Port port, Error& error);

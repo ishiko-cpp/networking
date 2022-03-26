@@ -23,6 +23,8 @@ public:
     static const Port AnyPort;
 
     TCPServerSocket(IPv4Address address, Port port, Error& error);
+    TCPServerSocket(const TCPServerSocket& other) = delete;
+    TCPServerSocket(TCPServerSocket&& other);
     ~TCPServerSocket();
 
     TCPClientSocket accept(Error& error);
