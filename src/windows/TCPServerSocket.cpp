@@ -73,10 +73,7 @@ TCPServerSocket::TCPServerSocket(IPv4Address address, Port port, Error& error)
 
 TCPServerSocket::~TCPServerSocket()
 {
-    if (m_socket != INVALID_SOCKET)
-    {
-        closesocket(m_socket);
-    }
+    close();
 }
 
 TCPClientSocket TCPServerSocket::accept(Error& error)
@@ -88,6 +85,15 @@ TCPClientSocket TCPServerSocket::accept(Error& error)
         Fail(error, NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
     }
     return TCPClientSocket(clientSocket);
+}
+
+void TCPServerSocket::close()
+{
+    if (m_socket != INVALID_SOCKET)
+    {
+        closesocket(m_socket);
+        m_socket = INVALID_SOCKET;
+    }
 }
 
 IPv4Address TCPServerSocket::ipAddress() const
