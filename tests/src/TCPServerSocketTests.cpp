@@ -19,6 +19,8 @@ TCPServerSocketTests::TCPServerSocketTests(const TestNumber& number, const TestC
     append<HeapAllocationErrorsTest>("Constructor test 1", ConstructorTest1);
     append<HeapAllocationErrorsTest>("Constructor test 2", ConstructorTest2);
     append<HeapAllocationErrorsTest>("accept test 1", AcceptTest1);
+    append<HeapAllocationErrorsTest>("close test 1", CloseTest1);
+    append<HeapAllocationErrorsTest>("close test 2", CloseTest2);
 }
 
 void TCPServerSocketTests::ConstructorTest1(Test& test)
@@ -65,6 +67,58 @@ void TCPServerSocketTests::AcceptTest1(Test& test)
     ISHIKO_TEST_FAIL_IF(error);
 
     client.join();
+
+    ISHIKO_TEST_PASS();
+}
+
+void TCPServerSocketTests::CloseTest1(Test& test)
+{
+    Error error;
+    TCPServerSocket socket(IPv4Address::Localhost(), TCPServerSocket::AnyPort, error);
+
+    ISHIKO_TEST_ABORT_IF(error);
+
+    socket.close();
+
+    Port listeningPort = socket.port();
+    TCPClientSocket clientSocket(error);
+
+    ISHIKO_TEST_ABORT_IF(error);
+
+    clientSocket.connect(IPv4Address::Localhost(), listeningPort, error); 
+
+    ISHIKO_TEST_FAIL_IF_NOT(error);
+
+    char buffer[1];
+    clientSocket.read(buffer, 1, error);
+
+    ISHIKO_TEST_FAIL_IF_NOT(error);
+
+    ISHIKO_TEST_PASS();
+}
+
+void TCPServerSocketTests::CloseTest2(Test& test)
+{
+    Error error;
+    TCPServerSocket socket(IPv4Address::Localhost(), TCPServerSocket::AnyPort, error);
+
+    ISHIKO_TEST_ABORT_IF(error);
+
+    Port listeningPort = socket.port();
+    TCPClientSocket clientSocket(error);
+
+    ISHIKO_TEST_ABORT_IF(error);
+
+    clientSocket.connect(IPv4Address::Localhost(), listeningPort, error);
+
+    ISHIKO_TEST_FAIL_IF(error);
+
+    socket.close();
+
+    char buffer[1];
+    clientSocket.read(buffer, 1, error);
+
+    ISHIKO_TEST_FAIL_IF_NOT(error);
 
     ISHIKO_TEST_PASS();
 }

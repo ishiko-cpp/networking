@@ -26,6 +26,7 @@ public:
     ~TCPServerSocket();
 
     TCPClientSocket accept(Error& error);
+    void close();
 
     IPv4Address ipAddress() const;
     Port port() const;
