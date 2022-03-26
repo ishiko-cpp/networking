@@ -37,8 +37,7 @@ TCPServerSocket::TCPServerSocket(IPv4Address address, Port port, Error& error)
     int err = bind(m_socket, (sockaddr*)&linuxAddress, sizeof(linuxAddress));
     if (err == -1)
     {
-        close(m_socket);
-        m_socket = -1;
+        close();
 
         // TODO: more detailed error
         Fail(error, NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
@@ -50,8 +49,7 @@ TCPServerSocket::TCPServerSocket(IPv4Address address, Port port, Error& error)
     err = getsockname(m_socket, (sockaddr*)&boundAddress, &boundAddressLength);
     if (err == -1)
     {
-        close(m_socket);
-        m_socket = -1;
+        close();
 
         // TODO: more detailed error
         Fail(error, NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
@@ -65,8 +63,7 @@ TCPServerSocket::TCPServerSocket(IPv4Address address, Port port, Error& error)
     err = listen(m_socket, 128);
     if (err == -1)
     {
-        close(m_socket);
-        m_socket = -1;
+        close();
 
         // TODO: more detailed error
         Fail(error, NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
