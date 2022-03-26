@@ -29,6 +29,12 @@ TCPClientSocket::TCPClientSocket(int socket)
 {
 }
 
+TCPClientSocket::TCPClientSocket(TCPClientSocket&& other)
+    : m_socket(other.m_socket)
+{
+    other.m_socket = -1;
+}
+
 TCPClientSocket::~TCPClientSocket()
 {
     if (m_socket != -1)
