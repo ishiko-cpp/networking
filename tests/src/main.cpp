@@ -14,7 +14,6 @@
 #include <Ishiko/TestFramework/Core.hpp>
 
 using namespace Ishiko;
-using namespace Ishiko::Tests;
 using namespace std;
 
 int main(int argc, char* argv[])
