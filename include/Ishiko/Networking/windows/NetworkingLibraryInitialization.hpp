@@ -15,11 +15,13 @@ namespace Ishiko
 class NetworkingLibraryInitialization
 {
 public:
-    NetworkingLibraryInitialization(Error& error);
+    NetworkingLibraryInitialization();
+    NetworkingLibraryInitialization(Error& error) noexcept;
     ~NetworkingLibraryInitialization();
 
-    static void Startup(Error& error);
-    static void Cleanup(Error& error);
+    static void Startup();
+    static void Startup(Error& error) noexcept;
+    static void Cleanup(Error& error) noexcept;
 
 private:
     bool m_cleanup;

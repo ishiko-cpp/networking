@@ -7,7 +7,7 @@
 #ifndef _ISHIKO_CPP_NETWORKING_TESTS_PORTTESTS_HPP_
 #define _ISHIKO_CPP_NETWORKING_TESTS_PORTTESTS_HPP_
 
-#include <Ishiko/Tests/Core.hpp>
+#include <Ishiko/TestFramework/Core.hpp>
 
 class PortTests : public Ishiko::TestSequence
 {
