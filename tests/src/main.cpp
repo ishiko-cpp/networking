@@ -35,10 +35,10 @@ int main(int argc, char* argv[])
     }
     catch (const exception& e)
     {
-        return Ishiko::TestApplicationReturnCode::exception;
+        return TestApplicationReturnCode::exception;
     }
     catch (...)
     {
-        return Ishiko::TestApplicationReturnCode::exception;
+        return TestApplicationReturnCode::exception;
     }
 }
