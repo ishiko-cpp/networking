@@ -50,7 +50,7 @@ TCPServerSocket::TCPServerSocket(IPv4Address address, Port port)
         close();
 
         // TODO: more detailed error
-        Throw(error, NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
+        Throw(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
     }
 
     m_ipAddress = IPv4Address(ntohl(boundAddress.sin_addr.s_addr));
@@ -63,7 +63,7 @@ TCPServerSocket::TCPServerSocket(IPv4Address address, Port port)
         close();
 
         // TODO: more detailed error
-        Throw(error, NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
+        Throw(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
     }
 }
 
@@ -138,7 +138,7 @@ TCPClientSocket TCPServerSocket::accept()
     if (clientSocket == -1)
     {
         // TODO: more detailed error
-        Throw(error, NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
+        Throw(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
     }
     return TCPClientSocket(clientSocket);
 }
