@@ -11,7 +11,12 @@
 namespace Ishiko
 {
 
-NetworkingLibraryInitialization::NetworkingLibraryInitialization(Error& error)
+NetworkingLibraryInitialization::NetworkingLibraryInitialization()
+{
+    Startup();
+}
+
+NetworkingLibraryInitialization::NetworkingLibraryInitialization(Error& error) noexcept
 {
     Startup(error);
     if (!error)
@@ -30,7 +35,23 @@ NetworkingLibraryInitialization::~NetworkingLibraryInitialization()
     }
 }
 
-void NetworkingLibraryInitialization::Startup(Error& error)
+void NetworkingLibraryInitialization::Startup()
+{
+    WORD version = MAKEWORD(2, 2);
+    WSADATA data;
+    if (WSAStartup(version, &data) == SOCKET_ERROR)
+    {
+        // TODO: more detailed error
+        Throw(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
+    }
+    else if ((LOBYTE(data.wVersion) != 2) || (HIBYTE(data.wVersion) != 2))
+    {
+        // TODO: more detailed error
+        Throw(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
+    }
+}
+
+void NetworkingLibraryInitialization::Startup(Error& error) noexcept
 {
     WORD version = MAKEWORD(2, 2);
     WSADATA data;
@@ -46,7 +67,7 @@ void NetworkingLibraryInitialization::Startup(Error& error)
     }
 }
 
-void NetworkingLibraryInitialization::Cleanup(Error& error)
+void NetworkingLibraryInitialization::Cleanup(Error& error) noexcept
 {
     if (WSACleanup() == SOCKET_ERROR)
     {

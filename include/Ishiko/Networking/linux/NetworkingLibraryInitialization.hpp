@@ -15,7 +15,8 @@ namespace Ishiko
 class NetworkingLibraryInitialization
 {
 public:
-    NetworkingLibraryInitialization(Error& error);
+    NetworkingLibraryInitialization();
+    NetworkingLibraryInitialization(Error& error) noexcept;
     ~NetworkingLibraryInitialization();
 };
 

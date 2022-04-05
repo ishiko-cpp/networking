@@ -9,7 +9,12 @@
 namespace Ishiko
 {
 
-NetworkingLibraryInitialization::NetworkingLibraryInitialization(Error& error)
+NetworkingLibraryInitialization::NetworkingLibraryInitialization()
+{
+    // No initialization is required on Linux
+}
+
+NetworkingLibraryInitialization::NetworkingLibraryInitialization(Error& error) noexcept
 {
     // No initialization is required on Linux
 }

@@ -7,7 +7,7 @@
 #ifndef _ISHIKO_CPP_NETWORKING_TESTS_IPV4ADDRESSTESTS_HPP_
 #define _ISHIKO_CPP_NETWORKING_TESTS_IPV4ADDRESSTESTS_HPP_
 
-#include <Ishiko/Tests/Core.hpp>
+#include <Ishiko/TestFramework/Core.hpp>
 
 class IPv4AddressTests : public Ishiko::TestSequence
 {
