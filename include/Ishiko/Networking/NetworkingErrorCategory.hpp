@@ -28,6 +28,7 @@ private:
     NetworkingErrorCategory() noexcept = default;
 };
 
+void Throw(NetworkingErrorCategory::Value value, const std::string& message, const char* file, int line);
 void Fail(Error& error, NetworkingErrorCategory::Value value, const std::string& message, const char* file, int line) noexcept;
 
 }

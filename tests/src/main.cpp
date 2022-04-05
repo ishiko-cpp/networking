@@ -11,25 +11,34 @@
 #include "TCPServerSocketTests.hpp"
 #include "Ishiko/Networking/NetworkingLibraryInitialization.hpp"
 #include "Ishiko/Networking/linkoptions.hpp"
-#include <Ishiko/Tests/Core.hpp>
+#include <Ishiko/TestFramework/Core.hpp>
 
 using namespace Ishiko;
-using namespace Ishiko::Tests;
+using namespace std;
 
 int main(int argc, char* argv[])
 {
-    // TODO: handle the error
-    Error error;
-    NetworkingLibraryInitialization networkingLibraryInitilization(error);
+    try
+    {
+        NetworkingLibraryInitialization networkingLibraryInitilization;
 
-    TestHarness theTestHarness("IshikoNetworking");
+        TestHarness theTestHarness("IshikoNetworking");
 
-    TestSequence& theTests = theTestHarness.tests();
-    theTests.append<IPv4AddressTests>();
-    theTests.append<IPAddressTests>();
-    theTests.append<PortTests>();
-    theTests.append<TCPServerSocketTests>();
-    theTests.append<TCPClientSocketTests>();
+        TestSequence& theTests = theTestHarness.tests();
+        theTests.append<IPv4AddressTests>();
+        theTests.append<IPAddressTests>();
+        theTests.append<PortTests>();
+        theTests.append<TCPServerSocketTests>();
+        theTests.append<TCPClientSocketTests>();
 
-    return theTestHarness.run();
+        return theTestHarness.run();
+    }
+    catch (const exception& e)
+    {
+        return TestApplicationReturnCode::exception;
+    }
+    catch (...)
+    {
+        return TestApplicationReturnCode::exception;
+    }
 }
