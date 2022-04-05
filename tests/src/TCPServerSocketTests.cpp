@@ -19,12 +19,23 @@ TCPServerSocketTests::TCPServerSocketTests(const TestNumber& number, const TestC
     append<HeapAllocationErrorsTest>("Constructor test 1", ConstructorTest1);
     append<HeapAllocationErrorsTest>("Constructor test 2", ConstructorTest2);
     append<HeapAllocationErrorsTest>("Constructor test 3", ConstructorTest3);
+    append<HeapAllocationErrorsTest>("Constructor test 4", ConstructorTest4);
     append<HeapAllocationErrorsTest>("accept test 1", AcceptTest1);
+    append<HeapAllocationErrorsTest>("accept test 2", AcceptTest2);
     append<HeapAllocationErrorsTest>("close test 1", CloseTest1);
     append<HeapAllocationErrorsTest>("close test 2", CloseTest2);
 }
 
 void TCPServerSocketTests::ConstructorTest1(Test& test)
+{
+    TCPServerSocket socket(IPv4Address::Localhost(), 8585);
+
+    ISHIKO_TEST_FAIL_IF_NEQ(socket.ipAddress(), IPv4Address::Localhost());
+    ISHIKO_TEST_FAIL_IF_NEQ(socket.port(), 8585);
+    ISHIKO_TEST_PASS();
+}
+
+void TCPServerSocketTests::ConstructorTest2(Test& test)
 {
     Error error;
     TCPServerSocket socket(IPv4Address::Localhost(), 8585, error);
@@ -35,7 +46,7 @@ void TCPServerSocketTests::ConstructorTest1(Test& test)
     ISHIKO_TEST_PASS();
 }
 
-void TCPServerSocketTests::ConstructorTest2(Test& test)
+void TCPServerSocketTests::ConstructorTest3(Test& test)
 {
     Error error;
     TCPServerSocket socket(TCPServerSocket::AllInterfaces, TCPServerSocket::AnyPort, error);
@@ -47,7 +58,7 @@ void TCPServerSocketTests::ConstructorTest2(Test& test)
     ISHIKO_TEST_PASS();
 }
 
-void TCPServerSocketTests::ConstructorTest3(Test& test)
+void TCPServerSocketTests::ConstructorTest4(Test& test)
 {
     Error error;
     TCPServerSocket socket(TCPServerSocket::AllInterfaces, TCPServerSocket::AnyPort, error);
@@ -63,19 +74,39 @@ void TCPServerSocketTests::ConstructorTest3(Test& test)
 
 void TCPServerSocketTests::AcceptTest1(Test& test)
 {
+    TCPServerSocket socket(IPv4Address::Localhost(), TCPServerSocket::AnyPort);
+
+    Port listeningPort = socket.port();
+    thread client(
+        [listeningPort]()
+        {
+            Error error;
+            TCPClientSocket clientSocket(error);
+            clientSocket.connect(IPv4Address::Localhost(), listeningPort, error);
+        });
+
+    TCPClientSocket clientSocket = socket.accept();
+
+    client.join();
+
+    ISHIKO_TEST_PASS();
+}
+
+void TCPServerSocketTests::AcceptTest2(Test& test)
+{
     Error error;
     TCPServerSocket socket(IPv4Address::Localhost(), TCPServerSocket::AnyPort, error);
 
     ISHIKO_TEST_ABORT_IF(error);
 
     Port listeningPort = socket.port();
-    thread client([listeningPort]()
+    thread client(
+        [listeningPort]()
         {
             Error error;
             TCPClientSocket clientSocket(error);
             clientSocket.connect(IPv4Address::Localhost(), listeningPort, error);
-        }
-    );
+        });
 
     TCPClientSocket clientSocket = socket.accept(error);
 
