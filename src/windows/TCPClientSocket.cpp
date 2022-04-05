@@ -10,18 +10,17 @@
 namespace Ishiko
 {
 
-TCPClientSocket::TCPClientSocket(Error& error)
+TCPClientSocket::TCPClientSocket(Error& error) noexcept
 {
     m_socket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
     if (m_socket == INVALID_SOCKET)
     {
         // TODO: more detailed error
         Fail(error, NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
-        return;
     }
 }
 
-TCPClientSocket::TCPClientSocket(SOCKET socket)
+TCPClientSocket::TCPClientSocket(SOCKET socket) noexcept
     : m_socket(socket)
 {
 }

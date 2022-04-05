@@ -13,7 +13,7 @@
 namespace Ishiko
 {
 
-TCPClientSocket::TCPClientSocket(Error& error)
+TCPClientSocket::TCPClientSocket(Error& error) noexcept
 {
     m_socket = socket(AF_INET, SOCK_STREAM, 0);
     if (m_socket == -1)
@@ -24,7 +24,7 @@ TCPClientSocket::TCPClientSocket(Error& error)
     }
 }
 
-TCPClientSocket::TCPClientSocket(int socket)
+TCPClientSocket::TCPClientSocket(int socket) noexcept
     : m_socket(socket)
 {
 }
