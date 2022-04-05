@@ -15,7 +15,56 @@ namespace Ishiko
 const IPv4Address TCPServerSocket::AllInterfaces = IPv4Address(0);
 const Port TCPServerSocket::AnyPort = Port(0);
 
-TCPServerSocket::TCPServerSocket(IPv4Address address, Port port, Error& error)
+TCPServerSocket::TCPServerSocket(IPv4Address address, Port port)
+    : m_ipAddress(address), m_port(port)
+{
+    m_socket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
+    if (m_socket == INVALID_SOCKET)
+    {
+        // TODO: more detailed error
+        Throw(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
+    }
+
+    SOCKADDR_IN winsockAddress;
+    winsockAddress.sin_family = AF_INET;
+    winsockAddress.sin_addr.s_addr = htonl(address.value());
+    winsockAddress.sin_port = htons(port.number());
+
+    int err = bind(m_socket, (sockaddr*)&winsockAddress, sizeof(winsockAddress));
+    if (err == SOCKET_ERROR)
+    {
+        close();
+
+        // TODO: more detailed error
+        Throw(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
+    }
+
+    SOCKADDR_IN boundAddress;
+    int boundAddressLength = sizeof(boundAddress);
+    err = getsockname(m_socket, (sockaddr*)&boundAddress, &boundAddressLength);
+    if (err == SOCKET_ERROR)
+    {
+        close();
+
+        // TODO: more detailed error
+        Throw(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
+    }
+
+    m_ipAddress = IPv4Address(ntohl(boundAddress.sin_addr.s_addr));
+    m_port = Port(ntohs(boundAddress.sin_port));
+
+    // TODO: make backlog explicit and configurable
+    err = listen(m_socket, SOMAXCONN);
+    if (err == SOCKET_ERROR)
+    {
+        close();
+
+        // TODO: more detailed error
+        Throw(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
+    }
+}
+
+TCPServerSocket::TCPServerSocket(IPv4Address address, Port port, Error& error) noexcept
     : m_ipAddress(address), m_port(port)
 {
     m_socket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
@@ -68,7 +117,7 @@ TCPServerSocket::TCPServerSocket(IPv4Address address, Port port, Error& error)
     }
 }
 
-TCPServerSocket::TCPServerSocket(TCPServerSocket&& other)
+TCPServerSocket::TCPServerSocket(TCPServerSocket&& other) noexcept
     : m_ipAddress(other.m_ipAddress), m_port(other.m_port), m_socket(other.m_socket)
 {
     // TODO: not sure what I should do with the IP address and port
@@ -80,7 +129,18 @@ TCPServerSocket::~TCPServerSocket()
     close();
 }
 
-TCPClientSocket TCPServerSocket::accept(Error& error)
+TCPClientSocket TCPServerSocket::accept()
+{
+    SOCKET clientSocket = WSAAccept(m_socket, NULL, NULL, NULL, NULL);
+    if (clientSocket == INVALID_SOCKET)
+    {
+        // TODO: more detailed error
+        Throw(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
+    }
+    return TCPClientSocket(clientSocket);
+}
+
+TCPClientSocket TCPServerSocket::accept(Error& error) noexcept
 {
     SOCKET clientSocket = WSAAccept(m_socket, NULL, NULL, NULL, NULL);
     if (clientSocket == INVALID_SOCKET)

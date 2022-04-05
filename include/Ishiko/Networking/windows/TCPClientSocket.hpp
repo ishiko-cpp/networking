@@ -18,8 +18,8 @@ namespace Ishiko
 class TCPClientSocket
 {
 public:
-    TCPClientSocket(Error& error);
-    TCPClientSocket(SOCKET socket);
+    TCPClientSocket(Error& error) noexcept;
+    TCPClientSocket(SOCKET socket) noexcept;
     TCPClientSocket(const TCPClientSocket& other) = delete;
     TCPClientSocket(TCPClientSocket&& other);
     ~TCPClientSocket();

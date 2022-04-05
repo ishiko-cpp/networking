@@ -22,12 +22,14 @@ public:
     static const IPv4Address AllInterfaces;
     static const Port AnyPort;
 
-    TCPServerSocket(IPv4Address address, Port port, Error& error);
+    TCPServerSocket(IPv4Address address, Port port);
+    TCPServerSocket(IPv4Address address, Port port, Error& error) noexcept;
     TCPServerSocket(const TCPServerSocket& other) = delete;
-    TCPServerSocket(TCPServerSocket&& other);
+    TCPServerSocket(TCPServerSocket&& other) noexcept;
     ~TCPServerSocket();
 
-    TCPClientSocket accept(Error& error);
+    TCPClientSocket accept();
+    TCPClientSocket accept(Error& error) noexcept;
     void close();
 
     IPv4Address ipAddress() const;
