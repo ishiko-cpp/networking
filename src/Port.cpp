@@ -5,15 +5,20 @@
 */
 
 #include "Port.hpp"
+#include <Ishiko/Text.hpp>
 
-using namespace std;
-
-namespace Ishiko
-{
+using namespace Ishiko;
 
 Port::Port(uint16_t number)
     : m_number(number)
 {
+}
+
+Port::Port(const std::string& number)
+{
+    // TODO: use exception instead of error and handle error
+    Error error;
+    ASCII::Convert(number, m_number, error);
 }
 
 uint16_t Port::number() const
@@ -31,9 +36,7 @@ bool Port::operator!=(Port other) const
     return (m_number != other.m_number);
 }
 
-string Port::toString() const
+std::string Port::toString() const
 {
-    return to_string(m_number);
-}
-
+    return std::to_string(m_number);
 }

@@ -22,6 +22,7 @@ public:
     };
 
     Port(uint16_t number);
+    Port(const std::string& number);
 
     unsigned short number() const;
 
