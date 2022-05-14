@@ -22,7 +22,7 @@ const char* NetworkingErrorCategory::name() const noexcept
 
 void Throw(NetworkingErrorCategory::Value value, const std::string& message, const char* file, int line)
 {
-    throw new Exception(static_cast<int>(value), NetworkingErrorCategory::Get(), message, file, line);
+    throw Exception(static_cast<int>(value), NetworkingErrorCategory::Get(), message, file, line);
 }
 
 void Fail(Error& error, NetworkingErrorCategory::Value value, const std::string& message, const char* file, int line) noexcept
