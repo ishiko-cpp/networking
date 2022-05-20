@@ -78,7 +78,7 @@ void TCPClientSocket::write(const char* buffer, int length, Error& error)
     }
 }
 
-TCPClientSocket::close()
+void TCPClientSocket::close()
 {
     if (m_socket != -1)
     {
