@@ -76,6 +76,17 @@ void TCPClientSocket::write(const char* buffer, int length, Error& error)
     }
 }
 
+void TCPClientSocket::shutdown(Error& error)
+{
+    int err = ::shutdown(m_socket, SD_SEND);
+    if (err == SOCKET_ERROR)
+    {
+        int lastError = WSAGetLastError();
+        // TODO: more detailed error
+        Fail(error, NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
+    }
+}
+
 void TCPClientSocket::close()
 {
     if (m_socket != INVALID_SOCKET)

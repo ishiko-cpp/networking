@@ -33,6 +33,7 @@ public:
     // TODO: should length be size_t
     void write(const char* buffer, int length, Error& error);
 
+    void shutdown(Error& error);
     void close();
 
     IPv4Address getLocalIPAddress(Error& error) const;
