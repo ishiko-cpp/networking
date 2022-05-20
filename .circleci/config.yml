@@ -8,6 +8,9 @@ jobs:
           name: "Set ISHIKO_CPP environment variable and create workspace directory"
           command: mkdir -p /projects/ishiko/cpp && echo 'export ISHIKO_CPP="/projects/ishiko/cpp"' >> $BASH_ENV
       - run:
+          name: "Install build dependency: Ishiko/C++ botan"
+          command: cd /projects/ishiko/cpp && mkdir randombit && git clone https://github.com/ishiko-cpp/randombit_botan.git botan && cd botan && git checkout 2.19.1 && python3 configure.py --prefix=/projects/ishiko/cpp/randombit/botan --disable-shared-library && make && make install && echo 'export ISHIKO_CPP_THIRD_PARTY_BOTAN="/projects/ishiko/cpp/randombit/botan"' >> $BASH_ENV
+      - run:
           name: "Install build dependency: Ishiko/C++ BasePlatform"
           command: cd /projects/ishiko/cpp && git clone https://github.com/ishiko-cpp/base-platform.git && cd base-platform/build/gnumake && make
       - run:
