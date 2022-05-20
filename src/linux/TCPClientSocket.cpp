@@ -78,6 +78,17 @@ void TCPClientSocket::write(const char* buffer, int length, Error& error)
     }
 }
 
+void TCPClientSocket::shutdown(Error& error)
+{
+    int err = shutdown(m_socket, SHUT_WR);
+    if (err == -1)
+    {
+        // TODO: more detailed error
+        Fail(error, NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
+        return;
+    }
+}
+
 void TCPClientSocket::close()
 {
     if (m_socket != -1)

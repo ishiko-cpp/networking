@@ -40,6 +40,7 @@ public:
     // an error. And it also means some headache with exception version of functions. So we may have to keep track of
     // socket state inside the class.
 
+    void shutdown(Error& error);
     void close();
 
     IPv4Address getLocalIPAddress(Error& error) const;
