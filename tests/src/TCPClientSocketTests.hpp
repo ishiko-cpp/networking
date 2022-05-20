@@ -23,6 +23,8 @@ private:
     static void GetPeerPortTest1(Ishiko::Test& test);
     static void WriteTest1(Ishiko::Test& test);
     static void ReadTest1(Ishiko::Test& test);
+    static void CloseTest1(Ishiko::Test& test);
+    static void ShutdownTest1(Ishiko::Test& test);
 };
 
 #endif
