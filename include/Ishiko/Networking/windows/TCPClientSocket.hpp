@@ -33,13 +33,6 @@ public:
     // TODO: should length be size_t
     void write(const char* buffer, int length, Error& error);
 
-    // TODO: there is an issue here with the fact that SIGPIPE will be triggered if we try any operations after
-    // receiving FIN. This means either it becomes a very annoying precondition or I need to check state before all
-    // operations. I think read is the annoying once because if we don't set error but return 0 when no more data then
-    // any subsequent operation would not know there is an error. This seems to suggest it should really be treated as
-    // an error. And it also means some headache with exception version of functions. So we may have to keep track of
-    // socket state inside the class.
-
     void close();
 
     IPv4Address getLocalIPAddress(Error& error) const;

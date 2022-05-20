@@ -37,10 +37,7 @@ TCPClientSocket::TCPClientSocket(TCPClientSocket&& other)
 
 TCPClientSocket::~TCPClientSocket()
 {
-    if (m_socket != -1)
-    {
-        close(m_socket);
-    }
+    close();
 }
 
 void TCPClientSocket::connect(IPv4Address address, Port port, Error& error)
@@ -78,6 +75,15 @@ void TCPClientSocket::write(const char* buffer, int length, Error& error)
         // TODO: more detailed error
         Fail(error, NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
         return;
+    }
+}
+
+TCPClientSocket::close()
+{
+    if (m_socket != -1)
+    {
+        ::close(m_socket);
+        m_socket = -1;
     }
 }
 
