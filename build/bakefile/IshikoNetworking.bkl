@@ -47,6 +47,7 @@ library IshikoNetworking : IshikoText, IshikoErrors, IshikoBasePlatform
         ../../include/Ishiko/Networking/TCPClientSocket.hpp
         ../../include/Ishiko/Networking/TCPConnector.hpp
         ../../include/Ishiko/Networking/TCPServerSocket.hpp
+        ../../include/Ishiko/Networking/TLSClientSocket.hpp
     }
 
     sources
@@ -58,6 +59,7 @@ library IshikoNetworking : IshikoText, IshikoErrors, IshikoBasePlatform
         ../../src/Port.cpp
         ../../src/TCPAcceptor.cpp
         ../../src/TCPConnector.cpp
+        ../../src/TLSClientSocket.cpp
     }
 
     if ($(toolset) == gnu)
