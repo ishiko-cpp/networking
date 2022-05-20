@@ -10,8 +10,6 @@
 #include <thread>
 
 using namespace Ishiko;
-using namespace Ishiko::Tests;
-using namespace std;
 
 TCPServerSocketTests::TCPServerSocketTests(const TestNumber& number, const TestContext& context)
     : TestSequence(number, "TCPServerSocket tests", context)
@@ -63,7 +61,7 @@ void TCPServerSocketTests::ConstructorTest4(Test& test)
     Error error;
     TCPServerSocket socket(TCPServerSocket::AllInterfaces, TCPServerSocket::AnyPort, error);
 
-    TCPServerSocket movedSocket = move(socket);
+    TCPServerSocket movedSocket = std::move(socket);
 
     ISHIKO_TEST_FAIL_IF(error);
     ISHIKO_TEST_FAIL_IF_NEQ(movedSocket.ipAddress(), IPv4Address(0));
@@ -77,7 +75,7 @@ void TCPServerSocketTests::AcceptTest1(Test& test)
     TCPServerSocket socket(IPv4Address::Localhost(), TCPServerSocket::AnyPort);
 
     Port listeningPort = socket.port();
-    thread client(
+    std::thread client(
         [listeningPort]()
         {
             Error error;
@@ -100,7 +98,7 @@ void TCPServerSocketTests::AcceptTest2(Test& test)
     ISHIKO_TEST_ABORT_IF(error);
 
     Port listeningPort = socket.port();
-    thread client(
+    std::thread client(
         [listeningPort]()
         {
             Error error;

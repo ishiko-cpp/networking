@@ -10,6 +10,7 @@
 #include "Networking/IPAddress.hpp"
 #include "Networking/IPv4Address.hpp"
 #include "Networking/IPv6Address.hpp"
+#include "Networking/linkoptions.hpp"
 #include "Networking/NetworkingErrorCategory.hpp"
 #include "Networking/NetworkingLibraryInitialization.hpp"
 #include "Networking/Port.hpp"
@@ -17,7 +18,6 @@
 #include "Networking/TCPClientSocket.hpp"
 #include "Networking/TCPConnector.hpp"
 #include "Networking/TCPServerSocket.hpp"
-
-#include "Networking/linkoptions.hpp"
+#include "Networking/TLSClientSocket.hpp"
 
 #endif
