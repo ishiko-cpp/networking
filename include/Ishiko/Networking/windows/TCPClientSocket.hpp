@@ -24,7 +24,7 @@ public:
     TCPClientSocket(TCPClientSocket&& other);
     ~TCPClientSocket();
 
-    void connect(IPv4Address address, Port port, Error& error);
+    void connect(IPv4Address address, Port port, Error& error) noexcept;
 
     // TODO: should length be size_t, same for return value
     int read(char* buffer, int length, Error& error);

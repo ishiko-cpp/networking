@@ -36,7 +36,7 @@ TCPClientSocket::~TCPClientSocket()
     close();
 }
 
-void TCPClientSocket::connect(IPv4Address address, Port port, Error& error)
+void TCPClientSocket::connect(IPv4Address address, Port port, Error& error) noexcept
 {
     SOCKADDR_IN winsockAddress;
     winsockAddress.sin_family = AF_INET;

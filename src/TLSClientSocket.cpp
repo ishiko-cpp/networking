@@ -9,5 +9,13 @@
 using namespace Ishiko;
 
 TLSClientSocket::TLSClientSocket(Error& error) noexcept
+    : m_socket(error)
 {
+}
+
+void TLSClientSocket::connect(IPv4Address address, Port port, Error& error) noexcept
+{
+    m_socket.connect(address, port, error);
+
+    // TODO: TLS handshake
 }
