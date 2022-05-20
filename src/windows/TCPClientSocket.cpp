@@ -33,10 +33,7 @@ TCPClientSocket::TCPClientSocket(TCPClientSocket&& other)
 
 TCPClientSocket::~TCPClientSocket()
 {
-    if (m_socket != INVALID_SOCKET)
-    {
-        closesocket(m_socket);
-    }
+    close();
 }
 
 void TCPClientSocket::connect(IPv4Address address, Port port, Error& error)
@@ -76,6 +73,15 @@ void TCPClientSocket::write(const char* buffer, int length, Error& error)
         int lastError = WSAGetLastError();
         // TODO: more detailed error
         Fail(error, NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
+    }
+}
+
+void TCPClientSocket::close()
+{
+    if (m_socket != INVALID_SOCKET)
+    {
+        closesocket(m_socket);
+        m_socket = INVALID_SOCKET;
     }
 }
 

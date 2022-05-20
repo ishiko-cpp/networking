@@ -24,6 +24,7 @@ TCPClientSocketTests::TCPClientSocketTests(const TestNumber& number, const TestC
     append<HeapAllocationErrorsTest>("getPeerPort test 1", GetPeerPortTest1);
     append<HeapAllocationErrorsTest>("write test 1", WriteTest1);
     append<HeapAllocationErrorsTest>("read test 1", ReadTest1);
+    append<HeapAllocationErrorsTest>("close test 1", CloseTest1);
 }
 
 void TCPClientSocketTests::ConstructorTest1(Test& test)
@@ -194,5 +195,61 @@ void TCPClientSocketTests::ReadTest1(Test& test)
 
     ISHIKO_TEST_FAIL_IF(error);
     ISHIKO_TEST_FAIL_IF_NEQ(n2, 0);
+    ISHIKO_TEST_PASS();
+}
+
+void TCPClientSocketTests::CloseTest1(Test& test)
+{
+    // TODO: this test will hand if close() doesn't work properly. I need to make this more robust.
+
+    thread serverThread(
+        []()
+        {
+            Error error;
+            TCPServerSocket socket(IPv4Address::Localhost(), 8687, error);
+            TCPClientSocket clientSocket = socket.accept(error);
+
+            // This will also make sure the server stays alive until the client closes the connection
+            char buffer[1];
+            clientSocket.read(buffer, 1, error);
+        }
+    );
+
+    // TODO: this is flaky, should be able to fix once I get async server
+    this_thread::sleep_for(chrono::seconds(1));
+
+    Error error;
+    TCPClientSocket socket(error);
+
+    ISHIKO_TEST_FAIL_IF(error);
+
+    socket.connect(IPv4Address::Localhost(), 8687, error);
+
+    ISHIKO_TEST_FAIL_IF(error);
+
+    IPv4Address localAddress = socket.getLocalIPAddress(error);
+
+    ISHIKO_TEST_FAIL_IF(error);
+    ISHIKO_TEST_FAIL_IF_NEQ(localAddress, IPv4Address::Localhost());
+
+    Port localPort = socket.getLocalPort(error);
+
+    ISHIKO_TEST_FAIL_IF(error);
+    ISHIKO_TEST_FAIL_IF_EQ(localPort, 0);
+
+    IPv4Address peerAddress = socket.getPeerIPAddress(error);
+
+    ISHIKO_TEST_FAIL_IF(error);
+    ISHIKO_TEST_FAIL_IF_NEQ(peerAddress, IPv4Address::Localhost());
+
+    Port peerPort = socket.getPeerPort(error);
+
+    ISHIKO_TEST_FAIL_IF(error);
+    ISHIKO_TEST_FAIL_IF_NEQ(peerPort, 8687);
+
+    socket.close();
+
+    serverThread.join();
+
     ISHIKO_TEST_PASS();
 }
