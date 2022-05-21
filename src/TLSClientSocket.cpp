@@ -5,51 +5,8 @@
 */
 
 #include "TLSClientSocket.hpp"
-#include <botan/certstor_system.h>
-#include <botan/tls_client.h>
-#include <botan/tls_policy.h>
 
 using namespace Ishiko;
-
-namespace
-{
-
-// TODO: I need to put this somewhere else and make user configurable
-class BotanCredentialsManager : public Botan::Credentials_Manager
-{
-public:
-    BotanCredentialsManager()
-    {
-        // TODO: is this adequate?
-        // We use the system managed trusted CA list
-        m_stores.push_back(new Botan::System_Certificate_Store);
-    }
-
-    std::vector<Botan::Certificate_Store*> trusted_certificate_authorities(const std::string& type,
-        const std::string& context) override
-    {
-        return m_stores;
-    }
-
-    std::vector<Botan::X509_Certificate> cert_chain(const std::vector<std::string>& cert_key_types,
-        const std::string& type, const std::string& context) override
-    {
-        // We don't use client authentication
-        return std::vector<Botan::X509_Certificate>();
-    }
-
-    Botan::Private_Key* private_key_for(const Botan::X509_Certificate& cert, const std::string& type,
-        const std::string& context) override
-    {
-        // We don't use client authentication
-        return nullptr;
-    }
-
-private:
-    std::vector<Botan::Certificate_Store*> m_stores;
-};
-
-}
 
 TLSClientSocket::BotanTLSCallbacks::BotanTLSCallbacks(TCPClientSocket& socket)
     : m_socket(socket)
@@ -80,6 +37,33 @@ bool TLSClientSocket::BotanTLSCallbacks::tls_session_established(const Botan::TL
     return false;
 }
 
+TLSClientSocket::BotanCredentialsManager::BotanCredentialsManager()
+{
+    // TODO: is this adequate?
+    // We use the system managed trusted CA list
+    m_stores.push_back(new Botan::System_Certificate_Store);
+}
+
+std::vector<Botan::Certificate_Store*> TLSClientSocket::BotanCredentialsManager::trusted_certificate_authorities(
+    const std::string& type, const std::string& context)
+{
+    return m_stores;
+}
+
+std::vector<Botan::X509_Certificate> TLSClientSocket::BotanCredentialsManager::cert_chain(
+    const std::vector<std::string>& cert_key_types, const std::string& type, const std::string& context)
+{
+    // We don't use client authentication
+    return std::vector<Botan::X509_Certificate>();
+}
+
+Botan::Private_Key* TLSClientSocket::BotanCredentialsManager::private_key_for(const Botan::X509_Certificate& cert,
+    const std::string& type, const std::string& context)
+{
+    // We don't use client authentication
+    return nullptr;
+}
+
 TLSClientSocket::TLSClientSocket(Error& error) noexcept
     : m_socket(error), m_botanTLSCallbacks(m_socket), m_sessionManager(m_rng)
 {
@@ -89,21 +73,15 @@ void TLSClientSocket::connect(IPv4Address address, Port port, Error& error) noex
 {
     m_socket.connect(address, port, error);
 
-    
-    
-    BotanCredentialsManager credentials;
-    
-    Botan::TLS::Strict_Policy policy;
-    
     // TODO: replace "needfulsoftware.com" with correct domain but how?
     // TODO: I want TLS v.1.3 but only available in Botan 3.0.0. which is not released yet
     // TODO: what of TLS 1.2 is not supported, can I safely downgrade?
-    Botan::TLS::Client tlsClient(m_botanTLSCallbacks, m_sessionManager, credentials, policy, m_rng,
-        Botan::TLS::Server_Information("needfulsoftware.com", port.number()),
-        Botan::TLS::Protocol_Version::TLS_V12);
+    m_tlsClient.reset(new Botan::TLS::Client(m_botanTLSCallbacks, m_sessionManager, m_credentials, m_policy, m_rng,
+        Botan::TLS::Server_Information("needfulsoftware.com", port.number()), Botan::TLS::Protocol_Version::TLS_V12));
+
     // When the Botan TLS client is active it means the handshake has finished and we can start sending data so we
     // consider the connection has now been established and we return to the caller.
-    while (!tlsClient.is_closed() && !tlsClient.is_active())
+    while (!m_tlsClient->is_closed() && !m_tlsClient->is_active())
     {
         // TODO: buffer size?
         char buffer[10 * 1024];
@@ -116,7 +94,7 @@ void TLSClientSocket::connect(IPv4Address address, Port port, Error& error) noex
 
         // TODO: this returns the amount of data needed to complete the next record. Do I need to do something with
         // this.
-        size_t needed = tlsClient.received_data((const uint8_t*)buffer, n);
+        size_t needed = m_tlsClient->received_data((const uint8_t*)buffer, n);
     }
 }
 
