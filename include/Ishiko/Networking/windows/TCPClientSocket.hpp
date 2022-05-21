@@ -10,6 +10,7 @@
 #include "../IPv4Address.hpp"
 #include "../Port.hpp"
 #include <Ishiko/Errors.hpp>
+#define NOMINMAX // TODO: what rubbish, how do I put this ugly windows logic somewhere central
 #include <winsock2.h>
 
 namespace Ishiko
