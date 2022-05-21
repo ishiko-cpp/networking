@@ -10,6 +10,7 @@
 #include "IPv4Address.hpp"
 #include "Port.hpp"
 #include "TCPClientSocket.hpp"
+#undef min  // TODO: track down where I include <windows.h> and sort this out
 #include <botan/auto_rng.h>
 #include <botan/certstor_system.h>
 #include <botan/tls_callbacks.h>
@@ -45,6 +46,10 @@ private:
         void tls_record_received(uint64_t seq_no, const uint8_t data[], size_t size) override;
         void tls_alert(Botan::TLS::Alert alert) override;
         bool tls_session_established(const Botan::TLS::Session& session) override;
+        void tls_verify_cert_chain(const std::vector<Botan::X509_Certificate>& cert_chain,
+            const std::vector<std::shared_ptr<const Botan::OCSP::Response>>& ocsp,
+            const std::vector<Botan::Certificate_Store*>& trusted_roots, Botan::Usage_Type usage,
+            const std::string& hostname, const Botan::TLS::Policy& policy) override;
 
     private:
         TCPClientSocket& m_socket;

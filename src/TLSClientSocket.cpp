@@ -5,6 +5,7 @@
 */
 
 #include "TLSClientSocket.hpp"
+#include <botan/x509path.h>
 
 using namespace Ishiko;
 
@@ -23,6 +24,8 @@ void TLSClientSocket::BotanTLSCallbacks::tls_emit_data(const uint8_t data[], siz
 void TLSClientSocket::BotanTLSCallbacks::tls_record_received(uint64_t seq_no, const uint8_t data[], size_t size)
 {
     // TODO: how do I pass this back synchronously to the application
+    int i = 0;
+    ++i;
 }
 
 void TLSClientSocket::BotanTLSCallbacks::tls_alert(Botan::TLS::Alert alert)
@@ -35,6 +38,24 @@ bool TLSClientSocket::BotanTLSCallbacks::tls_session_established(const Botan::TL
     // Do not cache the session
     // TODO: do I need to support this?
     return false;
+}
+
+void TLSClientSocket::BotanTLSCallbacks::tls_verify_cert_chain(const std::vector<Botan::X509_Certificate>& cert_chain,
+    const std::vector<std::shared_ptr<const Botan::OCSP::Response>>& ocsp,
+    const std::vector<Botan::Certificate_Store*>& trusted_roots, Botan::Usage_Type usage, const std::string& hostname,
+    const Botan::TLS::Policy& policy)
+{
+    if (cert_chain.empty())
+    {
+        throw Botan::Invalid_Argument("Certificate chain was empty");
+    }
+
+    Botan::Path_Validation_Restrictions restrictions(policy.require_cert_revocation_info(),
+        policy.minimum_signature_strength());
+    auto ocsp_timeout = std::chrono::milliseconds(1000);
+    Botan::Path_Validation_Result result =
+        Botan::x509_path_validate(cert_chain, restrictions, trusted_roots, hostname, usage,
+            std::chrono::system_clock::now(), ocsp_timeout, ocsp);
 }
 
 TLSClientSocket::BotanCredentialsManager::BotanCredentialsManager()
@@ -102,9 +123,16 @@ int TLSClientSocket::read(char* buffer, int length, Error& error)
 {
     // TODO: how much TLS encoded data do I need to read to get the amount requested by the client?
     // I'll never know I think. So I can only read into an internal buffer and return data from that.
+
+    // TODO: handle error
+    int n = m_socket.read(buffer, length, error);
+    size_t needed = m_tlsClient->received_data((const uint8_t*)buffer, n);
+
     return 0;
 }
 
 void TLSClientSocket::write(const char* buffer, int length, Error& error)
 {
+    // TODO: how do we handle errors?
+    m_tlsClient->send((const uint8_t*)buffer, length);
 }
