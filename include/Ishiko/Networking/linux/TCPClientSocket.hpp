@@ -10,6 +10,7 @@
 #include "../IPv4Address.hpp"
 #include "../Port.hpp"
 #include <Ishiko/Errors.hpp>
+#include <Ishiko/Memory.hpp>
 
 namespace Ishiko
 {
@@ -26,12 +27,15 @@ public:
 
     void connect(IPv4Address address, Port port, Error& error);
 
+    // TODO: should return value be size_t
+    int read(Buffer& buffer, size_t count, Error& error);
+    int read(Buffer& buffer, size_t offset, size_t count, Error& error);
     // TODO: should length be size_t, same for return value
-    int read(char* buffer, int length, Error& error);
+    int read(char* buffer, int count, Error& error);
     // TODO: always blocking at the moment, if this is non-blocking then would need to return the actual number of
     // bytes sent
     // TODO: should length be size_t
-    void write(const char* buffer, int length, Error& error);
+    void write(const char* buffer, int count, Error& error);
 
     // TODO: there is an issue here with the fact that SIGPIPE will be triggered if we try any operations after
     // receiving FIN. This means either it becomes a very annoying precondition or I need to check state before all
