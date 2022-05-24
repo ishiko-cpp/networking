@@ -41,6 +41,7 @@ endif
 #      ISHIKO_CPP_ERRORS_ROOT        Path to the Ishiko Errors installation
 #      ISHIKO_CPP_BOOST_ROOT         Path to the Boost installation
 #      ISHIKO_CPP_TEXT_ROOT          Path to the Ishiko/Text installation
+#      ISHIKO_CPP_BOTAN_ROOT         Path to the Botan installation
 
 # Use "make RANLIB=''" for platforms without ranlib.
 RANLIB ?= ranlib
@@ -75,44 +76,49 @@ ISHIKO_CPP_ERRORS_ROOT ?= $(ISHIKO_CPP)/errors
 ISHIKO_CPP_BOOST_ROOT ?= $(ISHIKO_CPP_THIRD_PARTY_BOOST)
 # Path to the Ishiko/Text installation
 ISHIKO_CPP_TEXT_ROOT ?= $(ISHIKO_CPP)/text
+# Path to the Botan installation
+ISHIKO_CPP_BOTAN_ROOT ?= $(ISHIKO_CPP_THIRD_PARTY_BOTAN)
 
 # ------------
 
 all: ../bakefile/../../lib/lib$(if $(call _equal,$(config),Debug),IshikoNetworking-d,IshikoNetworking).a
 
-../bakefile/../../lib/lib$(if $(call _equal,$(config),Debug),IshikoNetworking-d,IshikoNetworking).a: $(_builddir)IshikoNetworking_IPAddress.o $(_builddir)IshikoNetworking_IPv4Address.o $(_builddir)IshikoNetworking_IPv6Address.o $(_builddir)IshikoNetworking_NetworkingErrorCategory.o $(_builddir)IshikoNetworking_Port.o $(_builddir)IshikoNetworking_TCPAcceptor.o $(_builddir)IshikoNetworking_TCPConnector.o $(_builddir)IshikoNetworking_NetworkingLibraryInitialization.o $(_builddir)IshikoNetworking_TCPClientSocket.o $(_builddir)IshikoNetworking_TCPServerSocket.o
-	$(AR) rc $@ $(_builddir)IshikoNetworking_IPAddress.o $(_builddir)IshikoNetworking_IPv4Address.o $(_builddir)IshikoNetworking_IPv6Address.o $(_builddir)IshikoNetworking_NetworkingErrorCategory.o $(_builddir)IshikoNetworking_Port.o $(_builddir)IshikoNetworking_TCPAcceptor.o $(_builddir)IshikoNetworking_TCPConnector.o $(_builddir)IshikoNetworking_NetworkingLibraryInitialization.o $(_builddir)IshikoNetworking_TCPClientSocket.o $(_builddir)IshikoNetworking_TCPServerSocket.o
+../bakefile/../../lib/lib$(if $(call _equal,$(config),Debug),IshikoNetworking-d,IshikoNetworking).a: $(_builddir)IshikoNetworking_IPAddress.o $(_builddir)IshikoNetworking_IPv4Address.o $(_builddir)IshikoNetworking_IPv6Address.o $(_builddir)IshikoNetworking_NetworkingErrorCategory.o $(_builddir)IshikoNetworking_Port.o $(_builddir)IshikoNetworking_TCPAcceptor.o $(_builddir)IshikoNetworking_TCPConnector.o $(_builddir)IshikoNetworking_TLSClientSocket.o $(_builddir)IshikoNetworking_NetworkingLibraryInitialization.o $(_builddir)IshikoNetworking_TCPClientSocket.o $(_builddir)IshikoNetworking_TCPServerSocket.o
+	$(AR) rc $@ $(_builddir)IshikoNetworking_IPAddress.o $(_builddir)IshikoNetworking_IPv4Address.o $(_builddir)IshikoNetworking_IPv6Address.o $(_builddir)IshikoNetworking_NetworkingErrorCategory.o $(_builddir)IshikoNetworking_Port.o $(_builddir)IshikoNetworking_TCPAcceptor.o $(_builddir)IshikoNetworking_TCPConnector.o $(_builddir)IshikoNetworking_TLSClientSocket.o $(_builddir)IshikoNetworking_NetworkingLibraryInitialization.o $(_builddir)IshikoNetworking_TCPClientSocket.o $(_builddir)IshikoNetworking_TCPServerSocket.o
 	$(RANLIB) $@
 
 $(_builddir)IshikoNetworking_IPAddress.o: ../../src/IPAddress.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) $(CXXFLAGS) -MD -MP -fPIC -DPIC -pthread -I$(ISHIKO_CPP_ERRORS_ROOT)/include -I$(ISHIKO_CPP_BASEPLATFORM_ROOT)/include -I$(ISHIKO_CPP_BOOST_ROOT)/include -I$(ISHIKO_CPP_TEXT_ROOT)/include -I../../include/Ishiko/Networking -std=c++11 ../../src/IPAddress.cpp
+	$(CXX) -c -o $@ $(CPPFLAGS) $(CXXFLAGS) -MD -MP -fPIC -DPIC -pthread -I$(ISHIKO_CPP_ERRORS_ROOT)/include -I$(ISHIKO_CPP_BASEPLATFORM_ROOT)/include -I$(ISHIKO_CPP_BOOST_ROOT)/include -I$(ISHIKO_CPP_TEXT_ROOT)/include -I$(ISHIKO_CPP_BOTAN_ROOT)/include/botan-2 -I../../include/Ishiko/Networking -std=c++11 ../../src/IPAddress.cpp
 
 $(_builddir)IshikoNetworking_IPv4Address.o: ../../src/IPv4Address.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) $(CXXFLAGS) -MD -MP -fPIC -DPIC -pthread -I$(ISHIKO_CPP_ERRORS_ROOT)/include -I$(ISHIKO_CPP_BASEPLATFORM_ROOT)/include -I$(ISHIKO_CPP_BOOST_ROOT)/include -I$(ISHIKO_CPP_TEXT_ROOT)/include -I../../include/Ishiko/Networking -std=c++11 ../../src/IPv4Address.cpp
+	$(CXX) -c -o $@ $(CPPFLAGS) $(CXXFLAGS) -MD -MP -fPIC -DPIC -pthread -I$(ISHIKO_CPP_ERRORS_ROOT)/include -I$(ISHIKO_CPP_BASEPLATFORM_ROOT)/include -I$(ISHIKO_CPP_BOOST_ROOT)/include -I$(ISHIKO_CPP_TEXT_ROOT)/include -I$(ISHIKO_CPP_BOTAN_ROOT)/include/botan-2 -I../../include/Ishiko/Networking -std=c++11 ../../src/IPv4Address.cpp
 
 $(_builddir)IshikoNetworking_IPv6Address.o: ../../src/IPv6Address.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) $(CXXFLAGS) -MD -MP -fPIC -DPIC -pthread -I$(ISHIKO_CPP_ERRORS_ROOT)/include -I$(ISHIKO_CPP_BASEPLATFORM_ROOT)/include -I$(ISHIKO_CPP_BOOST_ROOT)/include -I$(ISHIKO_CPP_TEXT_ROOT)/include -I../../include/Ishiko/Networking -std=c++11 ../../src/IPv6Address.cpp
+	$(CXX) -c -o $@ $(CPPFLAGS) $(CXXFLAGS) -MD -MP -fPIC -DPIC -pthread -I$(ISHIKO_CPP_ERRORS_ROOT)/include -I$(ISHIKO_CPP_BASEPLATFORM_ROOT)/include -I$(ISHIKO_CPP_BOOST_ROOT)/include -I$(ISHIKO_CPP_TEXT_ROOT)/include -I$(ISHIKO_CPP_BOTAN_ROOT)/include/botan-2 -I../../include/Ishiko/Networking -std=c++11 ../../src/IPv6Address.cpp
 
 $(_builddir)IshikoNetworking_NetworkingErrorCategory.o: ../../src/NetworkingErrorCategory.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) $(CXXFLAGS) -MD -MP -fPIC -DPIC -pthread -I$(ISHIKO_CPP_ERRORS_ROOT)/include -I$(ISHIKO_CPP_BASEPLATFORM_ROOT)/include -I$(ISHIKO_CPP_BOOST_ROOT)/include -I$(ISHIKO_CPP_TEXT_ROOT)/include -I../../include/Ishiko/Networking -std=c++11 ../../src/NetworkingErrorCategory.cpp
+	$(CXX) -c -o $@ $(CPPFLAGS) $(CXXFLAGS) -MD -MP -fPIC -DPIC -pthread -I$(ISHIKO_CPP_ERRORS_ROOT)/include -I$(ISHIKO_CPP_BASEPLATFORM_ROOT)/include -I$(ISHIKO_CPP_BOOST_ROOT)/include -I$(ISHIKO_CPP_TEXT_ROOT)/include -I$(ISHIKO_CPP_BOTAN_ROOT)/include/botan-2 -I../../include/Ishiko/Networking -std=c++11 ../../src/NetworkingErrorCategory.cpp
 
 $(_builddir)IshikoNetworking_Port.o: ../../src/Port.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) $(CXXFLAGS) -MD -MP -fPIC -DPIC -pthread -I$(ISHIKO_CPP_ERRORS_ROOT)/include -I$(ISHIKO_CPP_BASEPLATFORM_ROOT)/include -I$(ISHIKO_CPP_BOOST_ROOT)/include -I$(ISHIKO_CPP_TEXT_ROOT)/include -I../../include/Ishiko/Networking -std=c++11 ../../src/Port.cpp
+	$(CXX) -c -o $@ $(CPPFLAGS) $(CXXFLAGS) -MD -MP -fPIC -DPIC -pthread -I$(ISHIKO_CPP_ERRORS_ROOT)/include -I$(ISHIKO_CPP_BASEPLATFORM_ROOT)/include -I$(ISHIKO_CPP_BOOST_ROOT)/include -I$(ISHIKO_CPP_TEXT_ROOT)/include -I$(ISHIKO_CPP_BOTAN_ROOT)/include/botan-2 -I../../include/Ishiko/Networking -std=c++11 ../../src/Port.cpp
 
 $(_builddir)IshikoNetworking_TCPAcceptor.o: ../../src/TCPAcceptor.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) $(CXXFLAGS) -MD -MP -fPIC -DPIC -pthread -I$(ISHIKO_CPP_ERRORS_ROOT)/include -I$(ISHIKO_CPP_BASEPLATFORM_ROOT)/include -I$(ISHIKO_CPP_BOOST_ROOT)/include -I$(ISHIKO_CPP_TEXT_ROOT)/include -I../../include/Ishiko/Networking -std=c++11 ../../src/TCPAcceptor.cpp
+	$(CXX) -c -o $@ $(CPPFLAGS) $(CXXFLAGS) -MD -MP -fPIC -DPIC -pthread -I$(ISHIKO_CPP_ERRORS_ROOT)/include -I$(ISHIKO_CPP_BASEPLATFORM_ROOT)/include -I$(ISHIKO_CPP_BOOST_ROOT)/include -I$(ISHIKO_CPP_TEXT_ROOT)/include -I$(ISHIKO_CPP_BOTAN_ROOT)/include/botan-2 -I../../include/Ishiko/Networking -std=c++11 ../../src/TCPAcceptor.cpp
 
 $(_builddir)IshikoNetworking_TCPConnector.o: ../../src/TCPConnector.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) $(CXXFLAGS) -MD -MP -fPIC -DPIC -pthread -I$(ISHIKO_CPP_ERRORS_ROOT)/include -I$(ISHIKO_CPP_BASEPLATFORM_ROOT)/include -I$(ISHIKO_CPP_BOOST_ROOT)/include -I$(ISHIKO_CPP_TEXT_ROOT)/include -I../../include/Ishiko/Networking -std=c++11 ../../src/TCPConnector.cpp
+	$(CXX) -c -o $@ $(CPPFLAGS) $(CXXFLAGS) -MD -MP -fPIC -DPIC -pthread -I$(ISHIKO_CPP_ERRORS_ROOT)/include -I$(ISHIKO_CPP_BASEPLATFORM_ROOT)/include -I$(ISHIKO_CPP_BOOST_ROOT)/include -I$(ISHIKO_CPP_TEXT_ROOT)/include -I$(ISHIKO_CPP_BOTAN_ROOT)/include/botan-2 -I../../include/Ishiko/Networking -std=c++11 ../../src/TCPConnector.cpp
+
+$(_builddir)IshikoNetworking_TLSClientSocket.o: ../../src/TLSClientSocket.cpp
+	$(CXX) -c -o $@ $(CPPFLAGS) $(CXXFLAGS) -MD -MP -fPIC -DPIC -pthread -I$(ISHIKO_CPP_ERRORS_ROOT)/include -I$(ISHIKO_CPP_BASEPLATFORM_ROOT)/include -I$(ISHIKO_CPP_BOOST_ROOT)/include -I$(ISHIKO_CPP_TEXT_ROOT)/include -I$(ISHIKO_CPP_BOTAN_ROOT)/include/botan-2 -I../../include/Ishiko/Networking -std=c++11 ../../src/TLSClientSocket.cpp
 
 $(_builddir)IshikoNetworking_NetworkingLibraryInitialization.o: ../../src/linux/NetworkingLibraryInitialization.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) $(CXXFLAGS) -MD -MP -fPIC -DPIC -pthread -I$(ISHIKO_CPP_ERRORS_ROOT)/include -I$(ISHIKO_CPP_BASEPLATFORM_ROOT)/include -I$(ISHIKO_CPP_BOOST_ROOT)/include -I$(ISHIKO_CPP_TEXT_ROOT)/include -I../../include/Ishiko/Networking -std=c++11 ../../src/linux/NetworkingLibraryInitialization.cpp
+	$(CXX) -c -o $@ $(CPPFLAGS) $(CXXFLAGS) -MD -MP -fPIC -DPIC -pthread -I$(ISHIKO_CPP_ERRORS_ROOT)/include -I$(ISHIKO_CPP_BASEPLATFORM_ROOT)/include -I$(ISHIKO_CPP_BOOST_ROOT)/include -I$(ISHIKO_CPP_TEXT_ROOT)/include -I$(ISHIKO_CPP_BOTAN_ROOT)/include/botan-2 -I../../include/Ishiko/Networking -std=c++11 ../../src/linux/NetworkingLibraryInitialization.cpp
 
 $(_builddir)IshikoNetworking_TCPClientSocket.o: ../../src/linux/TCPClientSocket.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) $(CXXFLAGS) -MD -MP -fPIC -DPIC -pthread -I$(ISHIKO_CPP_ERRORS_ROOT)/include -I$(ISHIKO_CPP_BASEPLATFORM_ROOT)/include -I$(ISHIKO_CPP_BOOST_ROOT)/include -I$(ISHIKO_CPP_TEXT_ROOT)/include -I../../include/Ishiko/Networking -std=c++11 ../../src/linux/TCPClientSocket.cpp
+	$(CXX) -c -o $@ $(CPPFLAGS) $(CXXFLAGS) -MD -MP -fPIC -DPIC -pthread -I$(ISHIKO_CPP_ERRORS_ROOT)/include -I$(ISHIKO_CPP_BASEPLATFORM_ROOT)/include -I$(ISHIKO_CPP_BOOST_ROOT)/include -I$(ISHIKO_CPP_TEXT_ROOT)/include -I$(ISHIKO_CPP_BOTAN_ROOT)/include/botan-2 -I../../include/Ishiko/Networking -std=c++11 ../../src/linux/TCPClientSocket.cpp
 
 $(_builddir)IshikoNetworking_TCPServerSocket.o: ../../src/linux/TCPServerSocket.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) $(CXXFLAGS) -MD -MP -fPIC -DPIC -pthread -I$(ISHIKO_CPP_ERRORS_ROOT)/include -I$(ISHIKO_CPP_BASEPLATFORM_ROOT)/include -I$(ISHIKO_CPP_BOOST_ROOT)/include -I$(ISHIKO_CPP_TEXT_ROOT)/include -I../../include/Ishiko/Networking -std=c++11 ../../src/linux/TCPServerSocket.cpp
+	$(CXX) -c -o $@ $(CPPFLAGS) $(CXXFLAGS) -MD -MP -fPIC -DPIC -pthread -I$(ISHIKO_CPP_ERRORS_ROOT)/include -I$(ISHIKO_CPP_BASEPLATFORM_ROOT)/include -I$(ISHIKO_CPP_BOOST_ROOT)/include -I$(ISHIKO_CPP_TEXT_ROOT)/include -I$(ISHIKO_CPP_BOTAN_ROOT)/include/botan-2 -I../../include/Ishiko/Networking -std=c++11 ../../src/linux/TCPServerSocket.cpp
 
 clean:
 	rm -f $(_builddir)*.o

@@ -11,6 +11,7 @@
 #include "../Port.hpp"
 #include "../windows/TCPClientSocket.hpp"
 #include <Ishiko/Errors.hpp>
+#define NOMINMAX // TODO: what rubbish, how do I put this ugly windows logic somewhere central
 #include <winsock2.h>
 
 namespace Ishiko

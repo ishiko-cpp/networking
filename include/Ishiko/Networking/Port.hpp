@@ -18,7 +18,8 @@ public:
     // TODO: not a class enum because we need straightforward conversion to a port number
     enum WellKnownPort
     {
-        http = 80
+        http = 80,
+        https = 443
     };
 
     Port(uint16_t number);

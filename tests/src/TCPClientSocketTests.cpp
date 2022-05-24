@@ -10,8 +10,6 @@
 #include <thread>
 
 using namespace Ishiko;
-using namespace Ishiko::Tests;
-using namespace std;
 
 TCPClientSocketTests::TCPClientSocketTests(const TestNumber& number, const TestContext& context)
     : TestSequence(number, "TCPClientSocket tests", context)
@@ -42,7 +40,7 @@ void TCPClientSocketTests::ConstructorTest2(Test& test)
     Error error;
     TCPClientSocket socket(error);
 
-    TCPClientSocket movedSocket = move(socket);
+    TCPClientSocket movedSocket = std::move(socket);
 
     ISHIKO_TEST_FAIL_IF(error);
     ISHIKO_TEST_PASS();
@@ -104,7 +102,7 @@ void TCPClientSocketTests::WriteTest1(Test& test)
 {
     char buffer[1];
     
-    thread serverThread(
+    std::thread serverThread(
         [&buffer]()
         {
             Error error;
@@ -117,7 +115,7 @@ void TCPClientSocketTests::WriteTest1(Test& test)
     );
 
     // TODO: this is flaky, should be able to fix once I get async server
-    this_thread::sleep_for(chrono::seconds(1));
+    std::this_thread::sleep_for(std::chrono::seconds(1));
 
     Error error;
     TCPClientSocket socket(error);
@@ -160,7 +158,7 @@ void TCPClientSocketTests::WriteTest1(Test& test)
 
 void TCPClientSocketTests::ReadTest1(Test& test)
 {
-    thread serverThread(
+    std::thread serverThread(
         []()
         {
             Error error;
@@ -171,7 +169,7 @@ void TCPClientSocketTests::ReadTest1(Test& test)
     );
 
     // TODO: this is flaky, should be able to fix once I get async server
-    this_thread::sleep_for(chrono::seconds(1));
+    std::this_thread::sleep_for(std::chrono::seconds(1));
     
     Error error;
     TCPClientSocket socket(error);
@@ -203,7 +201,7 @@ void TCPClientSocketTests::CloseTest1(Test& test)
 {
     // TODO: this test will hand if close() doesn't work properly. I need to make this more robust.
 
-    thread serverThread(
+    std::thread serverThread(
         []()
         {
             Error error;
@@ -217,7 +215,7 @@ void TCPClientSocketTests::CloseTest1(Test& test)
     );
 
     // TODO: this is flaky, should be able to fix once I get async server
-    this_thread::sleep_for(chrono::seconds(1));
+    std::this_thread::sleep_for(std::chrono::seconds(1));
 
     Error error;
     TCPClientSocket socket(error);
@@ -259,7 +257,7 @@ void TCPClientSocketTests::ShutdownTest1(Test& test)
 {
     // TODO: this test will hand if shutdown() doesn't work properly. I need to make this more robust.
 
-    thread serverThread(
+    std::thread serverThread(
         []()
     {
         Error error;
@@ -273,7 +271,7 @@ void TCPClientSocketTests::ShutdownTest1(Test& test)
     );
 
     // TODO: this is flaky, should be able to fix once I get async server
-    this_thread::sleep_for(chrono::seconds(1));
+    std::this_thread::sleep_for(std::chrono::seconds(1));
 
     Error error;
     TCPClientSocket socket(error);

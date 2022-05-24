@@ -9,12 +9,12 @@
 #include "PortTests.hpp"
 #include "TCPClientSocketTests.hpp"
 #include "TCPServerSocketTests.hpp"
+#include "TLSClientSocketTests.hpp"
 #include "Ishiko/Networking/NetworkingLibraryInitialization.hpp"
 #include "Ishiko/Networking/linkoptions.hpp"
 #include <Ishiko/TestFramework/Core.hpp>
 
 using namespace Ishiko;
-using namespace std;
 
 int main(int argc, char* argv[])
 {
@@ -30,10 +30,11 @@ int main(int argc, char* argv[])
         theTests.append<PortTests>();
         theTests.append<TCPServerSocketTests>();
         theTests.append<TCPClientSocketTests>();
+        theTests.append<TLSClientSocketTests>();
 
         return theTestHarness.run();
     }
-    catch (const exception& e)
+    catch (const std::exception& e)
     {
         return TestApplicationReturnCode::exception;
     }
