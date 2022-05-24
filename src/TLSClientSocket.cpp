@@ -6,6 +6,7 @@
 
 #include "TLSClientSocket.hpp"
 #include <botan/x509path.h>
+#include <Ishiko/Memory.hpp>
 
 using namespace Ishiko;
 
@@ -103,9 +104,9 @@ void TLSClientSocket::connect(IPv4Address address, Port port, Error& error) noex
     while (!m_tlsClient->is_closed() && !m_tlsClient->is_active())
     {
         // TODO: buffer size?
-        char buffer[10 * 1024];
+        Buffer buffer(10 * 1024);
         // TODO: handle error
-        int n = m_socket.read(buffer, sizeof(buffer), error);
+        int n = m_socket.read(buffer, buffer.capacity(), error);
 
         // TODO: is there not an issue that I may read data from the server past the handshake. So application data
         // might be called. This would only happen if the server pushes data. So I need to buffer everything received
@@ -113,7 +114,7 @@ void TLSClientSocket::connect(IPv4Address address, Port port, Error& error) noex
 
         // TODO: this returns the amount of data needed to complete the next record. Do I need to do something with
         // this.
-        size_t needed = m_tlsClient->received_data((const uint8_t*)buffer, n);
+        size_t needed = m_tlsClient->received_data((const uint8_t*)buffer.data(), n);
     }
 }
 
@@ -136,16 +137,16 @@ int TLSClientSocket::read(char* buffer, int length, Error& error)
     }
 
     // TODO: buffer size?
-    char localBuffer[10 * 1024];
+    Buffer localBuffer(10 * 1024);
     // TODO: handle error
-    int n = m_socket.read(localBuffer, sizeof(localBuffer), error);
+    int n = m_socket.read(localBuffer, localBuffer.capacity(), error);
     if (n == 0)
     {
         // TODO: socket was closed on the other end
         return 0;
     }
 
-    size_t needed = m_tlsClient->received_data((const uint8_t*)localBuffer, n);
+    size_t needed = m_tlsClient->received_data((const uint8_t*)localBuffer.data(), n);
     // TODO: take into account needed
 
     // TODO: is it possible here that I read so little I don't have a full TLS packet and m_buffer is still empty but
