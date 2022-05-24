@@ -10,6 +10,7 @@
 #include "../IPv4Address.hpp"
 #include "../Port.hpp"
 #include <Ishiko/Errors.hpp>
+#define NOMINMAX // TODO: what rubbish, how do I put this ugly windows logic somewhere central
 #include <winsock2.h>
 
 namespace Ishiko
@@ -24,7 +25,7 @@ public:
     TCPClientSocket(TCPClientSocket&& other);
     ~TCPClientSocket();
 
-    void connect(IPv4Address address, Port port, Error& error);
+    void connect(IPv4Address address, Port port, Error& error) noexcept;
 
     // TODO: should length be size_t, same for return value
     int read(char* buffer, int length, Error& error);

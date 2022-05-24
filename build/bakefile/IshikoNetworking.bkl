@@ -2,6 +2,7 @@ ishikopath = envvar("ISHIKO_CPP");
 import $(ishikopath)/base-platform/include/Ishiko/BasePlatform.bkl;
 import $(ishikopath)/errors/include/Ishiko/Errors.bkl;
 import $(ishikopath)/text/include/Ishiko/Text.bkl;
+import $(ishikopath)/third-party-glue/include/Ishiko/ThirdParty/Botan.bkl;
 
 toolsets = gnu vs2019 vs2017 vs2015 vs2013;
 
@@ -11,7 +12,7 @@ vs2017.solutionfile = ../vc15/IshikoNetworking.sln;
 vs2015.solutionfile = ../vc14/IshikoNetworking.sln;
 vs2013.solutionfile = ../vc12/IshikoNetworking.sln;
 
-library IshikoNetworking : IshikoText, IshikoErrors, IshikoBasePlatform
+library IshikoNetworking : IshikoText, IshikoErrors, IshikoBasePlatform, Botan
 {
     archs = x86 x86_64;
 
@@ -47,6 +48,7 @@ library IshikoNetworking : IshikoText, IshikoErrors, IshikoBasePlatform
         ../../include/Ishiko/Networking/TCPClientSocket.hpp
         ../../include/Ishiko/Networking/TCPConnector.hpp
         ../../include/Ishiko/Networking/TCPServerSocket.hpp
+        ../../include/Ishiko/Networking/TLSClientSocket.hpp
     }
 
     sources
@@ -58,6 +60,7 @@ library IshikoNetworking : IshikoText, IshikoErrors, IshikoBasePlatform
         ../../src/Port.cpp
         ../../src/TCPAcceptor.cpp
         ../../src/TCPConnector.cpp
+        ../../src/TLSClientSocket.cpp
     }
 
     if ($(toolset) == gnu)

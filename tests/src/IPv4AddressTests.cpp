@@ -8,7 +8,6 @@
 #include "Ishiko/Networking/IPv4Address.hpp"
 
 using namespace Ishiko;
-using namespace Ishiko::Tests;
 
 IPv4AddressTests::IPv4AddressTests(const TestNumber& number, const TestContext& context)
     : TestSequence(number, "IPv4Address tests", context)

@@ -32,6 +32,9 @@
     <ClInclude Include="..\..\src\TCPServerSocketTests.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\TLSClientSocketTests.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\IPAddressTests.cpp">
@@ -50,6 +53,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\TCPServerSocketTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TLSClientSocketTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
