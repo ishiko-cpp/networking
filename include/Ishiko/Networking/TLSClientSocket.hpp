@@ -40,7 +40,7 @@ private:
     class BotanTLSCallbacks : public Botan::TLS::Callbacks
     {
     public:
-        BotanTLSCallbacks(TCPClientSocket& socket);
+        BotanTLSCallbacks(TCPClientSocket& socket, std::string& buffer);
 
         void tls_emit_data(const uint8_t data[], size_t size) override;
         void tls_record_received(uint64_t seq_no, const uint8_t data[], size_t size) override;
@@ -53,6 +53,7 @@ private:
 
     private:
         TCPClientSocket& m_socket;
+        std::string& m_buffer;
     };
 
     // TODO: I need to put this somewhere else and make user configurable
@@ -82,6 +83,7 @@ private:
     Botan::TLS::Strict_Policy m_policy;
     // TODO: I needed to make this a pointer because the port is only known when connect(...) is called.
     std::unique_ptr<Botan::TLS::Client> m_tlsClient;
+    std::string m_buffer;
 };
 
 }

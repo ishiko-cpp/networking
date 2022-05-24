@@ -9,8 +9,8 @@
 
 using namespace Ishiko;
 
-TLSClientSocket::BotanTLSCallbacks::BotanTLSCallbacks(TCPClientSocket& socket)
-    : m_socket(socket)
+TLSClientSocket::BotanTLSCallbacks::BotanTLSCallbacks(TCPClientSocket& socket, std::string& buffer)
+    : m_socket(socket), m_buffer(buffer)
 {
 }
 
@@ -23,9 +23,7 @@ void TLSClientSocket::BotanTLSCallbacks::tls_emit_data(const uint8_t data[], siz
 
 void TLSClientSocket::BotanTLSCallbacks::tls_record_received(uint64_t seq_no, const uint8_t data[], size_t size)
 {
-    // TODO: how do I pass this back synchronously to the application
-    int i = 0;
-    ++i;
+    m_buffer.append((const char*)data, size);
 }
 
 void TLSClientSocket::BotanTLSCallbacks::tls_alert(Botan::TLS::Alert alert)
@@ -86,7 +84,7 @@ Botan::Private_Key* TLSClientSocket::BotanCredentialsManager::private_key_for(co
 }
 
 TLSClientSocket::TLSClientSocket(Error& error) noexcept
-    : m_socket(error), m_botanTLSCallbacks(m_socket), m_sessionManager(m_rng)
+    : m_socket(error), m_botanTLSCallbacks(m_socket, m_buffer), m_sessionManager(m_rng)
 {
 }
 
@@ -125,8 +123,44 @@ int TLSClientSocket::read(char* buffer, int length, Error& error)
     // I'll never know I think. So I can only read into an internal buffer and return data from that.
 
     // TODO: handle error
-    int n = m_socket.read(buffer, length, error);
-    size_t needed = m_tlsClient->received_data((const uint8_t*)buffer, n);
+    if (!m_buffer.empty())
+    {
+        size_t count = m_buffer.size();
+        if (m_buffer.size() > length)
+        {
+            count = length;
+        }
+        memcpy(buffer, m_buffer.c_str(), count);
+        m_buffer.erase(m_buffer.begin(), (m_buffer.begin() + count));
+        return count;
+    }
+
+    // TODO: buffer size?
+    char localBuffer[10 * 1024];
+    // TODO: handle error
+    int n = m_socket.read(localBuffer, sizeof(localBuffer), error);
+    if (n == 0)
+    {
+        // TODO: socket was closed on the other end
+        return 0;
+    }
+
+    size_t needed = m_tlsClient->received_data((const uint8_t*)localBuffer, n);
+    // TODO: take into account needed
+
+    // TODO: is it possible here that I read so little I don't have a full TLS packet and m_buffer is still empty but
+    // the socket is not closed.
+    if (!m_buffer.empty())
+    {
+        size_t count = m_buffer.size();
+        if (m_buffer.size() > length)
+        {
+            count = length;
+        }
+        memcpy(buffer, m_buffer.c_str(), count);
+        m_buffer.erase(m_buffer.begin(), (m_buffer.begin() + count));
+        return count;
+    }
 
     return 0;
 }
