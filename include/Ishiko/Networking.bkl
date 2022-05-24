@@ -1,6 +1,7 @@
 ishikopath = envvar("ISHIKO_CPP");
 import $(ishikopath)/base-platform/include/Ishiko/BasePlatform.bkl;
 import $(ishikopath)/errors/include/Ishiko/Errors.bkl;
+import $(ishikopath)/memory/include/Ishiko/Memory.bkl;
 import $(ishikopath)/text/include/Ishiko/Text.bkl;
 import $(ishikopath)/third-party-glue/include/Ishiko/ThirdParty/Botan.bkl;
 
@@ -10,7 +11,7 @@ setting ISHIKO_CPP_NETWORKING_ROOT
     default = '$(ISHIKO_CPP)/networking';
 }
 
-template IshikoNetworking : IshikoText, IshikoErrors, IshikoBasePlatform, Botan
+template IshikoNetworking : IshikoText, IshikoMemory, IshikoErrors, IshikoBasePlatform, Botan
 {
     includedirs += $(ISHIKO_CPP_NETWORKING_ROOT)/include;
 

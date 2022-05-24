@@ -56,9 +56,11 @@ void TCPClientSocket::connect(IPv4Address address, Port port, Error& error)
     }
 }
 
-int TCPClientSocket::read(char* buffer, int length, Error& error)
+// TODO: test
+int TCPClientSocket::read(Buffer& buffer, size_t count, Error& error)
 {
-    int err = recv(m_socket, buffer, length, 0);
+    // TODO: bounds checks
+    int err = recv(m_socket, reinterpret_cast<char*>(buffer.data()), count, 0);
     if (err == -1)
     {
         // TODO: more detailed error
@@ -67,9 +69,33 @@ int TCPClientSocket::read(char* buffer, int length, Error& error)
     return err;
 }
 
-void TCPClientSocket::write(const char* buffer, int length, Error& error)
+// TODO: test
+int TCPClientSocket::read(Buffer& buffer, size_t offset, size_t count, Error& error)
 {
-    int err = send(m_socket, buffer, length, 0);
+    // TODO: bounds checks
+    int err = recv(m_socket, reinterpret_cast<char*>(buffer.data() + offset), count, 0);
+    if (err == -1)
+    {
+        // TODO: more detailed error
+        Fail(error, NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
+    }
+    return err;
+}
+
+int TCPClientSocket::read(char* buffer, int count, Error& error)
+{
+    int err = recv(m_socket, buffer, count, 0);
+    if (err == -1)
+    {
+        // TODO: more detailed error
+        Fail(error, NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
+    }
+    return err;
+}
+
+void TCPClientSocket::write(const char* buffer, int count, Error& error)
+{
+    int err = send(m_socket, buffer, count, 0);
     if (err == -1)
     {
         // TODO: more detailed error
