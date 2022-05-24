@@ -18,6 +18,7 @@
 #include <botan/tls_policy.h>
 #include <botan/tls_session_manager.h>
 #include <Ishiko/Errors.hpp>
+#include <string>
 
 namespace Ishiko
 {
@@ -27,7 +28,9 @@ class TLSClientSocket
 public:
     TLSClientSocket(Error& error) noexcept;
 
-    void connect(IPv4Address address, Port port, Error& error) noexcept;
+    // TODO: hostname is for SNI. Should I provide an overload for when SNI is not needed? The caller can just leave it
+    // empty though
+    void connect(IPv4Address address, Port port, const std::string& hostname, Error& error) noexcept;
 
     // TODO: should length be size_t, same for return value
     int read(char* buffer, int length, Error& error);

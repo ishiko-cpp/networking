@@ -89,7 +89,7 @@ TLSClientSocket::TLSClientSocket(Error& error) noexcept
 {
 }
 
-void TLSClientSocket::connect(IPv4Address address, Port port, Error& error) noexcept
+void TLSClientSocket::connect(IPv4Address address, Port port, const std::string& hostname, Error& error) noexcept
 {
     m_socket.connect(address, port, error);
 
@@ -97,7 +97,7 @@ void TLSClientSocket::connect(IPv4Address address, Port port, Error& error) noex
     // TODO: I want TLS v.1.3 but only available in Botan 3.0.0. which is not released yet
     // TODO: what of TLS 1.2 is not supported, can I safely downgrade?
     m_tlsClient.reset(new Botan::TLS::Client(m_botanTLSCallbacks, m_sessionManager, m_credentials, m_policy, m_rng,
-        Botan::TLS::Server_Information("needfulsoftware.com", port.number()), Botan::TLS::Protocol_Version::TLS_V12));
+        Botan::TLS::Server_Information(hostname, port.number()), Botan::TLS::Protocol_Version::TLS_V12));
 
     // When the Botan TLS client is active it means the handshake has finished and we can start sending data so we
     // consider the connection has now been established and we return to the caller.
