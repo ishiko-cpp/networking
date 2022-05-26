@@ -158,6 +158,7 @@
     <ClCompile Include="..\..\src\TCPAcceptor.cpp" />
     <ClCompile Include="..\..\src\TCPConnector.cpp" />
     <ClCompile Include="..\..\src\TLSClientSocket.cpp" />
+    <ClCompile Include="..\..\src\TLSServerSocket.cpp" />
     <ClCompile Include="..\..\src\windows\NetworkingLibraryInitialization.cpp" />
     <ClCompile Include="..\..\src\windows\TCPClientSocket.cpp" />
     <ClCompile Include="..\..\src\windows\TCPServerSocket.cpp" />
@@ -176,6 +177,7 @@
     <ClInclude Include="..\..\include\Ishiko\Networking\TCPConnector.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\TCPServerSocket.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\TLSClientSocket.hpp" />
+    <ClInclude Include="..\..\include\Ishiko\Networking\TLSServerSocket.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\windows\NetworkingLibraryInitialization.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\windows\TCPClientSocket.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\windows\TCPServerSocket.hpp" />
