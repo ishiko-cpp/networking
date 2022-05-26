@@ -10,6 +10,7 @@
 #include "TCPClientSocketTests.hpp"
 #include "TCPServerSocketTests.hpp"
 #include "TLSClientSocketTests.hpp"
+#include "TLSServerSocketTests.hpp"
 #include "Ishiko/Networking/NetworkingLibraryInitialization.hpp"
 #include "Ishiko/Networking/linkoptions.hpp"
 #include <Ishiko/TestFramework/Core.hpp>
@@ -30,6 +31,7 @@ int main(int argc, char* argv[])
         theTests.append<PortTests>();
         theTests.append<TCPServerSocketTests>();
         theTests.append<TCPClientSocketTests>();
+        theTests.append<TLSServerSocketTests>();
         theTests.append<TLSClientSocketTests>();
 
         return theTestHarness.run();

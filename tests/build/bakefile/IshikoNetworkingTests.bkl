@@ -28,6 +28,7 @@ program IshikoNetworkingTests : IshikoNetworking, IshikoTestFrameworkCore
         ../../src/TCPClientSocketTests.hpp
         ../../src/TCPServerSocketTests.hpp
         ../../src/TLSClientSocketTests.hpp
+        ../../src/TLSServerSocketTests.hpp
     }
 
     sources
@@ -39,5 +40,6 @@ program IshikoNetworkingTests : IshikoNetworking, IshikoTestFrameworkCore
         ../../src/TCPClientSocketTests.cpp
         ../../src/TCPServerSocketTests.cpp
         ../../src/TLSClientSocketTests.cpp
+        ../../src/TLSServerSocketTests.cpp
     }
 }
