@@ -15,12 +15,9 @@ TLSServerSocket::TLSServerSocket(IPv4Address address, Port port, Error& error) n
 
 TLSClientSocket TLSServerSocket::accept(Error& error) noexcept
 {
+    // TODO: handle errors
     TCPClientSocket clientSocket = m_socket.accept(error);
-    // TODO: handle error
-
-    // TODO: establish TLS connection
-
-    return TLSClientSocket(std::move(clientSocket));
+    return TLSClientSocket(std::move(clientSocket), error);
 }
 
 IPv4Address TLSServerSocket::ipAddress() const

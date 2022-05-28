@@ -10,8 +10,7 @@
 using namespace Ishiko;
 
 TLSClientSocketBotanClientImpl::TLSClientSocketBotanClientImpl(Error& error) noexcept
-    : m_socket(error), m_botanTLSCallbacks(m_socket, m_buffer),
-    m_sessionManager(m_rng)
+    : m_socket(error), m_botanTLSCallbacks(m_socket, m_buffer), m_sessionManager(m_rng)
 {
 }
 
@@ -20,7 +19,6 @@ void TLSClientSocketBotanClientImpl::connect(IPv4Address address, Port port, con
 {
     m_socket.connect(address, port, error);
 
-    // TODO: replace "needfulsoftware.com" with correct domain but how?
     // TODO: I want TLS v.1.3 but only available in Botan 3.0.0. which is not released yet
     // TODO: what of TLS 1.2 is not supported, can I safely downgrade?
     m_tlsClient.reset(new Botan::TLS::Client(m_botanTLSCallbacks, m_sessionManager, m_credentials, m_policy, m_rng,
@@ -111,7 +109,8 @@ void TLSClientSocketBotanClientImpl::BotanTLSCallbacks::tls_emit_data(const uint
     m_socket.write((const char*)data, size, error);
 }
 
-void TLSClientSocketBotanClientImpl::BotanTLSCallbacks::tls_record_received(uint64_t seq_no, const uint8_t data[], size_t size)
+void TLSClientSocketBotanClientImpl::BotanTLSCallbacks::tls_record_received(uint64_t seq_no, const uint8_t data[],
+    size_t size)
 {
     m_buffer.append((const char*)data, size);
 }
@@ -168,8 +167,8 @@ std::vector<Botan::X509_Certificate> TLSClientSocketBotanClientImpl::BotanCreden
     return std::vector<Botan::X509_Certificate>();
 }
 
-Botan::Private_Key* TLSClientSocketBotanClientImpl::BotanCredentialsManager::private_key_for(const Botan::X509_Certificate& cert,
-    const std::string& type, const std::string& context)
+Botan::Private_Key* TLSClientSocketBotanClientImpl::BotanCredentialsManager::private_key_for(
+    const Botan::X509_Certificate& cert, const std::string& type, const std::string& context)
 {
     // We don't use client authentication
     return nullptr;

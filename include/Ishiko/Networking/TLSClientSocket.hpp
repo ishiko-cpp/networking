@@ -9,6 +9,7 @@
 
 #include "IPv4Address.hpp"
 #include "Port.hpp"
+#include "TCPClientSocket.hpp"
 #include <Ishiko/Errors.hpp>
 #include <string>
 
@@ -19,7 +20,10 @@ class TLSClientSocket
 {
 public:
     TLSClientSocket(Error& error) noexcept;
-    ~TLSClientSocket();
+    TLSClientSocket(TCPClientSocket&& socket, Error& error) noexcept;
+    TLSClientSocket(const TLSClientSocket& other) = delete;
+    TLSClientSocket(TLSClientSocket&& other) noexcept = default;
+    ~TLSClientSocket() = default;
 
     // TODO: hostname is for SNI. Should I provide an overload for when SNI is not needed? The caller can just leave it
     // empty though
@@ -34,6 +38,7 @@ public:
 
 private:
     friend class TLSClientSocketBotanClientImpl;
+    friend class TLSClientSocketBotanServerImpl;
 
     class Impl
     {
@@ -43,7 +48,7 @@ private:
         virtual void write(const char* buffer, int length, Error& error) = 0;
     };
 
-    Impl* m_impl;
+    std::unique_ptr<Impl> m_impl;
 };
 
 }

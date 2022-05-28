@@ -6,6 +6,7 @@
 
 #include "TLSClientSocket.hpp"
 #include "TLSClientSocketBotanClientImpl.hpp"
+#include "TLSClientSocketBotanServerImpl.hpp"
 #include <Ishiko/Memory.hpp>
 
 using namespace Ishiko;
@@ -16,9 +17,10 @@ TLSClientSocket::TLSClientSocket(Error& error) noexcept
 {
 }
 
-TLSClientSocket::~TLSClientSocket()
+TLSClientSocket::TLSClientSocket(TCPClientSocket&& socket, Error& error) noexcept
+// TODO: can't allocate memory here
+    : m_impl(new TLSClientSocketBotanServerImpl(std::move(socket), error))
 {
-    delete m_impl;
 }
 
 void TLSClientSocket::connect(IPv4Address address, Port port, const std::string& hostname, Error& error) noexcept
