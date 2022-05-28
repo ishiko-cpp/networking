@@ -9,7 +9,9 @@
 
 #include "IPv4Address.hpp"
 #include "Port.hpp"
+#include "TCPClientSocket.hpp"
 #include <Ishiko/Errors.hpp>
+#include <memory>
 #include <string>
 
 namespace Ishiko
@@ -19,7 +21,11 @@ class TLSClientSocket
 {
 public:
     TLSClientSocket(Error& error) noexcept;
-    ~TLSClientSocket();
+    TLSClientSocket(TCPClientSocket&& socket, const std::string& keyPath, const std::string& certificatePath,
+        Error& error) noexcept;
+    TLSClientSocket(const TLSClientSocket& other) = delete;
+    TLSClientSocket(TLSClientSocket&& other) noexcept = default;
+    ~TLSClientSocket() = default;
 
     // TODO: hostname is for SNI. Should I provide an overload for when SNI is not needed? The caller can just leave it
     // empty though
@@ -32,18 +38,27 @@ public:
     // TODO: should length be size_t
     void write(const char* buffer, int length, Error& error);
 
+    IPv4Address getLocalIPAddress(Error& error) const;
+    Port getLocalPort(Error& error) const;
+    IPv4Address getPeerIPAddress(Error& error) const;
+    Port getPeerPort(Error& error) const;
+
 private:
     friend class TLSClientSocketBotanClientImpl;
+    friend class TLSClientSocketBotanServerImpl;
 
     class Impl
     {
     public:
+        virtual ~Impl() = default;
+
         virtual void connect(IPv4Address address, Port port, const std::string& hostname, Error& error) noexcept = 0;
         virtual int read(char* buffer, int length, Error& error) = 0;
         virtual void write(const char* buffer, int length, Error& error) = 0;
+        virtual const TCPClientSocket& socket() const noexcept = 0;
     };
 
-    Impl* m_impl;
+    std::unique_ptr<Impl> m_impl;
 };
 
 }
