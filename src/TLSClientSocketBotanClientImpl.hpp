@@ -29,8 +29,9 @@ public:
     TLSClientSocketBotanClientImpl(Error& error) noexcept;
 
     void connect(IPv4Address address, Port port, const std::string& hostname, Error& error) noexcept override;
-    virtual int read(char* buffer, int length, Error& error) override;
-    virtual void write(const char* buffer, int length, Error& error) override;
+    int read(char* buffer, int length, Error& error) override;
+    void write(const char* buffer, int length, Error& error) override;
+    const TCPClientSocket& socket() const noexcept override;
 
 private:
     class BotanTLSCallbacks : public Botan::TLS::Callbacks

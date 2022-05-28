@@ -38,3 +38,23 @@ void TLSClientSocket::write(const char* buffer, int length, Error& error)
 {
     m_impl->write(buffer, length, error);
 }
+
+IPv4Address TLSClientSocket::getLocalIPAddress(Error& error) const
+{
+    return m_impl->socket().getLocalIPAddress(error);
+}
+
+Port TLSClientSocket::getLocalPort(Error& error) const
+{
+    return m_impl->socket().getLocalPort(error);
+}
+
+IPv4Address TLSClientSocket::getPeerIPAddress(Error& error) const
+{
+    return m_impl->socket().getPeerIPAddress(error);
+}
+
+Port TLSClientSocket::getPeerPort(Error& error) const
+{
+    return m_impl->socket().getPeerPort(error);
+}

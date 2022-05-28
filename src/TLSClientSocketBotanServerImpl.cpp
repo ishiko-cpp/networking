@@ -98,6 +98,11 @@ void TLSClientSocketBotanServerImpl::write(const char* buffer, int length, Error
     m_tlsServer.send((const uint8_t*)buffer, length);
 }
 
+const TCPClientSocket& TLSClientSocketBotanServerImpl::socket() const noexcept
+{
+    return m_socket;
+}
+
 TLSClientSocketBotanServerImpl::BotanTLSCallbacks::BotanTLSCallbacks(TCPClientSocket& socket, std::string& buffer)
     : m_socket(socket), m_buffer(buffer)
 {
