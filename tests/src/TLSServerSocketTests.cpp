@@ -20,8 +20,11 @@ TLSServerSocketTests::TLSServerSocketTests(const TestNumber& number, const TestC
 
 void TLSServerSocketTests::ConstructorTest1(Test& test)
 {
+    boost::filesystem::path keyPath = test.context().getTestDataPath("test_ecdsa_key.key");
+    boost::filesystem::path certificatePath = test.context().getTestDataPath("test_ecdsa_certificate.crt");
+
     Error error;
-    TLSServerSocket socket(IPv4Address::Localhost(), 8785, error);
+    TLSServerSocket socket(IPv4Address::Localhost(), 8785, keyPath.string(), certificatePath.string(), error);
 
     ISHIKO_TEST_FAIL_IF(error);
     ISHIKO_TEST_FAIL_IF_NEQ(socket.ipAddress(), IPv4Address::Localhost());
@@ -31,8 +34,12 @@ void TLSServerSocketTests::ConstructorTest1(Test& test)
 
 void TLSServerSocketTests::AcceptTest1(Test& test)
 {
+    boost::filesystem::path keyPath = test.context().getTestDataPath("test_ecdsa_key.key");
+    boost::filesystem::path certificatePath = test.context().getTestDataPath("test_ecdsa_certificate.crt");
+
     Error error;
-    TLSServerSocket socket(IPv4Address::Localhost(), TCPServerSocket::AnyPort, error);
+    TLSServerSocket socket(IPv4Address::Localhost(), TCPServerSocket::AnyPort, keyPath.string(),
+        certificatePath.string(), error);
 
     Port listeningPort = socket.port();
     std::thread client(

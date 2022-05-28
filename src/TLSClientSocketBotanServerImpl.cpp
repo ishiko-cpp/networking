@@ -12,9 +12,11 @@
 
 using namespace Ishiko;
 
-TLSClientSocketBotanServerImpl::TLSClientSocketBotanServerImpl(TCPClientSocket&& socket, Error& error) noexcept
+TLSClientSocketBotanServerImpl::TLSClientSocketBotanServerImpl(TCPClientSocket&& socket, const std::string& keyPath,
+    const std::string& certificatePath, Error& error) noexcept
     : m_socket(std::move(socket)), m_botanTLSCallbacks(m_socket, m_buffer), m_sessionManager(m_rng),
-    m_credentials(m_rng), m_tlsServer(m_botanTLSCallbacks, m_sessionManager, m_credentials, m_policy, m_rng)
+    m_credentials(keyPath, certificatePath, m_rng),
+    m_tlsServer(m_botanTLSCallbacks, m_sessionManager, m_credentials, m_policy, m_rng)
 {
    // When the Botan TLS client is active it means the handshake has finished and we can start sending data so we
     // consider the connection has now been established and we return to the caller.
@@ -126,10 +128,11 @@ bool TLSClientSocketBotanServerImpl::BotanTLSCallbacks::tls_session_established(
     return false;
 }
 
-TLSClientSocketBotanServerImpl::BotanCredentialsManager::BotanCredentialsManager(Botan::AutoSeeded_RNG& rng)
+TLSClientSocketBotanServerImpl::BotanCredentialsManager::BotanCredentialsManager(const std::string& keyPath,
+    const std::string& certificatePath, Botan::AutoSeeded_RNG& rng)
+    : m_certificatePath(certificatePath)
 {
-    //Botan::DataSource_Stream stream("C:\\Botan\\bin\\test_ecdsa_key.key", true);
-    m_key.reset(Botan::PKCS8::load_key("C:\\Botan\\bin\\test_ecdsa_key.key", rng));
+    m_key.reset(Botan::PKCS8::load_key(keyPath, rng));
 }
 
 std::vector<Botan::Certificate_Store*>
@@ -143,7 +146,7 @@ TLSClientSocketBotanServerImpl::BotanCredentialsManager::trusted_certificate_aut
 std::vector<Botan::X509_Certificate> TLSClientSocketBotanServerImpl::BotanCredentialsManager::cert_chain(
     const std::vector<std::string>& cert_key_types, const std::string& type, const std::string& context)
 {
-    return { Botan::X509_Certificate("C:\\Botan\\bin\\test_ecdsa_certificate.crt") };
+    return { Botan::X509_Certificate(m_certificatePath) };
 }
 
 Botan::Private_Key* TLSClientSocketBotanServerImpl::BotanCredentialsManager::private_key_for(

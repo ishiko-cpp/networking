@@ -17,9 +17,10 @@ TLSClientSocket::TLSClientSocket(Error& error) noexcept
 {
 }
 
-TLSClientSocket::TLSClientSocket(TCPClientSocket&& socket, Error& error) noexcept
+TLSClientSocket::TLSClientSocket(TCPClientSocket&& socket, const std::string& keyPath,
+    const std::string& certificatePath, Error& error) noexcept
 // TODO: can't allocate memory here
-    : m_impl(new TLSClientSocketBotanServerImpl(std::move(socket), error))
+    : m_impl(new TLSClientSocketBotanServerImpl(std::move(socket), keyPath, certificatePath, error))
 {
 }
 

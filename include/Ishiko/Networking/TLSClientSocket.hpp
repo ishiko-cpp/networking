@@ -21,7 +21,8 @@ class TLSClientSocket
 {
 public:
     TLSClientSocket(Error& error) noexcept;
-    TLSClientSocket(TCPClientSocket&& socket, Error& error) noexcept;
+    TLSClientSocket(TCPClientSocket&& socket, const std::string& keyPath, const std::string& certificatePath,
+        Error& error) noexcept;
     TLSClientSocket(const TLSClientSocket& other) = delete;
     TLSClientSocket(TLSClientSocket&& other) noexcept = default;
     ~TLSClientSocket() = default;

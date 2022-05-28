@@ -20,7 +20,8 @@ namespace Ishiko
 class TLSClientSocketBotanServerImpl : public TLSClientSocket::Impl
 {
 public:
-    TLSClientSocketBotanServerImpl(TCPClientSocket&& socket, Error& error) noexcept;
+    TLSClientSocketBotanServerImpl(TCPClientSocket&& socket, const std::string& keyPath,
+        const std::string& certificatePath, Error& error) noexcept;
 
     void connect(IPv4Address address, Port port, const std::string& hostname, Error& error) noexcept override;
     virtual int read(char* buffer, int length, Error& error) override;
@@ -46,7 +47,8 @@ private:
     class BotanCredentialsManager : public Botan::Credentials_Manager
     {
     public:
-        BotanCredentialsManager(Botan::AutoSeeded_RNG& rng);
+        BotanCredentialsManager(const std::string& keyPath, const std::string& certificatePath,
+            Botan::AutoSeeded_RNG& rng);
 
         std::vector<Botan::Certificate_Store*> trusted_certificate_authorities(const std::string& type,
             const std::string& context) override;
@@ -57,6 +59,7 @@ private:
 
     private:
         std::unique_ptr<Botan::Private_Key> m_key;
+        std::string m_certificatePath;
     };
 
     TCPClientSocket m_socket;

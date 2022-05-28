@@ -10,6 +10,7 @@
 #include "TCPServerSocket.hpp"
 #include "TLSClientSocket.hpp"
 #include <Ishiko/Errors.hpp>
+#include <string>
 
 namespace Ishiko
 {
@@ -17,7 +18,8 @@ namespace Ishiko
 class TLSServerSocket
 {
 public:
-    TLSServerSocket(IPv4Address address, Port port, Error& error) noexcept;
+    TLSServerSocket(IPv4Address address, Port port, std::string keyPath, std::string certificatePath,
+        Error& error) noexcept;
 
     TLSClientSocket accept(Error& error) noexcept;
 
@@ -26,6 +28,8 @@ public:
 
 private:
     TCPServerSocket m_socket;
+    std::string m_keyPath;
+    std::string m_certificatePath;
 };
 
 }
