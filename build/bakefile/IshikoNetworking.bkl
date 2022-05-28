@@ -51,6 +51,7 @@ library IshikoNetworking : IshikoText, IshikoMemory, IshikoErrors, IshikoBasePla
         ../../include/Ishiko/Networking/TCPServerSocket.hpp
         ../../include/Ishiko/Networking/TLSClientSocket.hpp
         ../../include/Ishiko/Networking/TLSServerSocket.hpp
+        ../../src/TLSClientSocketBotanClientImpl.hpp
     }
 
     sources
@@ -63,6 +64,7 @@ library IshikoNetworking : IshikoText, IshikoMemory, IshikoErrors, IshikoBasePla
         ../../src/TCPAcceptor.cpp
         ../../src/TCPConnector.cpp
         ../../src/TLSClientSocket.cpp
+        ../../src/TLSClientSocketBotanClientImpl.cpp
         ../../src/TLSServerSocket.cpp
     }
 
