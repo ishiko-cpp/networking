@@ -7,6 +7,7 @@
 #include "TLSClientSocketTests.hpp"
 #include "Ishiko/Networking/TLSClientSocket.hpp"
 #include "Ishiko/Networking/TLSServerSocket.hpp"
+#include <thread>
 
 using namespace Ishiko;
 
