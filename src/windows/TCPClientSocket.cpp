@@ -7,8 +7,7 @@
 #include "windows/TCPClientSocket.hpp"
 #include "NetworkingErrorCategory.hpp"
 
-namespace Ishiko
-{
+using namespace Ishiko;
 
 TCPClientSocket::TCPClientSocket(Error& error) noexcept
 {
@@ -178,6 +177,4 @@ Port TCPClientSocket::getPeerPort(Error& error) const
     }
 
     return Port(ntohs(boundAddress.sin_port));
-}
-
 }
