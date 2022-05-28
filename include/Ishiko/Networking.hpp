@@ -19,5 +19,6 @@
 #include "Networking/TCPConnector.hpp"
 #include "Networking/TCPServerSocket.hpp"
 #include "Networking/TLSClientSocket.hpp"
+#include "Networking/TLSServerSocket.hpp"
 
 #endif
