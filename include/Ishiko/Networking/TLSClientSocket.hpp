@@ -50,6 +50,8 @@ private:
     class Impl
     {
     public:
+        virtual ~Impl() = default;
+
         virtual void connect(IPv4Address address, Port port, const std::string& hostname, Error& error) noexcept = 0;
         virtual int read(char* buffer, int length, Error& error) = 0;
         virtual void write(const char* buffer, int length, Error& error) = 0;
