@@ -150,6 +150,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\HostnameResolver.cpp">
+      <ObjectFileName>$(IntDir)\HostnameResolver_.obj</ObjectFileName>
+    </ClCompile>
     <ClCompile Include="..\..\src\IPAddress.cpp" />
     <ClCompile Include="..\..\src\IPv4Address.cpp" />
     <ClCompile Include="..\..\src\IPv6Address.cpp" />
@@ -161,12 +164,16 @@
     <ClCompile Include="..\..\src\TLSClientSocketBotanClientImpl.cpp" />
     <ClCompile Include="..\..\src\TLSClientSocketBotanServerImpl.cpp" />
     <ClCompile Include="..\..\src\TLSServerSocket.cpp" />
+    <ClCompile Include="..\..\src\windows\HostnameResolver.cpp">
+      <ObjectFileName>$(IntDir)\HostnameResolver_windows.obj</ObjectFileName>
+    </ClCompile>
     <ClCompile Include="..\..\src\windows\NetworkingLibraryInitialization.cpp" />
     <ClCompile Include="..\..\src\windows\TCPClientSocket.cpp" />
     <ClCompile Include="..\..\src\windows\TCPServerSocket.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\Ishiko\Networking.hpp" />
+    <ClInclude Include="..\..\include\Ishiko\Networking\HostnameResolver.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\IPAddress.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\IPv4Address.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\IPv6Address.hpp" />
@@ -182,6 +189,7 @@
     <ClInclude Include="..\..\include\Ishiko\Networking\TLSServerSocket.hpp" />
     <ClInclude Include="..\..\src\TLSClientSocketBotanClientImpl.hpp" />
     <ClInclude Include="..\..\src\TLSClientSocketBotanServerImpl.hpp" />
+    <ClInclude Include="..\..\include\Ishiko\Networking\windows\HostnameResolver.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\windows\NetworkingLibraryInitialization.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\windows\TCPClientSocket.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\windows\TCPServerSocket.hpp" />
