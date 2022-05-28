@@ -58,7 +58,6 @@ library IshikoNetworking : IshikoText, IshikoMemory, IshikoErrors, IshikoBasePla
 
     sources
     {
-        ../../src/HostnameResolver.cpp
         ../../src/IPAddress.cpp
         ../../src/IPv4Address.cpp
         ../../src/IPv6Address.cpp

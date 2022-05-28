@@ -150,9 +150,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\HostnameResolver.cpp">
-      <ObjectFileName>$(IntDir)\HostnameResolver_.obj</ObjectFileName>
-    </ClCompile>
     <ClCompile Include="..\..\src\IPAddress.cpp" />
     <ClCompile Include="..\..\src\IPv4Address.cpp" />
     <ClCompile Include="..\..\src\IPv6Address.cpp" />
@@ -164,9 +161,7 @@
     <ClCompile Include="..\..\src\TLSClientSocketBotanClientImpl.cpp" />
     <ClCompile Include="..\..\src\TLSClientSocketBotanServerImpl.cpp" />
     <ClCompile Include="..\..\src\TLSServerSocket.cpp" />
-    <ClCompile Include="..\..\src\windows\HostnameResolver.cpp">
-      <ObjectFileName>$(IntDir)\HostnameResolver_windows.obj</ObjectFileName>
-    </ClCompile>
+    <ClCompile Include="..\..\src\windows\HostnameResolver.cpp" />
     <ClCompile Include="..\..\src\windows\NetworkingLibraryInitialization.cpp" />
     <ClCompile Include="..\..\src\windows\TCPClientSocket.cpp" />
     <ClCompile Include="..\..\src\windows\TCPServerSocket.cpp" />
