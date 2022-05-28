@@ -11,6 +11,7 @@
 #include "Port.hpp"
 #include "TCPClientSocket.hpp"
 #include <Ishiko/Errors.hpp>
+#include <memory>
 #include <string>
 
 namespace Ishiko
