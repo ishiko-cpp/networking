@@ -4,6 +4,7 @@
     See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
 */
 
+#include "HostnameResolverTests.hpp"
 #include "IPAddressTests.hpp"
 #include "IPv4AddressTests.hpp"
 #include "PortTests.hpp"
@@ -35,6 +36,7 @@ int main(int argc, char* argv[])
         theTests.append<TCPClientSocketTests>();
         theTests.append<TLSServerSocketTests>();
         theTests.append<TLSClientSocketTests>();
+        theTests.append<HostnameResolverTests>();
 
         return theTestHarness.run();
     }

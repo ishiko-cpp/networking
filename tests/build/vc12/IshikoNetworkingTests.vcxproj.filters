@@ -17,6 +17,9 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\src\HostnameResolverTests.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\IPAddressTests.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -40,6 +43,9 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\HostnameResolverTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\IPAddressTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
