@@ -10,11 +10,11 @@
 #include <Ishiko/BasePlatform.h>
 
 #if ISHIKO_OS == ISHIKO_OS_LINUX
-    #include "linux/TCPServerSocket.hpp"
+#include "linux/TCPServerSocket.hpp"
 #elif ISHIKO_OS == ISHIKO_OS_WINDOWS
-    #include "windows/TCPServerSocket.hpp"
+#include "windows/TCPServerSocket.hpp"
 #else
-    #error Unsupported or unrecognized OS
+#error Unsupported or unrecognized OS
 #endif
 
 #endif
