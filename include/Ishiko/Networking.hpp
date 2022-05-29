@@ -7,7 +7,7 @@
 #ifndef _ISHIKO_CPP_NETWORKING_HPP_
 #define _ISHIKO_CPP_NETWORKING_HPP_
 
-#include "HostnameResolver.hpp"
+#include "Networking/HostnameResolver.hpp"
 #include "Networking/IPAddress.hpp"
 #include "Networking/IPv4Address.hpp"
 #include "Networking/IPv6Address.hpp"
