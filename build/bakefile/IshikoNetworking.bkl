@@ -38,6 +38,7 @@ library IshikoNetworking : IshikoText, IshikoMemory, IshikoErrors, IshikoBasePla
     headers
     {
         ../../include/Ishiko/Networking.hpp
+        ../../include/Ishiko/Networking/HostnameResolver.hpp
         ../../include/Ishiko/Networking/IPAddress.hpp
         ../../include/Ishiko/Networking/IPv4Address.hpp
         ../../include/Ishiko/Networking/IPv6Address.hpp
@@ -74,6 +75,7 @@ library IshikoNetworking : IshikoText, IshikoMemory, IshikoErrors, IshikoBasePla
     {
         headers
         {
+            ../../include/Ishiko/Networking/linux/HostnameResolver.hpp
             ../../include/Ishiko/Networking/linux/NetworkingLibraryInitialization.hpp
             ../../include/Ishiko/Networking/linux/TCPClientSocket.hpp
             ../../include/Ishiko/Networking/linux/TCPServerSocket.hpp
@@ -81,6 +83,7 @@ library IshikoNetworking : IshikoText, IshikoMemory, IshikoErrors, IshikoBasePla
 
         sources
         {
+            ../../src/linux/HostnameResolver.cpp
             ../../src/linux/NetworkingLibraryInitialization.cpp
             ../../src/linux/TCPClientSocket.cpp
             ../../src/linux/TCPServerSocket.cpp
@@ -91,6 +94,7 @@ library IshikoNetworking : IshikoText, IshikoMemory, IshikoErrors, IshikoBasePla
     {
         headers
         {
+           ../../include/Ishiko/Networking/windows/HostnameResolver.hpp
            ../../include/Ishiko/Networking/windows/NetworkingLibraryInitialization.hpp
            ../../include/Ishiko/Networking/windows/TCPClientSocket.hpp
            ../../include/Ishiko/Networking/windows/TCPServerSocket.hpp
@@ -98,6 +102,7 @@ library IshikoNetworking : IshikoText, IshikoMemory, IshikoErrors, IshikoBasePla
 
         sources
         {
+            ../../src/windows/HostnameResolver.cpp
             ../../src/windows/NetworkingLibraryInitialization.cpp
             ../../src/windows/TCPClientSocket.cpp
             ../../src/windows/TCPServerSocket.cpp
