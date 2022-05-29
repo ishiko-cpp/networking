@@ -33,8 +33,9 @@ void HostnameResolverTests::ResolveTest1(Test& test)
     Error error;
     resolver.resolve("localhost", addresses, error);
 
-    ISHIKO_TEST_ABORT_IF_NEQ(addresses.size(), 1);
+    ISHIKO_TEST_ABORT_IF_NEQ(addresses.size(), 2);
     ISHIKO_TEST_FAIL_IF_NEQ(addresses[0].toString(), "127.0.0.1");
+    ISHIKO_TEST_FAIL_IF_NEQ(addresses[1].toString(), "127.0.0.1");
     ISHIKO_TEST_PASS();
 }
 
