@@ -20,8 +20,8 @@ TLSServerSocketTests::TLSServerSocketTests(const TestNumber& number, const TestC
 
 void TLSServerSocketTests::ConstructorTest1(Test& test)
 {
-    boost::filesystem::path keyPath = test.context().getTestDataPath("test_ecdsa_key.key");
-    boost::filesystem::path certificatePath = test.context().getTestDataPath("test_ecdsa_certificate.crt");
+    boost::filesystem::path keyPath = test.context().getDataPath("test_ecdsa_key.key");
+    boost::filesystem::path certificatePath = test.context().getDataPath("test_ecdsa_certificate.crt");
 
     Error error;
     TLSServerSocket socket(IPv4Address::Localhost(), 8785, keyPath.string(), certificatePath.string(), error);
@@ -34,8 +34,8 @@ void TLSServerSocketTests::ConstructorTest1(Test& test)
 
 void TLSServerSocketTests::AcceptTest1(Test& test)
 {
-    boost::filesystem::path keyPath = test.context().getTestDataPath("test_ecdsa_key.key");
-    boost::filesystem::path certificatePath = test.context().getTestDataPath("test_ecdsa_certificate.crt");
+    boost::filesystem::path keyPath = test.context().getDataPath("test_ecdsa_key.key");
+    boost::filesystem::path certificatePath = test.context().getDataPath("test_ecdsa_certificate.crt");
 
     Error error;
     TLSServerSocket socket(IPv4Address::Localhost(), TCPServerSocket::AnyPort, keyPath.string(),
