@@ -30,8 +30,8 @@ void TLSClientSocketTests::ConstructorTest1(Test& test)
 
 void TLSClientSocketTests::WriteTest1(Test& test)
 {
-    boost::filesystem::path keyPath = test.context().getTestDataPath("test_ecdsa_key.key");
-    boost::filesystem::path certificatePath = test.context().getTestDataPath("test_ecdsa_certificate.crt");
+    boost::filesystem::path keyPath = test.context().getDataPath("test_ecdsa_key.key");
+    boost::filesystem::path certificatePath = test.context().getDataPath("test_ecdsa_certificate.crt");
 
     char buffer[1];
 
@@ -90,8 +90,8 @@ void TLSClientSocketTests::WriteTest1(Test& test)
 
 void TLSClientSocketTests::ReadTest1(Test& test)
 {
-    boost::filesystem::path keyPath = test.context().getTestDataPath("test_ecdsa_key.key");
-    boost::filesystem::path certificatePath = test.context().getTestDataPath("test_ecdsa_certificate.crt");
+    boost::filesystem::path keyPath = test.context().getDataPath("test_ecdsa_key.key");
+    boost::filesystem::path certificatePath = test.context().getDataPath("test_ecdsa_certificate.crt");
 
     std::thread serverThread(
         [&keyPath, &certificatePath]()
