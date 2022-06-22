@@ -17,7 +17,7 @@ program IshikoNetworkingTests : IshikoNetworking, IshikoTestFrameworkCore
     if ($(toolset) == gnu)
     {
         cxx-compiler-options = "-std=c++11";
-        libs += IshikoNetworking IshikoTestFrameworkCore IshikoProcess IshikoText IshikoMemory IshikoErrors botan-2 boost_filesystem;
+        libs += IshikoNetworking IshikoTestFrameworkCore IshikoXML IshikoProcess IshikoText IshikoMemory IshikoErrors botan-2 boost_filesystem;
     }
 
     headers
