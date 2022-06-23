@@ -177,9 +177,26 @@ IPv6Address IPv6Address::Localhost()
     return result;
 }
 
+IPv6Address IPv6Address::Unspecified()
+{
+    IPv6Address result;
+    result.m_address = 0;
+    return result;
+}
+
 boost::multiprecision::uint128_t IPv6Address::value() const
 {
     return m_address;
+}
+
+bool IPv6Address::operator==(IPv6Address other) const
+{
+    return (m_address == other.m_address);
+}
+
+bool IPv6Address::operator!=(IPv6Address other) const
+{
+    return (m_address != other.m_address);
 }
 
 std::string IPv6Address::toString() const

@@ -20,9 +20,12 @@ public:
     IPv6Address();
     IPv6Address(const std::string& address, Error& error);
     static IPv6Address Localhost();
+    static IPv6Address Unspecified();
 
     boost::multiprecision::uint128_t value() const;
 
+    bool operator==(IPv6Address other) const;
+    bool operator!=(IPv6Address other) const;
     std::string toString() const;
 
 private:
