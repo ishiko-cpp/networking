@@ -28,7 +28,8 @@ void TCPServerSocketTests::ConstructorTest1(Test& test)
 {
     TCPServerSocket socket(IPv4Address::Localhost(), 8585);
 
-    ISHIKO_TEST_FAIL_IF_NEQ(socket.ipAddress(), IPv4Address::Localhost());
+    ISHIKO_TEST_ABORT_IF_NOT(socket.ipAddress().isIPv4());
+    ISHIKO_TEST_FAIL_IF_NEQ(socket.ipAddress().asIPv4Address(), IPv4Address::Localhost());
     ISHIKO_TEST_FAIL_IF_NEQ(socket.port(), 8585);
     ISHIKO_TEST_PASS();
 }
@@ -39,7 +40,8 @@ void TCPServerSocketTests::ConstructorTest2(Test& test)
     TCPServerSocket socket(IPv4Address::Localhost(), 8585, error);
 
     ISHIKO_TEST_FAIL_IF(error);
-    ISHIKO_TEST_FAIL_IF_NEQ(socket.ipAddress(), IPv4Address::Localhost());
+    ISHIKO_TEST_ABORT_IF_NOT(socket.ipAddress().isIPv4());
+    ISHIKO_TEST_FAIL_IF_NEQ(socket.ipAddress().asIPv4Address(), IPv4Address::Localhost());
     ISHIKO_TEST_FAIL_IF_NEQ(socket.port(), 8585);
     ISHIKO_TEST_PASS();
 }
@@ -50,7 +52,8 @@ void TCPServerSocketTests::ConstructorTest3(Test& test)
     TCPServerSocket socket(TCPServerSocket::AllInterfaces, TCPServerSocket::AnyPort, error);
 
     ISHIKO_TEST_FAIL_IF(error);
-    ISHIKO_TEST_FAIL_IF_NEQ(socket.ipAddress(), IPv4Address(0));
+    ISHIKO_TEST_ABORT_IF_NOT(socket.ipAddress().isIPv4());
+    ISHIKO_TEST_FAIL_IF_NEQ(socket.ipAddress().asIPv4Address(), IPv4Address(0));
     // A specific port should have been assigned by the OS
     ISHIKO_TEST_FAIL_IF_EQ(socket.port(), 0);
     ISHIKO_TEST_PASS();
@@ -64,7 +67,8 @@ void TCPServerSocketTests::ConstructorTest4(Test& test)
     TCPServerSocket movedSocket = std::move(socket);
 
     ISHIKO_TEST_FAIL_IF(error);
-    ISHIKO_TEST_FAIL_IF_NEQ(movedSocket.ipAddress(), IPv4Address(0));
+    ISHIKO_TEST_ABORT_IF_NOT(movedSocket.ipAddress().isIPv4());
+    ISHIKO_TEST_FAIL_IF_NEQ(movedSocket.ipAddress().asIPv4Address(), IPv4Address(0));
     // A specific port should have been assigned by the OS
     ISHIKO_TEST_FAIL_IF_EQ(movedSocket.port(), 0);
     ISHIKO_TEST_PASS();

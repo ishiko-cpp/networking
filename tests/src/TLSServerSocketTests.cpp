@@ -27,7 +27,8 @@ void TLSServerSocketTests::ConstructorTest1(Test& test)
     TLSServerSocket socket(IPv4Address::Localhost(), 8785, keyPath.string(), certificatePath.string(), error);
 
     ISHIKO_TEST_FAIL_IF(error);
-    ISHIKO_TEST_FAIL_IF_NEQ(socket.ipAddress(), IPv4Address::Localhost());
+    ISHIKO_TEST_ABORT_IF_NOT(socket.ipAddress().isIPv4());
+    ISHIKO_TEST_FAIL_IF_NEQ(socket.ipAddress().asIPv4Address(), IPv4Address::Localhost());
     ISHIKO_TEST_FAIL_IF_NEQ(socket.port(), 8785);
     ISHIKO_TEST_PASS();
 }

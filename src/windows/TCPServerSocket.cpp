@@ -30,7 +30,7 @@ TCPServerSocket::TCPServerSocket(IPv4Address address, Port port)
     winsockAddress.sin_addr.s_addr = htonl(address.value());
     winsockAddress.sin_port = htons(port.number());
 
-    int err = bind(m_socket, (sockaddr*)&winsockAddress, sizeof(winsockAddress));
+    int err = ::bind(m_socket, (sockaddr*)&winsockAddress, sizeof(winsockAddress));
     if (err == SOCKET_ERROR)
     {
         close();
@@ -80,7 +80,7 @@ TCPServerSocket::TCPServerSocket(IPv4Address address, Port port, Error& error) n
     winsockAddress.sin_addr.s_addr = htonl(address.value());
     winsockAddress.sin_port = htons(port.number());
     
-    int err = bind(m_socket, (sockaddr*)&winsockAddress, sizeof(winsockAddress));
+    int err = ::bind(m_socket, (sockaddr*)&winsockAddress, sizeof(winsockAddress));
     if (err == SOCKET_ERROR)
     {
         close();
@@ -160,7 +160,7 @@ void TCPServerSocket::close()
     }
 }
 
-IPv4Address TCPServerSocket::ipAddress() const
+IPAddress TCPServerSocket::ipAddress() const
 {
     return m_ipAddress;
 }
