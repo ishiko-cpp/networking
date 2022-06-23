@@ -35,6 +35,7 @@ void IPAddressTests::ConstructorTest2(Test& test)
 
     ISHIKO_TEST_FAIL_IF_NOT(address.isIPv4());
     ISHIKO_TEST_FAIL_IF(address.isIPv6());
+    ISHIKO_TEST_FAIL_IF_NEQ(address.asIPv4Address().toString(), "127.0.0.1");
     ISHIKO_TEST_PASS();
 }
 
@@ -45,5 +46,6 @@ void IPAddressTests::ConstructorTest3(Test& test)
 
     ISHIKO_TEST_FAIL_IF(address.isIPv4());
     ISHIKO_TEST_FAIL_IF_NOT(address.isIPv6());
+    ISHIKO_TEST_FAIL_IF_NEQ(address.asIPv6Address().toString(), "0000:0000:0000:0000:0000:0000:0000:0001");
     ISHIKO_TEST_PASS();
 }

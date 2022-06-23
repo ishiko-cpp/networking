@@ -24,6 +24,9 @@ public:
     bool isIPv4() const noexcept;
     bool isIPv6() const noexcept;
 
+    const IPv4Address& asIPv4Address() const;
+    const IPv6Address& asIPv6Address() const;
+
 private:
     boost::variant<IPv4Address, IPv6Address> m_address;
 };
