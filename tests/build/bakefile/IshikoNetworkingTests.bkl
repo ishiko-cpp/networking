@@ -25,6 +25,7 @@ program IshikoNetworkingTests : IshikoNetworking, IshikoTestFrameworkCore
         ../../src/HostnameResolverTests.hpp
         ../../src/IPAddressTests.hpp
         ../../src/IPv4AddressTests.hpp
+        ../../src/IPv6AddressTests.hpp
         ../../src/PortTests.hpp
         ../../src/TCPClientSocketTests.hpp
         ../../src/TCPServerSocketTests.hpp
@@ -37,6 +38,7 @@ program IshikoNetworkingTests : IshikoNetworking, IshikoTestFrameworkCore
         ../../src/HostnameResolverTests.cpp
         ../../src/IPAddressTests.cpp
         ../../src/IPv4AddressTests.cpp
+        ../../src/IPv6AddressTests.cpp
         ../../src/main.cpp
         ../../src/PortTests.cpp
         ../../src/TCPClientSocketTests.cpp

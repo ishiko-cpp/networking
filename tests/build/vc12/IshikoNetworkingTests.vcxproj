@@ -159,6 +159,7 @@
     <ClCompile Include="..\..\src\HostnameResolverTests.cpp" />
     <ClCompile Include="..\..\src\IPAddressTests.cpp" />
     <ClCompile Include="..\..\src\IPv4AddressTests.cpp" />
+    <ClCompile Include="..\..\src\IPv6AddressTests.cpp" />
     <ClCompile Include="..\..\src\main.cpp" />
     <ClCompile Include="..\..\src\PortTests.cpp" />
     <ClCompile Include="..\..\src\TCPClientSocketTests.cpp" />
@@ -170,6 +171,7 @@
     <ClInclude Include="..\..\src\HostnameResolverTests.hpp" />
     <ClInclude Include="..\..\src\IPAddressTests.hpp" />
     <ClInclude Include="..\..\src\IPv4AddressTests.hpp" />
+    <ClInclude Include="..\..\src\IPv6AddressTests.hpp" />
     <ClInclude Include="..\..\src\PortTests.hpp" />
     <ClInclude Include="..\..\src\TCPClientSocketTests.hpp" />
     <ClInclude Include="..\..\src\TCPServerSocketTests.hpp" />

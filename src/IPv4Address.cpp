@@ -9,11 +9,7 @@
 #include <Ishiko/Text.hpp>
 
 using namespace Ishiko;
-using namespace std;
 
-namespace Ishiko
-{
-    
 IPv4Address::IPv4Address()
     : m_address(0)
 {
@@ -24,9 +20,9 @@ IPv4Address::IPv4Address(uint32_t address)
 {
 }
 
-IPv4Address::IPv4Address(const string& address, Error& error)
+IPv4Address::IPv4Address(const std::string& address, Error& error)
 {
-    string::const_iterator it = address.begin();
+    std::string::const_iterator it = address.begin();
     while ((it != address.end()) && (*it != '.'))
     {
         ++it;
@@ -44,7 +40,7 @@ IPv4Address::IPv4Address(const string& address, Error& error)
         return;
     }
 
-    string::const_iterator startIt = ++it;
+    std::string::const_iterator startIt = ++it;
     while ((it != address.end()) && (*it != '.'))
     {
         ++it;
@@ -117,17 +113,15 @@ bool IPv4Address::operator!=(IPv4Address other) const
     return (m_address != other.m_address);
 }
 
-string IPv4Address::toString() const
+std::string IPv4Address::toString() const
 {
-    string result;
-    result += to_string(m_address >> 24);
+    std::string result;
+    result += std::to_string(m_address >> 24);
     result += '.';
-    result += to_string((m_address >> 16) & 0xFF);
+    result += std::to_string((m_address >> 16) & 0xFF);
     result += '.';
-    result += to_string((m_address >> 8) & 0xFF);
+    result += std::to_string((m_address >> 8) & 0xFF);
     result += '.';
-    result += to_string(m_address & 0xFF);
+    result += std::to_string(m_address & 0xFF);
     return result;
-}
-
 }
