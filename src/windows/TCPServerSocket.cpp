@@ -7,10 +7,7 @@
 #include "windows/TCPServerSocket.hpp"
 #include "NetworkingErrorCategory.hpp"
 
-using namespace std;
-
-namespace Ishiko
-{
+using namespace Ishiko;
 
 const IPv4Address TCPServerSocket::AllInterfaces = IPv4Address(0);
 const Port TCPServerSocket::AnyPort = Port(0);
@@ -30,7 +27,7 @@ TCPServerSocket::TCPServerSocket(IPv4Address address, Port port)
     winsockAddress.sin_addr.s_addr = htonl(address.value());
     winsockAddress.sin_port = htons(port.number());
 
-    int err = ::bind(m_socket, (sockaddr*)&winsockAddress, sizeof(winsockAddress));
+    int err = bind(m_socket, (sockaddr*)&winsockAddress, sizeof(winsockAddress));
     if (err == SOCKET_ERROR)
     {
         close();
@@ -80,7 +77,7 @@ TCPServerSocket::TCPServerSocket(IPv4Address address, Port port, Error& error) n
     winsockAddress.sin_addr.s_addr = htonl(address.value());
     winsockAddress.sin_port = htons(port.number());
     
-    int err = ::bind(m_socket, (sockaddr*)&winsockAddress, sizeof(winsockAddress));
+    int err = bind(m_socket, (sockaddr*)&winsockAddress, sizeof(winsockAddress));
     if (err == SOCKET_ERROR)
     {
         close();

@@ -7,6 +7,7 @@
 #ifndef _ISHIKO_CPP_NETWORKING_LINUX_TCPSERVERSOCKET_HPP_
 #define _ISHIKO_CPP_NETWORKING_LINUX_TCPSERVERSOCKET_HPP_
 
+#include "../IPAddress.hpp"
 #include "../IPv4Address.hpp"
 #include "../linux/TCPClientSocket.hpp"
 #include "../Port.hpp"
@@ -32,11 +33,11 @@ public:
     TCPClientSocket accept(Error& error) noexcept;
     void close();
 
-    IPv4Address ipAddress() const;
+    IPAddress ipAddress() const;
     Port port() const;
 
 private:
-    IPv4Address m_ipAddress;
+    IPAddress m_ipAddress;
     Port m_port;
     int m_socket;
 };

@@ -10,10 +10,7 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
-using namespace std;
-
-namespace Ishiko
-{
+using namespace Ishiko;
 
 const IPv4Address TCPServerSocket::AllInterfaces = IPv4Address(0);
 const Port TCPServerSocket::AnyPort = Port(0);
@@ -163,7 +160,7 @@ void TCPServerSocket::close()
     }
 }
 
-IPv4Address TCPServerSocket::ipAddress() const
+IPAddress TCPServerSocket::ipAddress() const
 {
     return m_ipAddress;
 }
@@ -171,6 +168,4 @@ IPv4Address TCPServerSocket::ipAddress() const
 Port TCPServerSocket::port() const
 {
     return m_port;
-}
-
 }
