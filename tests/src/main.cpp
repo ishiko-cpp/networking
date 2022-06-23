@@ -7,6 +7,7 @@
 #include "HostnameResolverTests.hpp"
 #include "IPAddressTests.hpp"
 #include "IPv4AddressTests.hpp"
+#include "IPv6AddressTests.hpp"
 #include "PortTests.hpp"
 #include "TCPClientSocketTests.hpp"
 #include "TCPServerSocketTests.hpp"
@@ -30,6 +31,7 @@ int main(int argc, char* argv[])
 
         TestSequence& theTests = theTestHarness.tests();
         theTests.append<IPv4AddressTests>();
+        theTests.append<IPv6AddressTests>();
         theTests.append<IPAddressTests>();
         theTests.append<PortTests>();
         theTests.append<TCPServerSocketTests>();

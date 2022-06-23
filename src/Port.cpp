@@ -6,6 +6,7 @@
 
 #include "Port.hpp"
 #include <Ishiko/Text.hpp>
+#include <ios>
 
 using namespace Ishiko;
 
@@ -18,7 +19,7 @@ Port::Port(const std::string& number)
 {
     // TODO: use exception instead of error and handle error
     Error error;
-    ASCII::Convert(number, m_number, error);
+    ASCII::Convert(number, std::ios::dec, m_number, error);
 }
 
 uint16_t Port::number() const
