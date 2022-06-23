@@ -16,7 +16,7 @@ const IPv4Address TCPServerSocket::AllInterfaces = IPv4Address(0);
 const Port TCPServerSocket::AnyPort = Port(0);
 
 TCPServerSocket::TCPServerSocket(IPv4Address address, Port port)
-    : m_ipAddress(move(address)), m_port(move(port))
+    : m_ipAddress(std::move(address)), m_port(std::move(port))
 {
     m_socket = socket(AF_INET, SOCK_STREAM, 0);
     if (m_socket == -1)
@@ -65,7 +65,7 @@ TCPServerSocket::TCPServerSocket(IPv4Address address, Port port)
 }
 
 TCPServerSocket::TCPServerSocket(IPv4Address address, Port port, Error& error) noexcept
-    : m_ipAddress(move(address)), m_port(move(port))
+    : m_ipAddress(std::move(address)), m_port(std::move(port))
 {
     m_socket = socket(AF_INET, SOCK_STREAM, 0);
     if (m_socket == -1)
