@@ -10,6 +10,7 @@
 #include <boost/multiprecision/cpp_int.hpp>
 #include <Ishiko/Errors.hpp>
 #include <string>
+#include <vector>
 
 namespace Ishiko
 {
@@ -27,6 +28,7 @@ public:
     bool operator==(IPv6Address other) const;
     bool operator!=(IPv6Address other) const;
     std::string toString() const;
+    void toBytes(unsigned char* bytes) const;
 
 private:
     boost::multiprecision::uint128_t m_address;

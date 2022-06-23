@@ -19,6 +19,7 @@ private:
     static void ConstructorTest2(Ishiko::Test& test);
     static void ConstructorTest3(Ishiko::Test& test);
     static void LocalhostTest1(Ishiko::Test& test);
+    static void ToBytesTest1(Ishiko::Test& test);
 };
 
 #endif

@@ -26,6 +26,7 @@ public:
 
     TCPServerSocket(IPv4Address address, Port port);
     TCPServerSocket(IPv4Address address, Port port, Error& error) noexcept;
+    TCPServerSocket(IPv6Address address, Port port);
     TCPServerSocket(const TCPServerSocket& other) = delete;
     TCPServerSocket(TCPServerSocket&& other) noexcept;
     ~TCPServerSocket();

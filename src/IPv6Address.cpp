@@ -219,3 +219,10 @@ std::string IPv6Address::toString() const
     result += ASCII::ToHexString((uint16_t)(m_address & 0xFFFF));
     return result;
 }
+
+void IPv6Address::toBytes(unsigned char* bytes) const
+{
+    std::vector<unsigned char> result;
+    boost::multiprecision::export_bits(m_address, std::back_inserter(result), 8);
+    memcpy(bytes, result.data(), 16);
+}
