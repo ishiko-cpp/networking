@@ -7,8 +7,8 @@
 #ifndef _ISHIKO_CPP_NETWORKING_IPV6ADDRESS_HPP_
 #define _ISHIKO_CPP_NETWORKING_IPV6ADDRESS_HPP_
 
-#include <boost/multiprecision/cpp_int.hpp>
 #include <Ishiko/Errors.hpp>
+#include <Ishiko/Memory.hpp>
 #include <string>
 #include <vector>
 
@@ -19,19 +19,19 @@ class IPv6Address
 {
 public:
     IPv6Address();
+    IPv6Address(const Byte* bytes);
     IPv6Address(const std::string& address, Error& error);
     static IPv6Address Localhost();
     static IPv6Address Unspecified();
 
-    boost::multiprecision::uint128_t value() const;
+    const FixedBuffer<16>& value() const;
 
     bool operator==(IPv6Address other) const;
     bool operator!=(IPv6Address other) const;
     std::string toString() const;
-    void toBytes(unsigned char* bytes) const;
 
 private:
-    boost::multiprecision::uint128_t m_address;
+    FixedBuffer<16> m_address;
 };
 
 }

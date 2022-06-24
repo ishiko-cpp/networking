@@ -12,7 +12,12 @@
 using namespace Ishiko;
 
 IPv6Address::IPv6Address()
-    : m_address(0)
+{
+    m_address.zero();
+}
+
+IPv6Address::IPv6Address(const Byte* bytes)
+    : m_address(FixedBuffer<16>::From(bytes))
 {
 }
 
@@ -160,31 +165,31 @@ IPv6Address::IPv6Address(const std::string& address, Error& error)
         return;
     }
 
-    m_address = section1;
-    m_address = (m_address << 16) + section2;
-    m_address = (m_address << 16) + section3;
-    m_address = (m_address << 16) + section4;
-    m_address = (m_address << 16) + section5;
-    m_address = (m_address << 16) + section6;
-    m_address = (m_address << 16) + section7;
-    m_address = (m_address << 16) + section8;
+    m_address.bigEndianWordAt(0) = section1;
+    m_address.bigEndianWordAt(2) = section2;
+    m_address.bigEndianWordAt(4) = section3;
+    m_address.bigEndianWordAt(6) = section4;
+    m_address.bigEndianWordAt(8) = section5;
+    m_address.bigEndianWordAt(10) = section6;
+    m_address.bigEndianWordAt(12) = section7;
+    m_address.bigEndianWordAt(14) = section8;
 }
 
 IPv6Address IPv6Address::Localhost()
 {
     IPv6Address result;
-    result.m_address = 1;
+    result.m_address.bigEndianWordAt(14) = 1;
     return result;
 }
 
 IPv6Address IPv6Address::Unspecified()
 {
+    // The default constructor creates the unspecified address already
     IPv6Address result;
-    result.m_address = 0;
     return result;
 }
 
-boost::multiprecision::uint128_t IPv6Address::value() const
+const FixedBuffer<16>& IPv6Address::value() const
 {
     return m_address;
 }
@@ -202,27 +207,20 @@ bool IPv6Address::operator!=(IPv6Address other) const
 std::string IPv6Address::toString() const
 {
     std::string result;
-    result += ASCII::ToHexString((uint16_t)((m_address >> 112) & 0xFFFF));
+    result += ASCII::ToHexString(m_address.bigEndianWordAt(0).toUint16());
     result += ':';
-    result += ASCII::ToHexString((uint16_t)((m_address >> 96) & 0xFFFF));
+    result += ASCII::ToHexString(m_address.bigEndianWordAt(2).toUint16());
     result += ':';
-    result += ASCII::ToHexString((uint16_t)((m_address >> 80) & 0xFFFF));
+    result += ASCII::ToHexString(m_address.bigEndianWordAt(4).toUint16());
     result += ':';
-    result += ASCII::ToHexString((uint16_t)((m_address >> 64) & 0xFFFF));
+    result += ASCII::ToHexString(m_address.bigEndianWordAt(6).toUint16());
     result += ':';
-    result += ASCII::ToHexString((uint16_t)((m_address >> 48) & 0xFFFF));
+    result += ASCII::ToHexString(m_address.bigEndianWordAt(8).toUint16());
     result += ':';
-    result += ASCII::ToHexString((uint16_t)((m_address >> 32) & 0xFFFF));
+    result += ASCII::ToHexString(m_address.bigEndianWordAt(10).toUint16());
     result += ':';
-    result += ASCII::ToHexString((uint16_t)((m_address >> 16) & 0xFFFF));
+    result += ASCII::ToHexString(m_address.bigEndianWordAt(12).toUint16());
     result += ':';
-    result += ASCII::ToHexString((uint16_t)(m_address & 0xFFFF));
+    result += ASCII::ToHexString(m_address.bigEndianWordAt(14).toUint16());
     return result;
-}
-
-void IPv6Address::toBytes(unsigned char* bytes) const
-{
-    std::vector<unsigned char> result;
-    boost::multiprecision::export_bits(m_address, std::back_inserter(result), 8);
-    memcpy(bytes, result.data(), 16);
 }
