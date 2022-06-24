@@ -128,7 +128,7 @@ TCPServerSocket::TCPServerSocket(IPv6Address address, Port port)
     }
 
     sockaddr_in6 linuxAddress;
-    memset(linuxAddress, 0, sizeof(linuxAddress));
+    memset((void*)linuxAddress, 0, sizeof(linuxAddress));
     linuxAddress.sin6_family = AF_INET6;
     address.value().copyTo(linuxAddress.sin6_addr.s6_addr);
     linuxAddress.sin6_port = htons(port.number());
