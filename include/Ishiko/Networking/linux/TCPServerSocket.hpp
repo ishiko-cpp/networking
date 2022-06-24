@@ -9,6 +9,7 @@
 
 #include "../IPAddress.hpp"
 #include "../IPv4Address.hpp"
+#include "../IPv6Address.hpp"
 #include "../linux/TCPClientSocket.hpp"
 #include "../Port.hpp"
 #include <Ishiko/Errors.hpp>
@@ -25,6 +26,7 @@ public:
 
     TCPServerSocket(IPv4Address address, Port port);
     TCPServerSocket(IPv4Address address, Port port, Error& error) noexcept;
+    TCPServerSocket(IPv6Address address, Port port);
     TCPServerSocket(const TCPServerSocket& other) = delete;
     TCPServerSocket(TCPServerSocket&& other) noexcept;
     ~TCPServerSocket();
