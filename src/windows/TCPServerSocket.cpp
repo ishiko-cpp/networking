@@ -65,7 +65,7 @@ TCPServerSocket::TCPServerSocket(IPv4Address address, Port port)
 TCPServerSocket::TCPServerSocket(IPv6Address address, Port port)
     : m_ipAddress(address), m_port(port)
 {
-    m_socket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
+    m_socket = WSASocket(AF_INET6, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
     if (m_socket == INVALID_SOCKET)
     {
         // TODO: more detailed error
@@ -75,7 +75,7 @@ TCPServerSocket::TCPServerSocket(IPv6Address address, Port port)
     struct sockaddr_in6 winsockAddress;
     ZeroMemory(&winsockAddress, sizeof(winsockAddress));
     winsockAddress.sin6_family = AF_INET6;
-    address.toBytes(winsockAddress.sin6_addr.u.Byte);
+    address.value().copyTo(winsockAddress.sin6_addr.u.Byte);
     winsockAddress.sin6_port = htons(port.number());
 
     int err = bind(m_socket, (sockaddr*)&winsockAddress, sizeof(winsockAddress));
@@ -87,7 +87,7 @@ TCPServerSocket::TCPServerSocket(IPv6Address address, Port port)
         Throw(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
     }
 
-    SOCKADDR_IN boundAddress;
+    struct sockaddr_in6 boundAddress;
     int boundAddressLength = sizeof(boundAddress);
     err = getsockname(m_socket, (sockaddr*)&boundAddress, &boundAddressLength);
     if (err == SOCKET_ERROR)
@@ -98,8 +98,8 @@ TCPServerSocket::TCPServerSocket(IPv6Address address, Port port)
         Throw(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
     }
 
-    m_ipAddress = IPv4Address(ntohl(boundAddress.sin_addr.s_addr));
-    m_port = Port(ntohs(boundAddress.sin_port));
+    m_ipAddress = IPv6Address(boundAddress.sin6_addr.u.Byte);
+    m_port = Port(ntohs(boundAddress.sin6_port));
 
     // TODO: make backlog explicit and configurable
     err = listen(m_socket, SOMAXCONN);

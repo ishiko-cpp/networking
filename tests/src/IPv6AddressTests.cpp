@@ -16,7 +16,7 @@ IPv6AddressTests::IPv6AddressTests(const TestNumber& number, const TestContext& 
     append<HeapAllocationErrorsTest>("Constructor test 2", ConstructorTest2);
     append<HeapAllocationErrorsTest>("Constructor test 3", ConstructorTest3);
     append<HeapAllocationErrorsTest>("Localhost test 1", LocalhostTest1);
-    append<HeapAllocationErrorsTest>("asBytes test 1", AsBytesTest1);
+    append<HeapAllocationErrorsTest>("value test 1", ValueTest1);
 }
 
 void IPv6AddressTests::ConstructorTest1(Test& test)
@@ -55,7 +55,7 @@ void IPv6AddressTests::LocalhostTest1(Test& test)
     ISHIKO_TEST_PASS();
 }
 
-void IPv6AddressTests::AsBytesTest1(Test& test)
+void IPv6AddressTests::ValueTest1(Test& test)
 {
     Error error;
     IPv6Address address("a754:6bd5:897e:4565:afbc:8965:f430:a56b", error);

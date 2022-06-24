@@ -18,6 +18,7 @@ TCPServerSocketTests::TCPServerSocketTests(const TestNumber& number, const TestC
     append<HeapAllocationErrorsTest>("Constructor test 2", ConstructorTest2);
     append<HeapAllocationErrorsTest>("Constructor test 3", ConstructorTest3);
     append<HeapAllocationErrorsTest>("Constructor test 4", ConstructorTest4);
+    append<HeapAllocationErrorsTest>("Constructor test 5", ConstructorTest5);
     append<HeapAllocationErrorsTest>("accept test 1", AcceptTest1);
     append<HeapAllocationErrorsTest>("accept test 2", AcceptTest2);
     append<HeapAllocationErrorsTest>("close test 1", CloseTest1);
@@ -71,6 +72,16 @@ void TCPServerSocketTests::ConstructorTest4(Test& test)
     ISHIKO_TEST_FAIL_IF_NEQ(movedSocket.ipAddress().asIPv4Address(), IPv4Address(0));
     // A specific port should have been assigned by the OS
     ISHIKO_TEST_FAIL_IF_EQ(movedSocket.port(), 0);
+    ISHIKO_TEST_PASS();
+}
+
+void TCPServerSocketTests::ConstructorTest5(Test& test)
+{
+    TCPServerSocket socket(IPv6Address::Localhost(), 9585);
+
+    ISHIKO_TEST_ABORT_IF_NOT(socket.ipAddress().isIPv6());
+    ISHIKO_TEST_FAIL_IF_NEQ(socket.ipAddress().asIPv6Address(), IPv6Address::Localhost());
+    ISHIKO_TEST_FAIL_IF_NEQ(socket.port(), 9585);
     ISHIKO_TEST_PASS();
 }
 
