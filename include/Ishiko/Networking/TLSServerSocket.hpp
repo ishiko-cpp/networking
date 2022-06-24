@@ -23,7 +23,7 @@ public:
 
     TLSClientSocket accept(Error& error) noexcept;
 
-    IPv4Address ipAddress() const;
+    IPAddress ipAddress() const;
     Port port() const;
 
 private:

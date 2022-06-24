@@ -6,11 +6,9 @@
 
 #include "windows/TCPServerSocket.hpp"
 #include "NetworkingErrorCategory.hpp"
+#include <ws2tcpip.h>
 
-using namespace std;
-
-namespace Ishiko
-{
+using namespace Ishiko;
 
 const IPv4Address TCPServerSocket::AllInterfaces = IPv4Address(0);
 const Port TCPServerSocket::AnyPort = Port(0);
@@ -52,6 +50,56 @@ TCPServerSocket::TCPServerSocket(IPv4Address address, Port port)
 
     m_ipAddress = IPv4Address(ntohl(boundAddress.sin_addr.s_addr));
     m_port = Port(ntohs(boundAddress.sin_port));
+
+    // TODO: make backlog explicit and configurable
+    err = listen(m_socket, SOMAXCONN);
+    if (err == SOCKET_ERROR)
+    {
+        close();
+
+        // TODO: more detailed error
+        Throw(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
+    }
+}
+
+TCPServerSocket::TCPServerSocket(IPv6Address address, Port port)
+    : m_ipAddress(address), m_port(port)
+{
+    m_socket = WSASocket(AF_INET6, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
+    if (m_socket == INVALID_SOCKET)
+    {
+        // TODO: more detailed error
+        Throw(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
+    }
+
+    struct sockaddr_in6 winsockAddress;
+    ZeroMemory(&winsockAddress, sizeof(winsockAddress));
+    winsockAddress.sin6_family = AF_INET6;
+    address.value().copyTo(winsockAddress.sin6_addr.u.Byte);
+    winsockAddress.sin6_port = htons(port.number());
+
+    int err = bind(m_socket, (sockaddr*)&winsockAddress, sizeof(winsockAddress));
+    if (err == SOCKET_ERROR)
+    {
+        close();
+
+        // TODO: more detailed error
+        Throw(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
+    }
+
+    struct sockaddr_in6 boundAddress;
+    int boundAddressLength = sizeof(boundAddress);
+    err = getsockname(m_socket, (sockaddr*)&boundAddress, &boundAddressLength);
+    if (err == SOCKET_ERROR)
+    {
+        close();
+
+        // TODO: more detailed error
+        Throw(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
+    }
+
+    m_ipAddress = IPv6Address(boundAddress.sin6_addr.u.Byte);
+    m_port = Port(ntohs(boundAddress.sin6_port));
 
     // TODO: make backlog explicit and configurable
     err = listen(m_socket, SOMAXCONN);
@@ -160,7 +208,7 @@ void TCPServerSocket::close()
     }
 }
 
-IPv4Address TCPServerSocket::ipAddress() const
+IPAddress TCPServerSocket::ipAddress() const
 {
     return m_ipAddress;
 }
@@ -168,6 +216,4 @@ IPv4Address TCPServerSocket::ipAddress() const
 Port TCPServerSocket::port() const
 {
     return m_port;
-}
-
 }

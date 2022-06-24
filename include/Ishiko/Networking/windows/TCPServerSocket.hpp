@@ -7,6 +7,7 @@
 #ifndef _ISHIKO_CPP_NETWORKING_WINDOWS_TCPSERVERSOCKET_HPP_
 #define _ISHIKO_CPP_NETWORKING_WINDOWS_TCPSERVERSOCKET_HPP_
 
+#include "../IPAddress.hpp"
 #include "../IPv4Address.hpp"
 #include "../Port.hpp"
 #include "../windows/TCPClientSocket.hpp"
@@ -25,6 +26,7 @@ public:
 
     TCPServerSocket(IPv4Address address, Port port);
     TCPServerSocket(IPv4Address address, Port port, Error& error) noexcept;
+    TCPServerSocket(IPv6Address address, Port port);
     TCPServerSocket(const TCPServerSocket& other) = delete;
     TCPServerSocket(TCPServerSocket&& other) noexcept;
     ~TCPServerSocket();
@@ -33,11 +35,11 @@ public:
     TCPClientSocket accept(Error& error) noexcept;
     void close();
 
-    IPv4Address ipAddress() const;
+    IPAddress ipAddress() const;
     Port port() const;
 
 private:
-    IPv4Address m_ipAddress;
+    IPAddress m_ipAddress;
     Port m_port;
     SOCKET m_socket;
 };
