@@ -21,7 +21,7 @@ TLSClientSocket TLSServerSocket::accept(Error& error) noexcept
     return TLSClientSocket(std::move(clientSocket), m_keyPath, m_certificatePath, error);
 }
 
-IPv4Address TLSServerSocket::ipAddress() const
+IPAddress TLSServerSocket::ipAddress() const
 {
     return m_socket.ipAddress();
 }

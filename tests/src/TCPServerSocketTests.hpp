@@ -19,6 +19,7 @@ private:
     static void ConstructorTest2(Ishiko::Test& test);
     static void ConstructorTest3(Ishiko::Test& test);
     static void ConstructorTest4(Ishiko::Test& test);
+    static void ConstructorTest5(Ishiko::Test& test);
     static void AcceptTest1(Ishiko::Test& test);
     static void AcceptTest2(Ishiko::Test& test);
     static void CloseTest1(Ishiko::Test& test);
