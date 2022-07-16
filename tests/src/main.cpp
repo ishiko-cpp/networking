@@ -16,6 +16,7 @@
 #include "Ishiko/Networking/NetworkingLibraryInitialization.hpp"
 #include "Ishiko/Networking/linkoptions.hpp"
 #include <Ishiko/TestFramework/Core.hpp>
+#include <exception>
 
 using namespace Ishiko;
 
@@ -23,11 +24,17 @@ int main(int argc, char* argv[])
 {
     try
     {
-        NetworkingLibraryInitialization networkingLibraryInitilization;
+        NetworkingLibraryInitialization networkingLibraryInitialization;
 
-        TestHarness theTestHarness("IshikoNetworking");
+        TestHarness::CommandLineSpecification commandLineSpec;
+        commandLineSpec.setDefaultValue("context.data", "../../data");
+        commandLineSpec.setDefaultValue("context.output", "../../output");
+        commandLineSpec.setDefaultValue("context.reference", "../../reference");
 
-        theTestHarness.context().setDataDirectory("../../data");
+        Configuration configuration = commandLineSpec.createDefaultConfiguration();
+        CommandLineParser::parse(commandLineSpec, argc, argv, configuration);
+
+        TestHarness theTestHarness("Ishiko/C++ Networking Library Tests", configuration);
 
         TestSequence& theTests = theTestHarness.tests();
         theTests.append<IPv4AddressTests>();
