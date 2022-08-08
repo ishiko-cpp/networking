@@ -4,8 +4,8 @@
     See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
 */
 
-#ifndef _ISHIKO_CPP_NETWORKING_NETWORKINGERRORCATEGORY_HPP_
-#define _ISHIKO_CPP_NETWORKING_NETWORKINGERRORCATEGORY_HPP_
+#ifndef GUARD_ISHIKO_CPP_NETWORKING_NETWORKINGERRORCATEGORY_HPP
+#define GUARD_ISHIKO_CPP_NETWORKING_NETWORKINGERRORCATEGORY_HPP
 
 #include <Ishiko/Errors.hpp>
 
@@ -29,7 +29,8 @@ private:
 };
 
 void Throw(NetworkingErrorCategory::Value value, const std::string& message, const char* file, int line);
-void Fail(Error& error, NetworkingErrorCategory::Value value, const std::string& message, const char* file, int line) noexcept;
+void Fail(NetworkingErrorCategory::Value value, const std::string& message, const char* file, int line,
+    Error& error) noexcept;
 
 }
 
