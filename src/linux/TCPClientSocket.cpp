@@ -10,8 +10,7 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
-namespace Ishiko
-{
+using namespace Ishiko;
 
 TCPClientSocket::TCPClientSocket(Error& error) noexcept
 {
@@ -180,6 +179,4 @@ Port TCPClientSocket::getPeerPort(Error& error) const
     }
 
     return Port(ntohs(boundAddress.sin_port));
-}
-
 }
