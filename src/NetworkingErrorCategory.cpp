@@ -6,8 +6,7 @@
 
 #include "NetworkingErrorCategory.hpp"
 
-namespace Ishiko
-{
+using namespace Ishiko;
 
 const NetworkingErrorCategory& NetworkingErrorCategory::Get() noexcept
 {
@@ -20,14 +19,13 @@ const char* NetworkingErrorCategory::name() const noexcept
     return "Ishiko::NetworkingErrorCategory";
 }
 
-void Throw(NetworkingErrorCategory::Value value, const std::string& message, const char* file, int line)
+void Ishiko::Throw(NetworkingErrorCategory::Value value, const std::string& message, const char* file, int line)
 {
     throw Exception(static_cast<int>(value), NetworkingErrorCategory::Get(), message, file, line);
 }
 
-void Fail(Error& error, NetworkingErrorCategory::Value value, const std::string& message, const char* file, int line) noexcept
+void Ishiko::Fail(NetworkingErrorCategory::Value value, const std::string& message, const char* file, int line,
+    Error& error) noexcept
 {
-    error.fail(static_cast<int>(value), NetworkingErrorCategory::Get(), message, file, line);
-}
-
+    error.fail(NetworkingErrorCategory::Get(), static_cast<int>(value), message, file, line);
 }

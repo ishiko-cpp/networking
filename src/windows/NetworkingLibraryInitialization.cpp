@@ -58,12 +58,12 @@ void NetworkingLibraryInitialization::Startup(Error& error) noexcept
     if (WSAStartup(version, &data) == SOCKET_ERROR)
     {
         // TODO: more detailed error
-        Fail(error, NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
+        Fail(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__, error);
     }
     else if ((LOBYTE(data.wVersion) != 2) || (HIBYTE(data.wVersion) != 2))
     {
         // TODO: more detailed error
-        Fail(error, NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
+        Fail(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__, error);
     }
 }
 
@@ -72,7 +72,7 @@ void NetworkingLibraryInitialization::Cleanup(Error& error) noexcept
     if (WSACleanup() == SOCKET_ERROR)
     {
         // TODO: more detailed error
-        Fail(error, NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
+        Fail(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__, error);
     }
 }
 

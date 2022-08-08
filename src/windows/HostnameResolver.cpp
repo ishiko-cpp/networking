@@ -23,7 +23,7 @@ void HostnameResolver::resolve(const std::string& name, std::vector<IPv4Address>
     if (retval)
     {
         // TODO: handle error
-        Fail(error, NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
+        Fail(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__, error);
         return;
     }
 

@@ -119,7 +119,7 @@ TCPServerSocket::TCPServerSocket(IPv4Address address, Port port, Error& error) n
     if (m_socket == INVALID_SOCKET)
     {
         // TODO: more detailed error
-        Fail(error, NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
+        Fail(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__, error);
         return;
     }
 
@@ -134,7 +134,7 @@ TCPServerSocket::TCPServerSocket(IPv4Address address, Port port, Error& error) n
         close();
 
         // TODO: more detailed error
-        Fail(error, NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
+        Fail(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__, error);
         return;
     }
 
@@ -146,7 +146,7 @@ TCPServerSocket::TCPServerSocket(IPv4Address address, Port port, Error& error) n
         close();
 
         // TODO: more detailed error
-        Fail(error, NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
+        Fail(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__, error);
         return;
     }
 
@@ -160,7 +160,7 @@ TCPServerSocket::TCPServerSocket(IPv4Address address, Port port, Error& error) n
         close();
 
         // TODO: more detailed error
-        Fail(error, NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
+        Fail(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__, error);
         return;
     }
 }
@@ -194,7 +194,7 @@ TCPClientSocket TCPServerSocket::accept(Error& error) noexcept
     if (clientSocket == INVALID_SOCKET)
     {
         // TODO: more detailed error
-        Fail(error, NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
+        Fail(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__, error);
     }
     return TCPClientSocket(clientSocket);
 }

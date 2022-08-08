@@ -34,7 +34,7 @@ IPv6Address::IPv6Address(const std::string& address, Error& error)
     if (*it != separator)
     {
         // TODO: more detailed error
-        Fail(error, NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
+        Fail(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__, error);
         return;
     }
     uint16_t section1 = 0;
@@ -52,7 +52,7 @@ IPv6Address::IPv6Address(const std::string& address, Error& error)
     if (*it != separator)
     {
         // TODO: more detailed error
-        Fail(error, NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
+        Fail(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__, error);
         return;
     }
     uint16_t section2 = 0;
@@ -70,7 +70,7 @@ IPv6Address::IPv6Address(const std::string& address, Error& error)
     if (*it != separator)
     {
         // TODO: more detailed error
-        Fail(error, NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
+        Fail(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__, error);
         return;
     }
     uint16_t section3 = 0;
@@ -88,7 +88,7 @@ IPv6Address::IPv6Address(const std::string& address, Error& error)
     if (*it != separator)
     {
         // TODO: more detailed error
-        Fail(error, NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
+        Fail(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__, error);
         return;
     }
     uint16_t section4 = 0;
@@ -106,7 +106,7 @@ IPv6Address::IPv6Address(const std::string& address, Error& error)
     if (*it != separator)
     {
         // TODO: more detailed error
-        Fail(error, NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
+        Fail(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__, error);
         return;
     }
     uint16_t section5 = 0;
@@ -124,7 +124,7 @@ IPv6Address::IPv6Address(const std::string& address, Error& error)
     if (*it != separator)
     {
         // TODO: more detailed error
-        Fail(error, NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
+        Fail(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__, error);
         return;
     }
     uint16_t section6 = 0;
@@ -142,7 +142,7 @@ IPv6Address::IPv6Address(const std::string& address, Error& error)
     if (*it != separator)
     {
         // TODO: more detailed error
-        Fail(error, NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
+        Fail(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__, error);
         return;
     }
     uint16_t section7 = 0;
