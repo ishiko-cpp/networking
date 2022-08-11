@@ -42,12 +42,12 @@ void NetworkingLibraryInitialization::Startup()
     if (WSAStartup(version, &data) == SOCKET_ERROR)
     {
         // TODO: more detailed error
-        Throw(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
+        Throw(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__);
     }
     else if ((LOBYTE(data.wVersion) != 2) || (HIBYTE(data.wVersion) != 2))
     {
         // TODO: more detailed error
-        Throw(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
+        Throw(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__);
     }
 }
 
@@ -58,12 +58,12 @@ void NetworkingLibraryInitialization::Startup(Error& error) noexcept
     if (WSAStartup(version, &data) == SOCKET_ERROR)
     {
         // TODO: more detailed error
-        Fail(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__, error);
+        Fail(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__, error);
     }
     else if ((LOBYTE(data.wVersion) != 2) || (HIBYTE(data.wVersion) != 2))
     {
         // TODO: more detailed error
-        Fail(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__, error);
+        Fail(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__, error);
     }
 }
 
@@ -72,7 +72,7 @@ void NetworkingLibraryInitialization::Cleanup(Error& error) noexcept
     if (WSACleanup() == SOCKET_ERROR)
     {
         // TODO: more detailed error
-        Fail(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__, error);
+        Fail(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__, error);
     }
 }
 

@@ -30,7 +30,7 @@ IPv4Address::IPv4Address(const std::string& address, Error& error)
     if (*it != '.')
     {
         // TODO: more detailed error
-        Fail(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__, error);
+        Fail(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__, error);
         return;
     }
     unsigned char byte1 = 0;
@@ -48,7 +48,7 @@ IPv4Address::IPv4Address(const std::string& address, Error& error)
     if (*it != '.')
     {
         // TODO: more detailed error
-        Fail(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__, error);
+        Fail(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__, error);
         return;
     }
     unsigned char byte2 = 0;
@@ -66,7 +66,7 @@ IPv4Address::IPv4Address(const std::string& address, Error& error)
     if (*it != '.')
     {
         // TODO: more detailed error
-        Fail(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__, error);
+        Fail(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__, error);
         return;
     }
     unsigned char byte3 = 0;
