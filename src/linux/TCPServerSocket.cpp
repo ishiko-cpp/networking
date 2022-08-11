@@ -22,7 +22,7 @@ TCPServerSocket::TCPServerSocket(IPv4Address address, Port port)
     if (m_socket == -1)
     {
         // TODO: more detailed error
-        Throw(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
+        Throw(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__);
     }
 
     sockaddr_in linuxAddress;
@@ -36,7 +36,7 @@ TCPServerSocket::TCPServerSocket(IPv4Address address, Port port)
         close();
 
         // TODO: more detailed error
-        Throw(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
+        Throw(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__);
     }
 
     sockaddr_in boundAddress;
@@ -47,7 +47,7 @@ TCPServerSocket::TCPServerSocket(IPv4Address address, Port port)
         close();
 
         // TODO: more detailed error
-        Throw(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
+        Throw(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__);
     }
 
     m_ipAddress = IPv4Address(ntohl(boundAddress.sin_addr.s_addr));
@@ -60,7 +60,7 @@ TCPServerSocket::TCPServerSocket(IPv4Address address, Port port)
         close();
 
         // TODO: more detailed error
-        Throw(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
+        Throw(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__);
     }
 }
 
@@ -71,7 +71,7 @@ TCPServerSocket::TCPServerSocket(IPv4Address address, Port port, Error& error) n
     if (m_socket == -1)
     {
         // TODO: more detailed error
-        Fail(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__, error);
+        Fail(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__, error);
         return;
     }
 
@@ -86,7 +86,7 @@ TCPServerSocket::TCPServerSocket(IPv4Address address, Port port, Error& error) n
         close();
 
         // TODO: more detailed error
-        Fail(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__, error);
+        Fail(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__, error);
         return;
     }
 
@@ -98,7 +98,7 @@ TCPServerSocket::TCPServerSocket(IPv4Address address, Port port, Error& error) n
         close();
 
         // TODO: more detailed error
-        Fail(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__, error);
+        Fail(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__, error);
         return;
     }
 
@@ -112,7 +112,7 @@ TCPServerSocket::TCPServerSocket(IPv4Address address, Port port, Error& error) n
         close();
 
         // TODO: more detailed error
-        Fail(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__, error);
+        Fail(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__, error);
         return;
     }
 }
@@ -124,7 +124,7 @@ TCPServerSocket::TCPServerSocket(IPv6Address address, Port port)
     if (m_socket == -1)
     {
         // TODO: more detailed error
-        Throw(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
+        Throw(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__);
     }
 
     sockaddr_in6 linuxAddress;
@@ -139,7 +139,7 @@ TCPServerSocket::TCPServerSocket(IPv6Address address, Port port)
         close();
 
         // TODO: more detailed error
-        Throw(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
+        Throw(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__);
     }
 
     sockaddr_in6 boundAddress;
@@ -150,7 +150,7 @@ TCPServerSocket::TCPServerSocket(IPv6Address address, Port port)
         close();
 
         // TODO: more detailed error
-        Throw(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
+        Throw(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__);
     }
 
     m_ipAddress = IPv6Address(boundAddress.sin6_addr.s6_addr);
@@ -163,7 +163,7 @@ TCPServerSocket::TCPServerSocket(IPv6Address address, Port port)
         close();
 
         // TODO: more detailed error
-        Throw(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
+        Throw(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__);
     }
 }
 
@@ -185,7 +185,7 @@ TCPClientSocket TCPServerSocket::accept()
     if (clientSocket == -1)
     {
         // TODO: more detailed error
-        Throw(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__);
+        Throw(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__);
     }
     return TCPClientSocket(clientSocket);
 }
@@ -196,7 +196,7 @@ TCPClientSocket TCPServerSocket::accept(Error& error) noexcept
     if (clientSocket == -1)
     {
         // TODO: more detailed error
-        Fail(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__, error);
+        Fail(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__, error);
     }
     return TCPClientSocket(clientSocket);
 }
