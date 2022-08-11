@@ -15,7 +15,7 @@ TCPClientSocket::TCPClientSocket(Error& error) noexcept
     if (m_socket == INVALID_SOCKET)
     {
         // TODO: more detailed error
-        Fail(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__, error);
+        Fail(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__, error);
     }
 }
 
@@ -48,7 +48,7 @@ void TCPClientSocket::connect(IPv4Address address, Port port, Error& error) noex
     {
         int lastError = WSAGetLastError();
         // TODO: more detailed error
-        Fail(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__, error);
+        Fail(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__, error);
     }
 }
 
@@ -61,7 +61,7 @@ int TCPClientSocket::read(Buffer& buffer, size_t count, Error& error)
     {
         int lastError = WSAGetLastError();
         // TODO: more detailed error
-        Fail(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__, error);
+        Fail(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__, error);
     }
     return err;
 }
@@ -75,7 +75,7 @@ int TCPClientSocket::read(Buffer& buffer, size_t offset, size_t count, Error& er
     {
         int lastError = WSAGetLastError();
         // TODO: more detailed error
-        Fail(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__, error);
+        Fail(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__, error);
     }
     return err;
 }
@@ -87,7 +87,7 @@ int TCPClientSocket::read(char* buffer, int count, Error& error)
     {
         int lastError = WSAGetLastError();
         // TODO: more detailed error
-        Fail(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__, error);
+        Fail(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__, error);
     }
     return err;
 }
@@ -99,7 +99,7 @@ void TCPClientSocket::write(const char* buffer, int count, Error& error)
     {
         int lastError = WSAGetLastError();
         // TODO: more detailed error
-        Fail(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__, error);
+        Fail(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__, error);
     }
 }
 
@@ -110,7 +110,7 @@ void TCPClientSocket::shutdown(Error& error)
     {
         int lastError = WSAGetLastError();
         // TODO: more detailed error
-        Fail(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__, error);
+        Fail(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__, error);
     }
 }
 
@@ -131,7 +131,7 @@ IPv4Address TCPClientSocket::getLocalIPAddress(Error& error) const
     if (err == SOCKET_ERROR)
     {
         // TODO: more detailed error
-        Fail(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__, error);
+        Fail(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__, error);
     }
 
     return IPv4Address(ntohl(boundAddress.sin_addr.s_addr));
@@ -145,7 +145,7 @@ Port TCPClientSocket::getLocalPort(Error& error) const
     if (err == SOCKET_ERROR)
     {
         // TODO: more detailed error
-        Fail(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__, error);
+        Fail(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__, error);
     }
 
     return Port(ntohs(boundAddress.sin_port));
@@ -159,7 +159,7 @@ IPv4Address TCPClientSocket::getPeerIPAddress(Error& error) const
     if (err == SOCKET_ERROR)
     {
         // TODO: more detailed error
-        Fail(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__, error);
+        Fail(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__, error);
     }
 
     return IPv4Address(ntohl(boundAddress.sin_addr.s_addr));
@@ -173,7 +173,7 @@ Port TCPClientSocket::getPeerPort(Error& error) const
     if (err == SOCKET_ERROR)
     {
         // TODO: more detailed error
-        Fail(NetworkingErrorCategory::Value::generic, "", __FILE__, __LINE__, error);
+        Fail(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__, error);
     }
 
     return Port(ntohs(boundAddress.sin_port));
