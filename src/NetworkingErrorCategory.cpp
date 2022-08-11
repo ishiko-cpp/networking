@@ -19,6 +19,21 @@ const char* NetworkingErrorCategory::name() const noexcept
     return "Ishiko::NetworkingErrorCategory";
 }
 
+std::ostream& NetworkingErrorCategory::streamOut(int value, std::ostream& os) const
+{
+    switch (static_cast<Value>(value))
+    {
+    case Value::generic_error:
+        os << "generic error";
+        break;
+
+    default:
+        os << "unknown value";
+        break;
+    }
+    return os;
+}
+
 void Ishiko::Throw(NetworkingErrorCategory::Value value, const std::string& message, const char* file, int line)
 {
     throw Exception(static_cast<int>(value), NetworkingErrorCategory::Get(), message, file, line);
