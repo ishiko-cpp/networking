@@ -29,7 +29,7 @@ void TLSClientSocketBotanClientImpl::connect(IPv4Address address, Port port, con
     while (!m_tlsClient->is_closed() && !m_tlsClient->is_active())
     {
         // TODO: buffer size?
-        Buffer buffer(10 * 1024);
+        ByteBuffer buffer(10 * 1024);
         // TODO: handle error
         int n = m_socket.read(buffer, buffer.capacity(), error);
 
@@ -62,7 +62,7 @@ int TLSClientSocketBotanClientImpl::read(char* buffer, int length, Error& error)
     }
 
     // TODO: buffer size?
-    Buffer localBuffer(10 * 1024);
+    ByteBuffer localBuffer(10 * 1024);
     // TODO: handle error
     int n = m_socket.read(localBuffer, localBuffer.capacity(), error);
     if (n == 0)

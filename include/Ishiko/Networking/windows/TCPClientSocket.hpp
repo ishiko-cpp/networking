@@ -29,8 +29,8 @@ public:
     void connect(IPv4Address address, Port port, Error& error) noexcept;
 
     // TODO: should return value be size_t
-    int read(Buffer& buffer, size_t count, Error& error);
-    int read(Buffer& buffer, size_t offset, size_t count, Error& error);
+    int read(ByteBuffer& buffer, size_t count, Error& error);
+    int read(ByteBuffer& buffer, size_t offset, size_t count, Error& error);
     // TODO: should length be size_t, same for return value
     int read(char* buffer, int count, Error& error);
     // TODO: always blocking at the moment, if this is non-blocking then would need to return the actual number of
