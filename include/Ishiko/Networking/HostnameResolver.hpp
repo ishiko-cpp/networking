@@ -4,8 +4,8 @@
     See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
 */
 
-#ifndef _ISHIKO_CPP_NETWORKING_HOSTNAMERESOLVER_HPP_
-#define _ISHIKO_CPP_NETWORKING_HOSTNAMERESOLVER_HPP_
+#ifndef GUARD_ISHIKO_CPP_NETWORKING_HOSTNAMERESOLVER_HPP
+#define GUARD_ISHIKO_CPP_NETWORKING_HOSTNAMERESOLVER_HPP
 
 #include <Ishiko/BasePlatform.h>
 

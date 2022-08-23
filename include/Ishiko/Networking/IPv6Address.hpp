@@ -4,8 +4,8 @@
     See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
 */
 
-#ifndef _ISHIKO_CPP_NETWORKING_IPV6ADDRESS_HPP_
-#define _ISHIKO_CPP_NETWORKING_IPV6ADDRESS_HPP_
+#ifndef GUARD_ISHIKO_CPP_NETWORKING_IPV6ADDRESS_HPP
+#define GUARD_ISHIKO_CPP_NETWORKING_IPV6ADDRESS_HPP
 
 #include <Ishiko/Errors.hpp>
 #include <Ishiko/Memory.hpp>
@@ -24,14 +24,14 @@ public:
     static IPv6Address Localhost();
     static IPv6Address Unspecified();
 
-    const FixedBuffer<16>& value() const;
+    const FixedByteBuffer<16>& value() const;
 
     bool operator==(IPv6Address other) const;
     bool operator!=(IPv6Address other) const;
     std::string toString() const;
 
 private:
-    FixedBuffer<16> m_address;
+    FixedByteBuffer<16> m_address;
 };
 
 }

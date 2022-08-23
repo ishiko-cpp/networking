@@ -56,7 +56,7 @@ void TCPClientSocket::connect(IPv4Address address, Port port, Error& error)
 }
 
 // TODO: test
-int TCPClientSocket::read(Buffer& buffer, size_t count, Error& error)
+int TCPClientSocket::read(ByteBuffer& buffer, size_t count, Error& error)
 {
     // TODO: bounds checks
     int err = recv(m_socket, reinterpret_cast<char*>(buffer.data()), count, 0);
@@ -69,7 +69,7 @@ int TCPClientSocket::read(Buffer& buffer, size_t count, Error& error)
 }
 
 // TODO: test
-int TCPClientSocket::read(Buffer& buffer, size_t offset, size_t count, Error& error)
+int TCPClientSocket::read(ByteBuffer& buffer, size_t offset, size_t count, Error& error)
 {
     // TODO: bounds checks
     int err = recv(m_socket, reinterpret_cast<char*>(buffer.data() + offset), count, 0);

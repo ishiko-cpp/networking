@@ -23,7 +23,7 @@ TLSClientSocketBotanServerImpl::TLSClientSocketBotanServerImpl(TCPClientSocket&&
     while (!m_tlsServer.is_closed() && !m_tlsServer.is_active())
     {
         // TODO: buffer size?
-        Buffer buffer(10 * 1024);
+        ByteBuffer buffer(10 * 1024);
         // TODO: handle error
         int n = m_socket.read(buffer, buffer.capacity(), error);
 
@@ -63,7 +63,7 @@ int TLSClientSocketBotanServerImpl::read(char* buffer, int length, Error& error)
     }
 
     // TODO: buffer size?
-    Buffer localBuffer(10 * 1024);
+    ByteBuffer localBuffer(10 * 1024);
     // TODO: handle error
     int n = m_socket.read(localBuffer, localBuffer.capacity(), error);
     if (n == 0)
