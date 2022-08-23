@@ -17,7 +17,7 @@ IPv6Address::IPv6Address()
 }
 
 IPv6Address::IPv6Address(const Byte* bytes)
-    : m_address(FixedBuffer<16>::From(bytes))
+    : m_address(FixedByteBuffer<16>::From(bytes))
 {
 }
 
@@ -189,7 +189,7 @@ IPv6Address IPv6Address::Unspecified()
     return result;
 }
 
-const FixedBuffer<16>& IPv6Address::value() const
+const FixedByteBuffer<16>& IPv6Address::value() const
 {
     return m_address;
 }
