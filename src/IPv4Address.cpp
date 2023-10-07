@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2021-2022 Xavier Leclercq
+    Copyright (c) 2021-2023 Xavier Leclercq
     Released under the MIT License
     See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
 */
@@ -111,6 +111,11 @@ bool IPv4Address::operator==(IPv4Address other) const
 bool IPv4Address::operator!=(IPv4Address other) const
 {
     return (m_address != other.m_address);
+}
+
+bool IPv4Address::operator<(IPv4Address other) const
+{
+    return (m_address < other.m_address);
 }
 
 std::string IPv4Address::toString() const
