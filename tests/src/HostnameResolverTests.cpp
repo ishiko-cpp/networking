@@ -50,7 +50,7 @@ void HostnameResolverTests::ResolveTest2(Test& test)
     std::sort(addresses.begin(), addresses.end());
 
     ISHIKO_TEST_ABORT_IF_NEQ(addresses.size(), 2);
-    ISHIKO_TEST_FAIL_IF_NEQ(addresses[0].toString(), "172.67.176.128");
-    ISHIKO_TEST_FAIL_IF_NEQ(addresses[1].toString(), "104.21.31.121");
+    ISHIKO_TEST_FAIL_IF_NEQ(addresses[0].toString(), "104.21.31.121");
+    ISHIKO_TEST_FAIL_IF_NEQ(addresses[1].toString(), "172.67.176.128");
     ISHIKO_TEST_PASS();
 }
