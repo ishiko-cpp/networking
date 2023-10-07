@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2022 Xavier Leclercq
+    Copyright (c) 2022-2023 Xavier Leclercq
     Released under the MIT License
     See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
 */
@@ -46,6 +46,8 @@ void HostnameResolverTests::ResolveTest2(Test& test)
     std::vector<IPv4Address> addresses;
     Error error;
     resolver.resolve("needfulsoftware.com", addresses, error);
+
+    std::sort(addresses.begin(), addresses.end());
 
     ISHIKO_TEST_ABORT_IF_NEQ(addresses.size(), 2);
     ISHIKO_TEST_FAIL_IF_NEQ(addresses[0].toString(), "172.67.176.128");
