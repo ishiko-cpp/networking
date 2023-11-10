@@ -1,4 +1,4 @@
-ishikopath = envvar("ISHIKO_CPP");
+ishikopath = envvar("ISHIKO_CPP_ROOT");
 import $(ishikopath)/networking/include/Ishiko/Networking.bkl;
 import $(ishikopath)/test-framework/include/Ishiko/TestFramework/Core.bkl;
 
