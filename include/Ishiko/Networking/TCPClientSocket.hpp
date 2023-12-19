@@ -1,13 +1,13 @@
 /*
-    Copyright (c) 2021-2022 Xavier Leclercq
+    Copyright (c) 2021-2023 Xavier Leclercq
     Released under the MIT License
     See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
 */
 
-#ifndef _ISHIKO_CPP_NETWORKING_TCPCLIENTSOCKET_HPP_
-#define _ISHIKO_CPP_NETWORKING_TCPCLIENTSOCKET_HPP_
+#ifndef GUARD_ISHIKO_CPP_NETWORKING_TCPCLIENTSOCKET_HPP
+#define GUARD_ISHIKO_CPP_NETWORKING_TCPCLIENTSOCKET_HPP
 
-#include <Ishiko/BasePlatform.h>
+#include <Ishiko/BasePlatform.hpp>
 
 #if ISHIKO_OS == ISHIKO_OS_LINUX
 #include "linux/TCPClientSocket.hpp"
