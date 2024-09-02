@@ -1,12 +1,13 @@
 /*
-    Copyright (c) 2021-2022 Xavier Leclercq
+    Copyright (c) 2021-2024 Xavier Leclercq
     Released under the MIT License
     See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
 */
 
-#ifndef _ISHIKO_CPP_NETWORKING_PORT_HPP_
-#define _ISHIKO_CPP_NETWORKING_PORT_HPP_
+#ifndef GUARD_ISHIKO_CPP_NETWORKING_PORT_HPP
+#define GUARD_ISHIKO_CPP_NETWORKING_PORT_HPP
 
+#include <cstdint>
 #include <string>
 
 namespace Ishiko
