@@ -4,4 +4,11 @@
 #ifndef GUARD_ISHIKO_CPP_NETWORKING_NETWORKCONNECTIONSMANAGER_HPP
 #define GUARD_ISHIKO_CPP_NETWORKING_NETWORKCONNECTIONSMANAGER_HPP
 
+namespace Ishiko
+{
+    class NetworkConnectionsManager
+    {
+    };
+}
+
 #endif
