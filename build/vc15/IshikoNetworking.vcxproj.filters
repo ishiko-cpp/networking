@@ -94,6 +94,9 @@
     <ClCompile Include="..\..\src\IPv6Address.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\NetworkConnectionsManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\NetworkingErrorCategory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

@@ -153,6 +153,7 @@
     <ClCompile Include="..\..\src\IPAddress.cpp" />
     <ClCompile Include="..\..\src\IPv4Address.cpp" />
     <ClCompile Include="..\..\src\IPv6Address.cpp" />
+    <ClCompile Include="..\..\src\NetworkConnectionsManager.cpp" />
     <ClCompile Include="..\..\src\NetworkingErrorCategory.cpp" />
     <ClCompile Include="..\..\src\Port.cpp" />
     <ClCompile Include="..\..\src\TCPAcceptor.cpp" />

@@ -63,6 +63,7 @@ library IshikoNetworking : IshikoText, IshikoMemory, IshikoErrors, IshikoBasePla
         ../../src/IPAddress.cpp
         ../../src/IPv4Address.cpp
         ../../src/IPv6Address.cpp
+        ../../src/NetworkConnectionsManager.cpp
         ../../src/NetworkingErrorCategory.cpp
         ../../src/Port.cpp
         ../../src/TCPAcceptor.cpp
@@ -78,7 +79,6 @@ library IshikoNetworking : IshikoText, IshikoMemory, IshikoErrors, IshikoBasePla
         headers
         {
             ../../include/Ishiko/Networking/linux/HostnameResolver.hpp
-            ../../include/Ishiko/Networking/linux/NetworkConnectionsManager.hpp
             ../../include/Ishiko/Networking/linux/NetworkingLibraryInitialization.hpp
             ../../include/Ishiko/Networking/linux/TCPClientSocket.hpp
             ../../include/Ishiko/Networking/linux/TCPServerSocket.hpp
