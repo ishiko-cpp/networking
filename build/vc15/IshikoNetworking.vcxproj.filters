@@ -35,6 +35,9 @@
     <ClInclude Include="..\..\include\Ishiko\Networking\linkoptions.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\Ishiko\Networking\NetworkConnectionsManager.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\Ishiko\Networking\NetworkingErrorCategory.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>

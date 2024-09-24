@@ -173,6 +173,7 @@
     <ClInclude Include="..\..\include\Ishiko\Networking\IPv4Address.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\IPv6Address.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\linkoptions.hpp" />
+    <ClInclude Include="..\..\include\Ishiko\Networking\NetworkConnectionsManager.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\NetworkingErrorCategory.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\NetworkingLibraryInitialization.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\Port.hpp" />
