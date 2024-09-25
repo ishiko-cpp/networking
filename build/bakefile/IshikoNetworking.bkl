@@ -64,7 +64,6 @@ library IshikoNetworking : IshikoText, IshikoMemory, IshikoErrors, IshikoBasePla
         ../../src/IPAddress.cpp
         ../../src/IPv4Address.cpp
         ../../src/IPv6Address.cpp
-        ../../src/NativeSocketHandle.cpp
         ../../src/NetworkConnectionsManager.cpp
         ../../src/NetworkingErrorCategory.cpp
         ../../src/Port.cpp
