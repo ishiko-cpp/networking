@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2022 Xavier Leclercq
+    Copyright (c) 2022-2024 Xavier Leclercq
     Released under the MIT License
     See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
 */
@@ -24,6 +24,8 @@ public:
     TCPClientSocket(const TCPClientSocket& other) = delete;
     TCPClientSocket(TCPClientSocket&& other);
     ~TCPClientSocket();
+
+    TCPClientSocket& operator=(TCPClientSocket&& other);
 
     void connect(IPv4Address address, Port port, Error& error);
 

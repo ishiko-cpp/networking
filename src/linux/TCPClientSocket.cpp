@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2021-2022 Xavier Leclercq
+    Copyright (c) 2021-2024 Xavier Leclercq
     Released under the MIT License
     See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
 */
@@ -37,6 +37,14 @@ TCPClientSocket::TCPClientSocket(TCPClientSocket&& other)
 TCPClientSocket::~TCPClientSocket()
 {
     close();
+}
+
+
+TCPClientSocket& TCPClientSocket::operator=(TCPClientSocket&& other)
+{
+    m_socket = other.m_socket;
+    other.m_socket = -1;
+    return *this;
 }
 
 void TCPClientSocket::connect(IPv4Address address, Port port, Error& error)
