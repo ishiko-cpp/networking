@@ -26,6 +26,12 @@ namespace Ishiko
             virtual void onConnectionEstablished(TCPClientSocket& socket) = 0;
 
             virtual void onData(boost::string_view data) = 0;
+
+            // TODO: a better name for this. A client should just try to write on the socket and if it gets an error
+            // that the call would be blocking then wait for this event. Note that as usual a client must also be ready
+            // for partial writes but in the case of a partial write he can then immediately try to write the rest (but
+            // probably then with a higher probability of a would block error).
+            virtual void onWrite() = 0;
         };
 
         NetworkConnectionsManager();
