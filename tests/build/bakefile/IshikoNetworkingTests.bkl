@@ -24,6 +24,7 @@ program IshikoNetworkingTests : IshikoNetworking, IshikoTestFrameworkCore
 
     headers
     {
+        ../../src/NetworkConnectionsManagerTests.hpp
         ../../src/HostnameResolverTests.hpp
         ../../src/IPAddressTests.hpp
         ../../src/IPv4AddressTests.hpp
@@ -37,6 +38,7 @@ program IshikoNetworkingTests : IshikoNetworking, IshikoTestFrameworkCore
 
     sources
     {
+        ../../src/NetworkConnectionsManagerTests.cpp
         ../../src/HostnameResolverTests.cpp
         ../../src/IPAddressTests.cpp
         ../../src/IPv4AddressTests.cpp

@@ -153,6 +153,7 @@
     <ClCompile Include="..\..\src\IPAddress.cpp" />
     <ClCompile Include="..\..\src\IPv4Address.cpp" />
     <ClCompile Include="..\..\src\IPv6Address.cpp" />
+    <ClCompile Include="..\..\src\NativeSocketHandle.cpp" />
     <ClCompile Include="..\..\src\NetworkConnectionsManager.cpp" />
     <ClCompile Include="..\..\src\NetworkingErrorCategory.cpp" />
     <ClCompile Include="..\..\src\Port.cpp" />
@@ -174,6 +175,7 @@
     <ClInclude Include="..\..\include\Ishiko\Networking\IPv4Address.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\IPv6Address.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\linkoptions.hpp" />
+    <ClInclude Include="..\..\include\Ishiko\Networking\NativeSocketHandle.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\NetworkConnectionsManager.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\NetworkingErrorCategory.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\NetworkingLibraryInitialization.hpp" />
