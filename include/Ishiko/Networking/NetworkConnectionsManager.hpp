@@ -17,6 +17,15 @@ namespace Ishiko
     class NetworkConnectionsManager
     {
     public:
+        // TODO: find a better name for this, although maybe it's OK?
+        class ManagedSocket
+        {
+            // TODO: Need to be able to close and shutdown the connection
+            // TODO: needs to be able to write but what about the read? Because that can be part of events?
+            // TODO: maybe it should simple read from there as well since all I'll get from select is an event saying
+            // there is data to read.
+        };
+
         class ConnectionCallbacks
         {
         public:
