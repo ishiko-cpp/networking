@@ -15,6 +15,9 @@
 
 namespace Ishiko
 {
+    // TODO: by design we let the clients do the reads and writes. Another possibility would have been to delegate all
+    // these to the manager but that means the manager has to own a lot of buffers and also that more copying between
+    // buffers may be needed.
     class NetworkConnectionsManager
     {
     public:

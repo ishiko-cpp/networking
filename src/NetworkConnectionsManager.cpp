@@ -34,6 +34,7 @@ void NetworkConnectionsManager::ManagedSocket::shutdown(Error& error)
 
 void NetworkConnectionsManager::ManagedSocket::close()
 {
+    // TODO: this needs to remove the managed socket from the NetworkConnectionManager
     m_socket.close();
 }
 
@@ -69,28 +70,9 @@ void NetworkConnectionsManager::connect(IPv4Address address, Port port, Connecti
 
 void NetworkConnectionsManager::run()
 {
+    // TODO: all this should be doing is select and notify the sockets of any events relevant to them
     // TODO: can't assume the socket index is 0
     // TODO: need to use select and iterate over all ready sockets
     ManagedSocket& socket = m_managed_sockets[0];
     ConnectionCallbacks& callbacks = *m_callbacks[0];
-
-    // TODO: these errors need to be reported to the clients somehow
-    Error todo_error;
-
-    // TODO: buffer size and handle bigger responses
-    // TODO: this only works if the server closes the connection after the response is sent. We do set the close header
-    // but since we are parsing already can we double check stuff and also create APIs that support connection re-use.
-    char buffer[10 * 1024];
-    size_t offset = 0;
-    int n = 0;
-    do
-    {
-        n = socket.read(buffer, sizeof(buffer), todo_error);
-        callbacks.onData(boost::string_view(buffer, n));
-    } while ((n != 0) && !todo_error);
-
-    // TODO: is this the correct way to shutdown here?
-    // TODO: need to implement these functions in TCPClientSocket
-    socket.shutdown(todo_error);
-    socket.close();
 }
