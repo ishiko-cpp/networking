@@ -39,14 +39,6 @@ TCPClientSocket::~TCPClientSocket()
     close();
 }
 
-
-TCPClientSocket& TCPClientSocket::operator=(TCPClientSocket&& other)
-{
-    m_socket = other.m_socket;
-    other.m_socket = -1;
-    return *this;
-}
-
 void TCPClientSocket::connect(IPv4Address address, Port port, Error& error)
 {
     sockaddr_in linuxAddress;

@@ -25,8 +25,6 @@ public:
     TCPClientSocket(TCPClientSocket&& other);
     ~TCPClientSocket();
 
-    TCPClientSocket& operator=(TCPClientSocket&& other);
-
     void connect(IPv4Address address, Port port, Error& error);
 
     // TODO: should return value be size_t
