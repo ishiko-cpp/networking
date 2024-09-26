@@ -156,6 +156,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\NetworkConnectionsManagerTests.cpp" />
     <ClCompile Include="..\..\src\HostnameResolverTests.cpp" />
     <ClCompile Include="..\..\src\IPAddressTests.cpp" />
     <ClCompile Include="..\..\src\IPv4AddressTests.cpp" />
@@ -168,6 +169,7 @@
     <ClCompile Include="..\..\src\TLSServerSocketTests.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\src\NetworkConnectionsManagerTests.hpp" />
     <ClInclude Include="..\..\src\HostnameResolverTests.hpp" />
     <ClInclude Include="..\..\src\IPAddressTests.hpp" />
     <ClInclude Include="..\..\src\IPv4AddressTests.hpp" />

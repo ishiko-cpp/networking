@@ -1,8 +1,5 @@
-/*
-    Copyright (c) 2021-2022 Xavier Leclercq
-    Released under the MIT License
-    See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
-*/
+// SPDX-FileCopyrightText: 2021-2024 Xavier Leclercq
+// SPDX-License-Identifier: BSL-1.0
 
 #ifndef GUARD_ISHIKO_CPP_NETWORKING_HPP
 #define GUARD_ISHIKO_CPP_NETWORKING_HPP
@@ -12,6 +9,8 @@
 #include "Networking/IPv4Address.hpp"
 #include "Networking/IPv6Address.hpp"
 #include "Networking/linkoptions.hpp"
+#include "Networking/NativeSocketHandle.hpp"
+#include "Networking/NetworkConnectionsManager.hpp"
 #include "Networking/NetworkingErrorCategory.hpp"
 #include "Networking/NetworkingLibraryInitialization.hpp"
 #include "Networking/Port.hpp"
