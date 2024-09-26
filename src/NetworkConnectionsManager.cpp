@@ -6,27 +6,41 @@
 
 using namespace Ishiko;
 
-NetworkConnectionsManager::ManagedSocket::ManagedSocket(TCPClientSocket& socket)
-    : m_socket{&socket}
+NetworkConnectionsManager::ManagedSocket::ManagedSocket(TCPClientSocket&& socket)
+    : m_socket{std::move(socket)}
 {
 
 }
 
 int NetworkConnectionsManager::ManagedSocket::read(ByteBuffer& buffer, size_t count, Error& error)
 {
-    return m_socket->read(buffer, count, error);
+    return m_socket.read(buffer, count, error);
+}
+
+int NetworkConnectionsManager::ManagedSocket::read(char* buffer, int count, Error& error)
+{
+    return m_socket.read(buffer, count, error);
 }
 
 void NetworkConnectionsManager::ManagedSocket::write(const char* buffer, int count, Error& error)
 {
-    m_socket->write(buffer, count, error);
+    m_socket.write(buffer, count, error);
+}
+
+void NetworkConnectionsManager::ManagedSocket::shutdown(Error& error)
+{
+    m_socket.shutdown(error);
+}
+
+void NetworkConnectionsManager::ManagedSocket::close()
+{
+    m_socket.close();
 }
 
 NetworkConnectionsManager::NetworkConnectionsManager()
-    : m_client_sockets{m_temp_hack_todo}
 {
     // TODO: just to avoid reallocations however even that isn't working well
-    //m_client_sockets.reserve(100);
+    m_managed_sockets.reserve(100);
 }
 
 void NetworkConnectionsManager::connect(IPv4Address address, Port port, ConnectionCallbacks& callbacks, Error& error)
@@ -46,19 +60,18 @@ void NetworkConnectionsManager::connect(IPv4Address address, Port port, Connecti
         return;
     }
 
-    m_client_sockets = std::move(socket);
+    m_managed_sockets.emplace_back(std::move(socket));
     m_callbacks.emplace_back(&callbacks);
-    m_managed_sockets = ManagedSocket{m_client_sockets};
 
     // TODO: can't assume the socket index is 0
-    callbacks.onConnectionEstablished(m_managed_sockets);
+    callbacks.onConnectionEstablished(m_managed_sockets[0]);
 }
 
 void NetworkConnectionsManager::run()
 {
     // TODO: can't assume the socket index is 0
     // TODO: need to use select and iterate over all ready sockets
-    TCPClientSocket& socket = m_client_sockets;
+    ManagedSocket& socket = m_managed_sockets[0];
     ConnectionCallbacks& callbacks = *m_callbacks[0];
 
     // TODO: these errors need to be reported to the clients somehow

@@ -26,16 +26,18 @@ namespace Ishiko
         class ManagedSocket
         {
         public:
-            // get rid of this constructor
-            ManagedSocket() = default;
-            ManagedSocket(TCPClientSocket& socket);
+            ManagedSocket(TCPClientSocket&& socket);
 
             int read(ByteBuffer& buffer, size_t count, Error& error);
+            int read(char* buffer, int count, Error& error);
 
             void write(const char* buffer, int count, Error& error);
 
+            void shutdown(Error& error);
+            void close();
+
         private:
-            TCPClientSocket* m_socket;
+            TCPClientSocket m_socket;
         };
 
         class ConnectionCallbacks
@@ -67,9 +69,7 @@ namespace Ishiko
         // TODO: replace this with stable collection, maybe a colony? Unless I make the clients of this class agnostic
         // of the actual memory location which is probably what I need to do as I don't really want to give them access
         // to the sockets but I more narrow interface.
-        TCPClientSocket m_client_sockets;
-        // TODO: sort out duplication with m_client_sockets
-        ManagedSocket m_managed_sockets;
+        std::vector<ManagedSocket> m_managed_sockets;
         std::vector<ConnectionCallbacks*> m_callbacks;
     };
 }
