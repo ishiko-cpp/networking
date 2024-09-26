@@ -6,6 +6,22 @@
 
 using namespace Ishiko;
 
+NetworkConnectionsManager::ManagedSocket::ManagedSocket(TCPClientSocket& socket)
+    : m_socket{&socket}
+{
+
+}
+
+int NetworkConnectionsManager::ManagedSocket::read(ByteBuffer& buffer, size_t count, Error& error)
+{
+    return m_socket->read(buffer, count, error);
+}
+
+void NetworkConnectionsManager::ManagedSocket::write(const char* buffer, int count, Error& error)
+{
+    m_socket->write(buffer, count, error);
+}
+
 NetworkConnectionsManager::NetworkConnectionsManager()
     : m_client_sockets{m_temp_hack_todo}
 {
@@ -32,9 +48,10 @@ void NetworkConnectionsManager::connect(IPv4Address address, Port port, Connecti
 
     m_client_sockets = std::move(socket);
     m_callbacks.emplace_back(&callbacks);
+    m_managed_sockets = ManagedSocket{m_client_sockets};
 
     // TODO: can't assume the socket index is 0
-    callbacks.onConnectionEstablished(m_client_sockets);
+    callbacks.onConnectionEstablished(m_managed_sockets);
 }
 
 void NetworkConnectionsManager::run()
