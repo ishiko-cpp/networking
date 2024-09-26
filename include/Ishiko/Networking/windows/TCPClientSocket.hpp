@@ -43,7 +43,8 @@ public:
     IPv4Address getPeerIPAddress(Error& error) const;
     Port getPeerPort(Error& error) const;
 
-private:
+public:
+    // TODO: back to private
     SOCKET m_socket;
 };
 

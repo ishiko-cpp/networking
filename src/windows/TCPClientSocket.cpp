@@ -17,6 +17,8 @@ TCPClientSocket::TCPClientSocket(Error& error) noexcept
         // TODO: more detailed error
         Fail(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__, error);
     }
+    u_long mode = 1;  // 1 to enable non-blocking socket
+    ioctlsocket(m_socket, FIONBIO, &mode);
 }
 
 TCPClientSocket::TCPClientSocket(SOCKET socket) noexcept
