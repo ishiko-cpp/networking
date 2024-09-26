@@ -11,7 +11,7 @@ Networking utilities.
 
 [![ishiko-cpp](https://circleci.com/gh/ishiko-cpp/networking.svg?style=shield)](https://circleci.com/gh/ishiko-cpp/networking)
 
-This project is intended for use by its author only.
+This project is in early development and not ready for public use yet. 
 
 ## Usage
 
@@ -23,6 +23,7 @@ None.
 
 ## License
 
-Copyright (c) 2021-2023 Xavier Leclercq\
-Released under the MIT License\
+Copyright (c) 2021-2024 Xavier Leclercq\
+This work is licensed under the Boost Software License 1.0\
 See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
+
