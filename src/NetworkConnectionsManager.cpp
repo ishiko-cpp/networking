@@ -14,16 +14,19 @@ NetworkConnectionsManager::ManagedSocket::ManagedSocket(TCPClientSocket&& socket
 
 int NetworkConnectionsManager::ManagedSocket::read(ByteBuffer& buffer, size_t count, Error& error)
 {
+    // TODO: if erro need to add socket to select read
     return m_socket.read(buffer, count, error);
 }
 
 int NetworkConnectionsManager::ManagedSocket::read(char* buffer, int count, Error& error)
 {
+    // TODO: if erro need to add socket to select read
     return m_socket.read(buffer, count, error);
 }
 
 void NetworkConnectionsManager::ManagedSocket::write(const char* buffer, int count, Error& error)
 {
+    // TODO: if erro need to add socket to select write
     m_socket.write(buffer, count, error);
 }
 
