@@ -80,6 +80,7 @@ library IshikoNetworking : IshikoText, IshikoMemory, IshikoErrors, IshikoBasePla
         headers
         {
             ../../include/Ishiko/Networking/linux/HostnameResolver.hpp
+            ../../include/Ishiko/Networking/linux/NativeSocketHandle.hpp
             ../../include/Ishiko/Networking/linux/NetworkingLibraryInitialization.hpp
             ../../include/Ishiko/Networking/linux/TCPClientSocket.hpp
             ../../include/Ishiko/Networking/linux/TCPServerSocket.hpp
@@ -99,6 +100,7 @@ library IshikoNetworking : IshikoText, IshikoMemory, IshikoErrors, IshikoBasePla
         headers
         {
            ../../include/Ishiko/Networking/windows/HostnameResolver.hpp
+           ../../include/Ishiko/Networking/windows/NativeSocketHandle.hpp
            ../../include/Ishiko/Networking/windows/NetworkingLibraryInitialization.hpp
            ../../include/Ishiko/Networking/windows/TCPClientSocket.hpp
            ../../include/Ishiko/Networking/windows/TCPServerSocket.hpp
