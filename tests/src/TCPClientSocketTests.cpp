@@ -1,8 +1,5 @@
-/*
-    Copyright (c) 2021-2022 Xavier Leclercq
-    Released under the MIT License
-    See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
-*/
+// SPDX-FileCopyrightText: 2021-2024 Xavier Leclercq
+// SPDX-License-Identifier: BSL-1.0
 
 #include "TCPClientSocketTests.hpp"
 #include "Ishiko/Networking/TCPClientSocket.hpp"
@@ -29,7 +26,7 @@ TCPClientSocketTests::TCPClientSocketTests(const TestNumber& number, const TestC
 void TCPClientSocketTests::ConstructorTest1(Test& test)
 {
     Error error;
-    TCPClientSocket socket(error);
+    TCPClientSocket socket(SocketOption::none, error);
 
     ISHIKO_TEST_FAIL_IF(error);
     ISHIKO_TEST_PASS();
@@ -38,7 +35,7 @@ void TCPClientSocketTests::ConstructorTest1(Test& test)
 void TCPClientSocketTests::ConstructorTest2(Test& test)
 {
     Error error;
-    TCPClientSocket socket(error);
+    TCPClientSocket socket(SocketOption::none, error);
 
     TCPClientSocket movedSocket = std::move(socket);
 
@@ -49,7 +46,7 @@ void TCPClientSocketTests::ConstructorTest2(Test& test)
 void TCPClientSocketTests::GetLocalIPAddressTest1(Test& test)
 {
     Error error;
-    TCPClientSocket socket(error);
+    TCPClientSocket socket(SocketOption::none, error);
 
     ISHIKO_TEST_FAIL_IF(error);
 
@@ -62,7 +59,7 @@ void TCPClientSocketTests::GetLocalIPAddressTest1(Test& test)
 void TCPClientSocketTests::GetLocalPortTest1(Test& test)
 {
     Error error;
-    TCPClientSocket socket(error);
+    TCPClientSocket socket(SocketOption::none, error);
 
     ISHIKO_TEST_FAIL_IF(error);
 
@@ -75,7 +72,7 @@ void TCPClientSocketTests::GetLocalPortTest1(Test& test)
 void TCPClientSocketTests::GetPeerIPAddressTest1(Test& test)
 {
     Error error;
-    TCPClientSocket socket(error);
+    TCPClientSocket socket(SocketOption::none, error);
 
     ISHIKO_TEST_FAIL_IF(error);
 
@@ -88,7 +85,7 @@ void TCPClientSocketTests::GetPeerIPAddressTest1(Test& test)
 void TCPClientSocketTests::GetPeerPortTest1(Test& test)
 {
     Error error;
-    TCPClientSocket socket(error);
+    TCPClientSocket socket(SocketOption::none, error);
 
     ISHIKO_TEST_FAIL_IF(error);
 
@@ -106,7 +103,7 @@ void TCPClientSocketTests::WriteTest1(Test& test)
         [&buffer]()
         {
             Error error;
-            TCPServerSocket socket(IPv4Address::Localhost(), 8685, error);
+            TCPServerSocket socket(IPv4Address::Localhost(), 8685, SocketOption::none, error);
             TCPClientSocket clientSocket = socket.accept(error);
 
             // This will also make sure the server stays alive until the client writes the data
@@ -118,7 +115,7 @@ void TCPClientSocketTests::WriteTest1(Test& test)
     std::this_thread::sleep_for(std::chrono::seconds(1));
 
     Error error;
-    TCPClientSocket socket(error);
+    TCPClientSocket socket(SocketOption::none, error);
 
     ISHIKO_TEST_FAIL_IF(error);
 
@@ -162,7 +159,7 @@ void TCPClientSocketTests::ReadTest1(Test& test)
         []()
         {
             Error error;
-            TCPServerSocket socket(IPv4Address::Localhost(), 8686, error);
+            TCPServerSocket socket(IPv4Address::Localhost(), 8686, SocketOption::none, error);
             TCPClientSocket clientSocket = socket.accept(error);
             clientSocket.write("a", 1, error);
         }
@@ -172,7 +169,7 @@ void TCPClientSocketTests::ReadTest1(Test& test)
     std::this_thread::sleep_for(std::chrono::seconds(1));
     
     Error error;
-    TCPClientSocket socket(error);
+    TCPClientSocket socket(SocketOption::none, error);
 
     ISHIKO_TEST_FAIL_IF(error);
 
@@ -205,7 +202,7 @@ void TCPClientSocketTests::CloseTest1(Test& test)
         []()
         {
             Error error;
-            TCPServerSocket socket(IPv4Address::Localhost(), 8687, error);
+            TCPServerSocket socket(IPv4Address::Localhost(), 8687, SocketOption::none, error);
             TCPClientSocket clientSocket = socket.accept(error);
 
             // This will also make sure the server stays alive until the client closes the connection
@@ -218,7 +215,7 @@ void TCPClientSocketTests::CloseTest1(Test& test)
     std::this_thread::sleep_for(std::chrono::seconds(1));
 
     Error error;
-    TCPClientSocket socket(error);
+    TCPClientSocket socket(SocketOption::none, error);
 
     ISHIKO_TEST_FAIL_IF(error);
 
@@ -261,7 +258,7 @@ void TCPClientSocketTests::ShutdownTest1(Test& test)
         []()
     {
         Error error;
-        TCPServerSocket socket(IPv4Address::Localhost(), 8687, error);
+        TCPServerSocket socket(IPv4Address::Localhost(), 8687, SocketOption::none, error);
         TCPClientSocket clientSocket = socket.accept(error);
 
         // This will also make sure the server stays alive until the client closes the connection
@@ -274,7 +271,7 @@ void TCPClientSocketTests::ShutdownTest1(Test& test)
     std::this_thread::sleep_for(std::chrono::seconds(1));
 
     Error error;
-    TCPClientSocket socket(error);
+    TCPClientSocket socket(SocketOption::none, error);
 
     ISHIKO_TEST_FAIL_IF(error);
 

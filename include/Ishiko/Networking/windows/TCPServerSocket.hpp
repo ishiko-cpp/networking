@@ -1,15 +1,13 @@
-/*
-    Copyright (c) 2021-2022 Xavier Leclercq
-    Released under the MIT License
-    See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
-*/
+// SPDX-FileCopyrightText: 2021-2024 Xavier Leclercq
+// SPDX-License-Identifier: BSL-1.0
 
-#ifndef _ISHIKO_CPP_NETWORKING_WINDOWS_TCPSERVERSOCKET_HPP_
-#define _ISHIKO_CPP_NETWORKING_WINDOWS_TCPSERVERSOCKET_HPP_
+#ifndef GUARD_ISHIKO_CPP_NETWORKING_WINDOWS_TCPSERVERSOCKET_HPP
+#define GUARD_ISHIKO_CPP_NETWORKING_WINDOWS_TCPSERVERSOCKET_HPP
 
 #include "../IPAddress.hpp"
 #include "../IPv4Address.hpp"
 #include "../Port.hpp"
+#include "../SocketOption.hpp"
 #include "../windows/TCPClientSocket.hpp"
 #include <Ishiko/Errors.hpp>
 #define NOMINMAX // TODO: what rubbish, how do I put this ugly windows logic somewhere central
@@ -17,33 +15,31 @@
 
 namespace Ishiko
 {
+    class TCPServerSocket
+    {
+    public:
+        static const IPv4Address AllInterfaces;
+        static const Port AnyPort;
 
-class TCPServerSocket
-{
-public:
-    static const IPv4Address AllInterfaces;
-    static const Port AnyPort;
+        TCPServerSocket(IPv4Address address, Port port, int socket_options = SocketOption::none);
+        TCPServerSocket(IPv4Address address, Port port, int socket_options, Error& error) noexcept;
+        TCPServerSocket(IPv6Address address, Port port, int socket_options = SocketOption::none);
+        TCPServerSocket(const TCPServerSocket& other) = delete;
+        TCPServerSocket(TCPServerSocket&& other) noexcept;
+        ~TCPServerSocket();
 
-    TCPServerSocket(IPv4Address address, Port port);
-    TCPServerSocket(IPv4Address address, Port port, Error& error) noexcept;
-    TCPServerSocket(IPv6Address address, Port port);
-    TCPServerSocket(const TCPServerSocket& other) = delete;
-    TCPServerSocket(TCPServerSocket&& other) noexcept;
-    ~TCPServerSocket();
+        TCPClientSocket accept();
+        TCPClientSocket accept(Error& error) noexcept;
+        void close();
 
-    TCPClientSocket accept();
-    TCPClientSocket accept(Error& error) noexcept;
-    void close();
+        IPAddress ipAddress() const;
+        Port port() const;
 
-    IPAddress ipAddress() const;
-    Port port() const;
-
-private:
-    IPAddress m_ipAddress;
-    Port m_port;
-    SOCKET m_socket;
-};
-
+    private:
+        IPAddress m_ipAddress;
+        Port m_port;
+        SOCKET m_socket;
+    };
 }
 
 #endif

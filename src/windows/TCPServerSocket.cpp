@@ -1,8 +1,5 @@
-/*
-    Copyright (c) 2021-2022 Xavier Leclercq
-    Released under the MIT License
-    See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
-*/
+// SPDX-FileCopyrightText: 2021-2024 Xavier Leclercq
+// SPDX-License-Identifier: BSL-1.0
 
 #include "windows/TCPServerSocket.hpp"
 #include "NetworkingErrorCategory.hpp"
@@ -13,7 +10,7 @@ using namespace Ishiko;
 const IPv4Address TCPServerSocket::AllInterfaces = IPv4Address(0);
 const Port TCPServerSocket::AnyPort = Port(0);
 
-TCPServerSocket::TCPServerSocket(IPv4Address address, Port port)
+TCPServerSocket::TCPServerSocket(IPv4Address address, Port port, int socket_options)
     : m_ipAddress(address), m_port(port)
 {
     m_socket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
@@ -62,57 +59,7 @@ TCPServerSocket::TCPServerSocket(IPv4Address address, Port port)
     }
 }
 
-TCPServerSocket::TCPServerSocket(IPv6Address address, Port port)
-    : m_ipAddress(address), m_port(port)
-{
-    m_socket = WSASocket(AF_INET6, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
-    if (m_socket == INVALID_SOCKET)
-    {
-        // TODO: more detailed error
-        Throw(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__);
-    }
-
-    struct sockaddr_in6 winsockAddress;
-    ZeroMemory(&winsockAddress, sizeof(winsockAddress));
-    winsockAddress.sin6_family = AF_INET6;
-    address.value().copyTo(winsockAddress.sin6_addr.u.Byte);
-    winsockAddress.sin6_port = htons(port.number());
-
-    int err = bind(m_socket, (sockaddr*)&winsockAddress, sizeof(winsockAddress));
-    if (err == SOCKET_ERROR)
-    {
-        close();
-
-        // TODO: more detailed error
-        Throw(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__);
-    }
-
-    struct sockaddr_in6 boundAddress;
-    int boundAddressLength = sizeof(boundAddress);
-    err = getsockname(m_socket, (sockaddr*)&boundAddress, &boundAddressLength);
-    if (err == SOCKET_ERROR)
-    {
-        close();
-
-        // TODO: more detailed error
-        Throw(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__);
-    }
-
-    m_ipAddress = IPv6Address(boundAddress.sin6_addr.u.Byte);
-    m_port = Port(ntohs(boundAddress.sin6_port));
-
-    // TODO: make backlog explicit and configurable
-    err = listen(m_socket, SOMAXCONN);
-    if (err == SOCKET_ERROR)
-    {
-        close();
-
-        // TODO: more detailed error
-        Throw(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__);
-    }
-}
-
-TCPServerSocket::TCPServerSocket(IPv4Address address, Port port, Error& error) noexcept
+TCPServerSocket::TCPServerSocket(IPv4Address address, Port port, int socket_options, Error& error) noexcept
     : m_ipAddress(address), m_port(port)
 {
     m_socket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
@@ -162,6 +109,56 @@ TCPServerSocket::TCPServerSocket(IPv4Address address, Port port, Error& error) n
         // TODO: more detailed error
         Fail(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__, error);
         return;
+    }
+}
+
+TCPServerSocket::TCPServerSocket(IPv6Address address, Port port, int socket_options)
+    : m_ipAddress(address), m_port(port)
+{
+    m_socket = WSASocket(AF_INET6, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
+    if (m_socket == INVALID_SOCKET)
+    {
+        // TODO: more detailed error
+        Throw(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__);
+    }
+
+    struct sockaddr_in6 winsockAddress;
+    ZeroMemory(&winsockAddress, sizeof(winsockAddress));
+    winsockAddress.sin6_family = AF_INET6;
+    address.value().copyTo(winsockAddress.sin6_addr.u.Byte);
+    winsockAddress.sin6_port = htons(port.number());
+
+    int err = bind(m_socket, (sockaddr*)&winsockAddress, sizeof(winsockAddress));
+    if (err == SOCKET_ERROR)
+    {
+        close();
+
+        // TODO: more detailed error
+        Throw(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__);
+    }
+
+    struct sockaddr_in6 boundAddress;
+    int boundAddressLength = sizeof(boundAddress);
+    err = getsockname(m_socket, (sockaddr*)&boundAddress, &boundAddressLength);
+    if (err == SOCKET_ERROR)
+    {
+        close();
+
+        // TODO: more detailed error
+        Throw(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__);
+    }
+
+    m_ipAddress = IPv6Address(boundAddress.sin6_addr.u.Byte);
+    m_port = Port(ntohs(boundAddress.sin6_port));
+
+    // TODO: make backlog explicit and configurable
+    err = listen(m_socket, SOMAXCONN);
+    if (err == SOCKET_ERROR)
+    {
+        close();
+
+        // TODO: more detailed error
+        Throw(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__);
     }
 }
 

@@ -88,7 +88,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
-      <AdditionalIncludeDirectories>$(ISHIKO_CPP_ROOT)/memory\include;$(ISHIKO_CPP_ROOT)/base-platform\include;$(ISHIKO_CPP_ROOT)/errors\include;$(BOOST_ROOT);$(ISHIKO_CPP_ROOT)/text\include;$(BOTAN_ROOT)\include\botan-2;..\..\include\Ishiko\Networking;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ISHIKO_CPP_ROOT)/base-platform\include;$(ISHIKO_CPP_ROOT)/errors\include;$(ISHIKO_CPP_ROOT)/memory\include;$(BOOST_ROOT);$(ISHIKO_CPP_ROOT)/text\include;$(BOTAN_ROOT)\include\botan-2;..\..\include\Ishiko\Networking;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -103,7 +103,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
-      <AdditionalIncludeDirectories>$(ISHIKO_CPP_ROOT)/memory\include;$(ISHIKO_CPP_ROOT)/base-platform\include;$(ISHIKO_CPP_ROOT)/errors\include;$(BOOST_ROOT);$(ISHIKO_CPP_ROOT)/text\include;$(BOTAN_ROOT)\include\botan-2;..\..\include\Ishiko\Networking;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ISHIKO_CPP_ROOT)/base-platform\include;$(ISHIKO_CPP_ROOT)/errors\include;$(ISHIKO_CPP_ROOT)/memory\include;$(BOOST_ROOT);$(ISHIKO_CPP_ROOT)/text\include;$(BOTAN_ROOT)\include\botan-2;..\..\include\Ishiko\Networking;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -120,7 +120,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
-      <AdditionalIncludeDirectories>$(ISHIKO_CPP_ROOT)/memory\include;$(ISHIKO_CPP_ROOT)/base-platform\include;$(ISHIKO_CPP_ROOT)/errors\include;$(BOOST_ROOT);$(ISHIKO_CPP_ROOT)/text\include;$(BOTAN_ROOT)\include\botan-2;..\..\include\Ishiko\Networking;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ISHIKO_CPP_ROOT)/base-platform\include;$(ISHIKO_CPP_ROOT)/errors\include;$(ISHIKO_CPP_ROOT)/memory\include;$(BOOST_ROOT);$(ISHIKO_CPP_ROOT)/text\include;$(BOTAN_ROOT)\include\botan-2;..\..\include\Ishiko\Networking;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -139,7 +139,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
-      <AdditionalIncludeDirectories>$(ISHIKO_CPP_ROOT)/memory\include;$(ISHIKO_CPP_ROOT)/base-platform\include;$(ISHIKO_CPP_ROOT)/errors\include;$(BOOST_ROOT);$(ISHIKO_CPP_ROOT)/text\include;$(BOTAN_ROOT)\include\botan-2;..\..\include\Ishiko\Networking;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ISHIKO_CPP_ROOT)/base-platform\include;$(ISHIKO_CPP_ROOT)/errors\include;$(ISHIKO_CPP_ROOT)/memory\include;$(BOOST_ROOT);$(ISHIKO_CPP_ROOT)/text\include;$(BOTAN_ROOT)\include\botan-2;..\..\include\Ishiko\Networking;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -166,6 +166,7 @@
     <ClCompile Include="..\..\src\windows\NetworkingLibraryInitialization.cpp" />
     <ClCompile Include="..\..\src\windows\TCPClientSocket.cpp" />
     <ClCompile Include="..\..\src\windows\TCPServerSocket.cpp" />
+    <ClCompile Include="..\..\src\windows\NetworkingUtilities.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\Ishiko\Networking.hpp" />
@@ -174,23 +175,30 @@
     <ClInclude Include="..\..\include\Ishiko\Networking\IPv4Address.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\IPv6Address.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\linkoptions.hpp" />
+    <ClInclude Include="..\..\include\Ishiko\Networking\NativeSocketError.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\NativeSocketHandle.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\NetworkConnectionsManager.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\NetworkingErrorCategory.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\NetworkingLibraryInitialization.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\Port.hpp" />
+    <ClInclude Include="..\..\include\Ishiko\Networking\SocketOption.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\TCPAcceptor.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\TCPClientSocket.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\TCPConnector.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\TCPServerSocket.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\TLSClientSocket.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\TLSServerSocket.hpp" />
+    <ClInclude Include="..\..\src\NetworkingUtilities.hpp" />
     <ClInclude Include="..\..\src\TLSClientSocketBotanClientImpl.hpp" />
     <ClInclude Include="..\..\src\TLSClientSocketBotanServerImpl.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\windows\HostnameResolver.hpp" />
+    <ClInclude Include="..\..\include\Ishiko\Networking\windows\NativeSocketError.hpp" />
+    <ClInclude Include="..\..\include\Ishiko\Networking\windows\NativeSocketHandle.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\windows\NetworkingLibraryInitialization.hpp" />
+    <ClInclude Include="..\..\include\Ishiko\Networking\windows\SocketOption.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\windows\TCPClientSocket.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\windows\TCPServerSocket.hpp" />
+    <ClInclude Include="..\..\src\windows\NetworkingUtilities.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,10 +1,8 @@
-/*
-    Copyright (c) 2021-2024 Xavier Leclercq
-    Released under the MIT License
-    See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
-*/
+// SPDX-FileCopyrightText: 2021-2024 Xavier Leclercq
+// SPDX-License-Identifier: BSL-1.0
 
 #include "linux/TCPClientSocket.hpp"
+#include "NativeSocketError.hpp"
 #include "NetworkingErrorCategory.hpp"
 #include <netinet/in.h>
 #include <sys/socket.h>
@@ -12,7 +10,7 @@
 
 using namespace Ishiko;
 
-TCPClientSocket::TCPClientSocket(Error& error) noexcept
+TCPClientSocket::TCPClientSocket(int socket_options, Error& error) noexcept
 {
     m_socket = socket(AF_INET, SOCK_STREAM, 0);
     if (m_socket == -1)
@@ -21,6 +19,7 @@ TCPClientSocket::TCPClientSocket(Error& error) noexcept
         Fail(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__, error);
         return;
     }
+    // TODO: implement socket options
 }
 
 TCPClientSocket::TCPClientSocket(int socket) noexcept
@@ -49,9 +48,9 @@ void TCPClientSocket::connect(IPv4Address address, Port port, Error& error)
     int err = ::connect(m_socket, reinterpret_cast<sockaddr*>(&linuxAddress), sizeof(linuxAddress));
     if (err == -1)
     {
-        // TODO: more detailed error
-        Fail(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__, error);
-        return;
+        NativeSocketError native_error{errno};
+        // TODO: what should be the message here?
+        Fail(native_error, "", __FILE__, __LINE__, error);
     }
 }
 
@@ -179,4 +178,9 @@ Port TCPClientSocket::getPeerPort(Error& error) const
     }
 
     return Port(ntohs(boundAddress.sin_port));
+}
+
+NativeSocketHandle TCPClientSocket::nativeHandle()
+{
+    return m_socket;
 }

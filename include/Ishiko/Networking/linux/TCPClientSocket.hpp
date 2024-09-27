@@ -1,14 +1,13 @@
-/*
-    Copyright (c) 2022-2024 Xavier Leclercq
-    Released under the MIT License
-    See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
-*/
+// SPDX-FileCopyrightText: 2021-2024 Xavier Leclercq
+// SPDX-License-Identifier: BSL-1.0
 
 #ifndef GUARD_ISHIKO_CPP_NETWORKING_LINUX_TCPCLIENTSOCKET_HPP
 #define GUARD_ISHIKO_CPP_NETWORKING_LINUX_TCPCLIENTSOCKET_HPP
 
 #include "../IPv4Address.hpp"
+#include "../NativeSocketHandle.hpp"
 #include "../Port.hpp"
+#include "../SocketOption.hpp"
 #include <Ishiko/Errors.hpp>
 #include <Ishiko/Memory.hpp>
 
@@ -19,7 +18,7 @@ namespace Ishiko
 class TCPClientSocket
 {
 public:
-    TCPClientSocket(Error& error) noexcept;
+    TCPClientSocket(int socket_options, Error& error) noexcept;
     TCPClientSocket(int socket) noexcept;
     TCPClientSocket(const TCPClientSocket& other) = delete;
     TCPClientSocket(TCPClientSocket&& other);
@@ -51,6 +50,8 @@ public:
     Port getLocalPort(Error& error) const;
     IPv4Address getPeerIPAddress(Error& error) const;
     Port getPeerPort(Error& error) const;
+
+    NativeSocketHandle nativeHandle();
 
 private:
     int m_socket;

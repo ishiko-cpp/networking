@@ -29,7 +29,7 @@ namespace Ishiko
         class ManagedSocket
         {
         public:
-            ManagedSocket(TCPClientSocket&& socket);
+            ManagedSocket(NetworkConnectionsManager& manager, TCPClientSocket&& socket);
 
             int read(ByteBuffer& buffer, size_t count, Error& error);
             int read(char* buffer, int count, Error& error);
@@ -39,7 +39,9 @@ namespace Ishiko
             void shutdown(Error& error);
             void close();
 
-        private:
+        public:
+            // TODO: back to private
+            NetworkConnectionsManager& m_manager;
             TCPClientSocket m_socket;
         };
 
@@ -74,6 +76,10 @@ namespace Ishiko
         // to the sockets but I more narrow interface.
         std::vector<ManagedSocket> m_managed_sockets;
         std::vector<ConnectionCallbacks*> m_callbacks;
+    public: // TODO: private
+        fd_set m_read_ready;
+        fd_set m_write_ready;
+        fd_set m_exception;
     };
 }
 
