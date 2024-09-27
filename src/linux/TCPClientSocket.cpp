@@ -9,7 +9,7 @@
 
 using namespace Ishiko;
 
-TCPClientSocket::TCPClientSocket(Error& error) noexcept
+TCPClientSocket::TCPClientSocket(int socket_options, Error& error) noexcept
 {
     m_socket = socket(AF_INET, SOCK_STREAM, 0);
     if (m_socket == -1)
@@ -18,6 +18,7 @@ TCPClientSocket::TCPClientSocket(Error& error) noexcept
         Fail(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__, error);
         return;
     }
+    // TODO: implement socket options
 }
 
 TCPClientSocket::TCPClientSocket(int socket) noexcept
