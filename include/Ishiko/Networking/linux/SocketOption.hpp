@@ -4,7 +4,7 @@
 #ifndef GUARD_ISHIKO_CPP_NETWORKING_LINUX_SOCKETOPTION_HPP
 #define GUARD_ISHIKO_CPP_NETWORKING_LINUX_SOCKETOPTION_HPP
 
-#include <fnctl.h>
+#include <fcntl.h>
 
 namespace Ishiko
 {
