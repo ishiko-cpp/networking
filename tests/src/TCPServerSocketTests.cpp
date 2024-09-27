@@ -91,7 +91,7 @@ void TCPServerSocketTests::AcceptTest1(Test& test)
         [listeningPort]()
         {
             Error error;
-            TCPClientSocket clientSocket(error);
+            TCPClientSocket clientSocket(SocketOption::none, error);
             clientSocket.connect(IPv4Address::Localhost(), listeningPort, error);
         });
 
@@ -114,7 +114,7 @@ void TCPServerSocketTests::AcceptTest2(Test& test)
         [listeningPort]()
         {
             Error error;
-            TCPClientSocket clientSocket(error);
+            TCPClientSocket clientSocket(SocketOption::none, error);
             clientSocket.connect(IPv4Address::Localhost(), listeningPort, error);
         });
 
@@ -137,7 +137,7 @@ void TCPServerSocketTests::CloseTest1(Test& test)
     socket.close();
 
     Port listeningPort = socket.port();
-    TCPClientSocket clientSocket(error);
+    TCPClientSocket clientSocket(SocketOption::none, error);
 
     ISHIKO_TEST_ABORT_IF(error);
 
@@ -161,7 +161,7 @@ void TCPServerSocketTests::CloseTest2(Test& test)
     ISHIKO_TEST_ABORT_IF(error);
 
     Port listeningPort = socket.port();
-    TCPClientSocket clientSocket(error);
+    TCPClientSocket clientSocket(SocketOption::none, error);
 
     ISHIKO_TEST_ABORT_IF(error);
 

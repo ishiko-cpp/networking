@@ -26,7 +26,7 @@ TCPClientSocketTests::TCPClientSocketTests(const TestNumber& number, const TestC
 void TCPClientSocketTests::ConstructorTest1(Test& test)
 {
     Error error;
-    TCPClientSocket socket(error);
+    TCPClientSocket socket(SocketOption::none, error);
 
     ISHIKO_TEST_FAIL_IF(error);
     ISHIKO_TEST_PASS();
@@ -35,7 +35,7 @@ void TCPClientSocketTests::ConstructorTest1(Test& test)
 void TCPClientSocketTests::ConstructorTest2(Test& test)
 {
     Error error;
-    TCPClientSocket socket(error);
+    TCPClientSocket socket(SocketOption::none, error);
 
     TCPClientSocket movedSocket = std::move(socket);
 
@@ -46,7 +46,7 @@ void TCPClientSocketTests::ConstructorTest2(Test& test)
 void TCPClientSocketTests::GetLocalIPAddressTest1(Test& test)
 {
     Error error;
-    TCPClientSocket socket(error);
+    TCPClientSocket socket(SocketOption::none, error);
 
     ISHIKO_TEST_FAIL_IF(error);
 
@@ -59,7 +59,7 @@ void TCPClientSocketTests::GetLocalIPAddressTest1(Test& test)
 void TCPClientSocketTests::GetLocalPortTest1(Test& test)
 {
     Error error;
-    TCPClientSocket socket(error);
+    TCPClientSocket socket(SocketOption::none, error);
 
     ISHIKO_TEST_FAIL_IF(error);
 
@@ -72,7 +72,7 @@ void TCPClientSocketTests::GetLocalPortTest1(Test& test)
 void TCPClientSocketTests::GetPeerIPAddressTest1(Test& test)
 {
     Error error;
-    TCPClientSocket socket(error);
+    TCPClientSocket socket(SocketOption::none, error);
 
     ISHIKO_TEST_FAIL_IF(error);
 
@@ -85,7 +85,7 @@ void TCPClientSocketTests::GetPeerIPAddressTest1(Test& test)
 void TCPClientSocketTests::GetPeerPortTest1(Test& test)
 {
     Error error;
-    TCPClientSocket socket(error);
+    TCPClientSocket socket(SocketOption::none, error);
 
     ISHIKO_TEST_FAIL_IF(error);
 
@@ -115,7 +115,7 @@ void TCPClientSocketTests::WriteTest1(Test& test)
     std::this_thread::sleep_for(std::chrono::seconds(1));
 
     Error error;
-    TCPClientSocket socket(error);
+    TCPClientSocket socket(SocketOption::none, error);
 
     ISHIKO_TEST_FAIL_IF(error);
 
@@ -169,7 +169,7 @@ void TCPClientSocketTests::ReadTest1(Test& test)
     std::this_thread::sleep_for(std::chrono::seconds(1));
     
     Error error;
-    TCPClientSocket socket(error);
+    TCPClientSocket socket(SocketOption::none, error);
 
     ISHIKO_TEST_FAIL_IF(error);
 
@@ -215,7 +215,7 @@ void TCPClientSocketTests::CloseTest1(Test& test)
     std::this_thread::sleep_for(std::chrono::seconds(1));
 
     Error error;
-    TCPClientSocket socket(error);
+    TCPClientSocket socket(SocketOption::none, error);
 
     ISHIKO_TEST_FAIL_IF(error);
 
@@ -271,7 +271,7 @@ void TCPClientSocketTests::ShutdownTest1(Test& test)
     std::this_thread::sleep_for(std::chrono::seconds(1));
 
     Error error;
-    TCPClientSocket socket(error);
+    TCPClientSocket socket(SocketOption::none, error);
 
     ISHIKO_TEST_FAIL_IF(error);
 

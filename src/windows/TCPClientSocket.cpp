@@ -1,21 +1,28 @@
-/*
-    Copyright (c) 2021-2022 Xavier Leclercq
-    Released under the MIT License
-    See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
-*/
+// SPDX-FileCopyrightText: 2021-2024 Xavier Leclercq
+// SPDX-License-Identifier: BSL-1.0
 
 #include "windows/TCPClientSocket.hpp"
+#include "NativeSocketError.hpp"
 #include "NetworkingErrorCategory.hpp"
 
 using namespace Ishiko;
 
-TCPClientSocket::TCPClientSocket(Error& error) noexcept
+TCPClientSocket::TCPClientSocket(int socket_options, Error& error) noexcept
 {
     m_socket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
     if (m_socket == INVALID_SOCKET)
     {
         // TODO: more detailed error
         Fail(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__, error);
+    }
+    if (socket_options != SocketOption::none)
+    {
+        u_long mode = socket_options;
+        if (ioctlsocket(m_socket, FIONBIO, &mode) == SOCKET_ERROR)
+        {
+            // TODO: more detailed error
+            Fail(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__, error);
+        }
     }
 }
 
@@ -46,9 +53,9 @@ void TCPClientSocket::connect(IPv4Address address, Port port, Error& error) noex
         NULL, NULL);
     if (err == SOCKET_ERROR)
     {
-        int lastError = WSAGetLastError();
-        // TODO: more detailed error
-        Fail(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__, error);
+        NativeSocketError native_error{WSAGetLastError()};
+        // TODO: what should be the message here?
+        Fail(native_error, "", __FILE__, __LINE__, error);
     }
 }
 
@@ -177,4 +184,9 @@ Port TCPClientSocket::getPeerPort(Error& error) const
     }
 
     return Port(ntohs(boundAddress.sin_port));
+}
+
+NativeSocketHandle TCPClientSocket::nativeHandle()
+{
+    return m_socket;
 }

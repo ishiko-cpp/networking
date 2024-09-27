@@ -5,6 +5,7 @@
 #define GUARD_ISHIKO_CPP_NETWORKING_WINDOWS_TCPCLIENTSOCKET_HPP
 
 #include "../IPv4Address.hpp"
+#include "NativeSocketHandle.hpp"
 #include "../Port.hpp"
 #include "../SocketOption.hpp"
 #include <Ishiko/Errors.hpp>
@@ -18,7 +19,7 @@ namespace Ishiko
 class TCPClientSocket
 {
 public:
-    TCPClientSocket(Error& error) noexcept;
+    TCPClientSocket(int socket_options, Error& error) noexcept;
     TCPClientSocket(SOCKET socket) noexcept;
     TCPClientSocket(const TCPClientSocket& other) = delete;
     TCPClientSocket(TCPClientSocket&& other);
@@ -43,6 +44,8 @@ public:
     Port getLocalPort(Error& error) const;
     IPv4Address getPeerIPAddress(Error& error) const;
     Port getPeerPort(Error& error) const;
+
+    NativeSocketHandle nativeHandle();
 
 private:
     SOCKET m_socket;

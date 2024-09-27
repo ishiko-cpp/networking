@@ -9,6 +9,7 @@
 #include "Networking/IPv4Address.hpp"
 #include "Networking/IPv6Address.hpp"
 #include "Networking/linkoptions.hpp"
+#include "Networking/NativeSocketError.hpp"
 #include "Networking/NativeSocketHandle.hpp"
 #include "Networking/NetworkConnectionsManager.hpp"
 #include "Networking/NetworkingErrorCategory.hpp"
