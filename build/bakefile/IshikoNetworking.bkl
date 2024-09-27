@@ -44,6 +44,7 @@ library IshikoNetworking : IshikoText, IshikoMemory, IshikoErrors, IshikoBasePla
         ../../include/Ishiko/Networking/IPv4Address.hpp
         ../../include/Ishiko/Networking/IPv6Address.hpp
         ../../include/Ishiko/Networking/linkoptions.hpp
+        ../../include/Ishiko/Networking/NativeSocketError.hpp
         ../../include/Ishiko/Networking/NativeSocketHandle.hpp
         ../../include/Ishiko/Networking/NetworkConnectionsManager.hpp
         ../../include/Ishiko/Networking/NetworkingErrorCategory.hpp
@@ -56,6 +57,8 @@ library IshikoNetworking : IshikoText, IshikoMemory, IshikoErrors, IshikoBasePla
         ../../include/Ishiko/Networking/TCPServerSocket.hpp
         ../../include/Ishiko/Networking/TLSClientSocket.hpp
         ../../include/Ishiko/Networking/TLSServerSocket.hpp
+
+        ../../src/NetworkingUtilities.hpp
         ../../src/TLSClientSocketBotanClientImpl.hpp
         ../../src/TLSClientSocketBotanServerImpl.hpp
     }
@@ -81,17 +84,21 @@ library IshikoNetworking : IshikoText, IshikoMemory, IshikoErrors, IshikoBasePla
         headers
         {
             ../../include/Ishiko/Networking/linux/HostnameResolver.hpp
+            ../../include/Ishiko/Networking/linux/NativeSocketError.hpp
             ../../include/Ishiko/Networking/linux/NativeSocketHandle.hpp
             ../../include/Ishiko/Networking/linux/NetworkingLibraryInitialization.hpp
             ../../include/Ishiko/Networking/linux/SocketOption.hpp
             ../../include/Ishiko/Networking/linux/TCPClientSocket.hpp
             ../../include/Ishiko/Networking/linux/TCPServerSocket.hpp
+
+            ../../src/NetworkingUtilities.hpp
         }
 
         sources
         {
             ../../src/linux/HostnameResolver.cpp
             ../../src/linux/NetworkingLibraryInitialization.cpp
+            ../../src/NetworkingUtilities.cpp
             ../../src/linux/TCPClientSocket.cpp
             ../../src/linux/TCPServerSocket.cpp
         }
@@ -102,11 +109,14 @@ library IshikoNetworking : IshikoText, IshikoMemory, IshikoErrors, IshikoBasePla
         headers
         {
            ../../include/Ishiko/Networking/windows/HostnameResolver.hpp
+           ../../include/Ishiko/Networking/windows/NativeSocketError.hpp
            ../../include/Ishiko/Networking/windows/NativeSocketHandle.hpp
            ../../include/Ishiko/Networking/windows/NetworkingLibraryInitialization.hpp
            ../../include/Ishiko/Networking/windows/SocketOption.hpp
            ../../include/Ishiko/Networking/windows/TCPClientSocket.hpp
            ../../include/Ishiko/Networking/windows/TCPServerSocket.hpp
+
+           ../../src/NetworkingUtilities.hpp
         }
 
         sources
@@ -115,6 +125,8 @@ library IshikoNetworking : IshikoText, IshikoMemory, IshikoErrors, IshikoBasePla
             ../../src/windows/NetworkingLibraryInitialization.cpp
             ../../src/windows/TCPClientSocket.cpp
             ../../src/windows/TCPServerSocket.cpp
+
+            ../../src/NetworkingUtilities.cpp
         }
     }
 }
