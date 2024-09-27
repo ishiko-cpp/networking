@@ -10,6 +10,7 @@
 #include <Ishiko/Errors.hpp>
 #include <Ishiko/Memory.hpp>
 #include <boost/utility/string_view.hpp>
+#include <set>
 #include <utility>
 #include <vector>
 
@@ -71,6 +72,15 @@ namespace Ishiko
 
         void run();
 
+        // TODO: how do I hide this from public interface?
+        void setWaitingForRead(NativeSocketHandle socket);
+
+        // TODO: how do I hide this from public interface?
+        void setWaitingForWrite(NativeSocketHandle socket);
+
+        // TODO: how do I hide this from public interface?
+        void setWaitingForException(NativeSocketHandle socket);
+
     private:
         // TODO: remove
         Error m_temp_hack_todo;
@@ -78,10 +88,9 @@ namespace Ishiko
         // of the actual memory location which is probably what I need to do as I don't really want to give them access
         // to the sockets but I more narrow interface.
         std::vector<ManagedSocket> m_managed_sockets;
-    public: // TODO: private
-        fd_set m_read_ready;
-        fd_set m_write_ready;
-        fd_set m_exception;
+        std::set<NativeSocketHandle> m_waiting_for_read;
+        std::set<NativeSocketHandle> m_waiting_for_write;
+        std::set<NativeSocketHandle> m_waiting_for_exception;
     };
 }
 
