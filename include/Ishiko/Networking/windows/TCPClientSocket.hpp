@@ -6,6 +6,7 @@
 
 #include "../IPv4Address.hpp"
 #include "../Port.hpp"
+#include "../SocketOption.hpp"
 #include <Ishiko/Errors.hpp>
 #include <Ishiko/Memory.hpp>
 #define NOMINMAX // TODO: what rubbish, how do I put this ugly windows logic somewhere central
