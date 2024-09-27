@@ -22,8 +22,22 @@ namespace Ishiko
     class NetworkConnectionsManager
     {
     public:
-        // TODO: can we get rid of this forward declaration?
-        class ManagedSocket;
+        // TODO: find a better name for this, although maybe it's OK?
+        // TODO: Need to be able to close and shutdown the connection
+        // TODO: needs to be able to write but what about the read? Because that can be part of events?
+        // TODO: maybe it should simple read from there as well since all I'll get from select is an event saying
+        // there is data to read.
+        class ManagedSocket
+        {
+        public:
+            virtual int read(ByteBuffer& buffer, size_t count, Error& error) = 0;
+            virtual int read(char* buffer, int count, Error& error) = 0;
+
+            virtual void write(const char* buffer, int count, Error& error) = 0;
+
+            virtual void shutdown(Error& error) = 0;
+            virtual void close() = 0;
+        };
 
         class ConnectionCallbacks
         {
@@ -42,23 +56,39 @@ namespace Ishiko
             virtual void onWriteReady() = 0;
         };
 
-        // TODO: find a better name for this, although maybe it's OK?
-        // TODO: Need to be able to close and shutdown the connection
-        // TODO: needs to be able to write but what about the read? Because that can be part of events?
-        // TODO: maybe it should simple read from there as well since all I'll get from select is an event saying
-        // there is data to read.
-        class ManagedSocket
+        NetworkConnectionsManager();
+
+        void connect(IPv4Address address, Port port, ConnectionCallbacks& callbacks, Error& error);
+
+        void run();
+
+    private:
+        // TODO: can we get rid of this forward declaration
+        class ManagedSocketImpl;
+
+    public:
+        // TODO: how do I hide this from public interface?
+        void setWaitingForRead(NativeSocketHandle socket, ManagedSocketImpl& callbacks);
+
+        // TODO: how do I hide this from public interface?
+        void setWaitingForWrite(NativeSocketHandle socket, ManagedSocketImpl& callbacks);
+
+        // TODO: how do I hide this from public interface?
+        void setWaitingForException(NativeSocketHandle socket, ManagedSocketImpl& callbacks);
+
+    private:
+        class ManagedSocketImpl : public ManagedSocket
         {
         public:
-            ManagedSocket(NetworkConnectionsManager& manager, TCPClientSocket&& socket, ConnectionCallbacks& callbacks);
+            ManagedSocketImpl(NetworkConnectionsManager& manager, TCPClientSocket&& socket, ConnectionCallbacks& callbacks);
 
-            int read(ByteBuffer& buffer, size_t count, Error& error);
-            int read(char* buffer, int count, Error& error);
+            int read(ByteBuffer& buffer, size_t count, Error& error) override;
+            int read(char* buffer, int count, Error& error) override;
 
-            void write(const char* buffer, int count, Error& error);
+            void write(const char* buffer, int count, Error& error) override;
 
-            void shutdown(Error& error);
-            void close();
+            void shutdown(Error& error) override;
+            void close() override;
 
             void callback();
 
@@ -75,31 +105,15 @@ namespace Ishiko
             State m_state;
         };
 
-        NetworkConnectionsManager();
-
-        void connect(IPv4Address address, Port port, ConnectionCallbacks& callbacks, Error& error);
-
-        void run();
-
-        // TODO: how do I hide this from public interface?
-        void setWaitingForRead(NativeSocketHandle socket, ManagedSocket& callbacks);
-
-        // TODO: how do I hide this from public interface?
-        void setWaitingForWrite(NativeSocketHandle socket, ManagedSocket& callbacks);
-
-        // TODO: how do I hide this from public interface?
-        void setWaitingForException(NativeSocketHandle socket, ManagedSocket& callbacks);
-
-    private:
         // TODO: remove
         Error m_temp_hack_todo;
         // TODO: replace this with stable collection, maybe a colony? Unless I make the clients of this class agnostic
         // of the actual memory location which is probably what I need to do as I don't really want to give them access
         // to the sockets but I more narrow interface.
-        std::vector<ManagedSocket> m_managed_sockets;
-        std::map<NativeSocketHandle, ManagedSocket*> m_waiting_for_read;
-        std::map<NativeSocketHandle, ManagedSocket*> m_waiting_for_write;
-        std::map<NativeSocketHandle, ManagedSocket*> m_waiting_for_exception;
+        std::vector<ManagedSocketImpl> m_managed_sockets;
+        std::map<NativeSocketHandle, ManagedSocketImpl*> m_waiting_for_read;
+        std::map<NativeSocketHandle, ManagedSocketImpl*> m_waiting_for_write;
+        std::map<NativeSocketHandle, ManagedSocketImpl*> m_waiting_for_exception;
     };
 }
 

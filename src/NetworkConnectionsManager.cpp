@@ -7,85 +7,6 @@
 
 using namespace Ishiko;
 
-NetworkConnectionsManager::ManagedSocket::ManagedSocket(NetworkConnectionsManager& manager, TCPClientSocket&& socket,
-    ConnectionCallbacks& callbacks)
-    : m_manager{manager}, m_socket{std::move(socket)}, m_callbacks{callbacks}, m_state{State::waiting_for_connection}
-{
-}
-
-int NetworkConnectionsManager::ManagedSocket::read(ByteBuffer& buffer, size_t count, Error& error)
-{
-    int n = m_socket.read(buffer, count, error);
-    if (error)
-    {
-        if (error.code() == NetworkingErrorCategory::Value::would_block)
-        {
-            // TODO: not sure but this may cause a race condition with run() since state and the call are separate steps
-            m_state = State::waiting_for_read;
-            m_manager.setWaitingForRead(m_socket.nativeHandle(), *this);
-        }
-    }
-    return n;
-}
-
-int NetworkConnectionsManager::ManagedSocket::read(char* buffer, int count, Error& error)
-{
-    int n = m_socket.read(buffer, count, error);
-    if (error)
-    {
-        if (error.code() == NetworkingErrorCategory::Value::would_block)
-        {
-            // TODO: not sure but this may cause a race condition with run() since state and the call are separate steps
-            m_state = State::waiting_for_read;
-            m_manager.setWaitingForRead(m_socket.nativeHandle(), *this);
-        }
-    }
-    return n;
-}
-
-void NetworkConnectionsManager::ManagedSocket::write(const char* buffer, int count, Error& error)
-{
-    m_socket.write(buffer, count, error);
-    if (error)
-    {
-        if (error.code() == NetworkingErrorCategory::Value::would_block)
-        {
-            // TODO: not sure but this may cause a race condition with run() since state and the call are separate steps
-            m_state = State::waiting_for_write;
-            m_manager.setWaitingForWrite(m_socket.nativeHandle(), *this);
-        }
-    }
-}
-
-void NetworkConnectionsManager::ManagedSocket::shutdown(Error& error)
-{
-    m_socket.shutdown(error);
-}
-
-void NetworkConnectionsManager::ManagedSocket::close()
-{
-    // TODO: this needs to remove the managed socket from the NetworkConnectionManager
-    m_socket.close();
-}
-
-void NetworkConnectionsManager::ManagedSocket::callback()
-{
-    switch (m_state)
-    {
-    case State::waiting_for_connection:
-        m_callbacks.onConnectionEstablished(*this);
-        break;
-
-    case State::waiting_for_read:
-        m_callbacks.onReadReady();
-        break;
-
-    case State::waiting_for_write:
-        m_callbacks.onWriteReady();
-        break;
-    }
-}
-
 NetworkConnectionsManager::NetworkConnectionsManager()
 {
     // TODO: just to avoid reallocations however even that isn't working well
@@ -127,21 +48,21 @@ void NetworkConnectionsManager::run()
     {
         fd_set fd_read_ready;
         FD_ZERO(&fd_read_ready);
-        for (const std::pair<NativeSocketHandle, ManagedSocket*>& socket : m_waiting_for_read)
+        for (const std::pair<NativeSocketHandle, ManagedSocketImpl*>& socket : m_waiting_for_read)
         {
             FD_SET(socket.first, &fd_read_ready);
         }
 
         fd_set fd_write_ready;
         FD_ZERO(&fd_write_ready);
-        for (const std::pair<NativeSocketHandle, ManagedSocket*>& socket : m_waiting_for_write)
+        for (const std::pair<NativeSocketHandle, ManagedSocketImpl*>& socket : m_waiting_for_write)
         {
             FD_SET(socket.first, &fd_write_ready);
         }
 
         fd_set fd_exception;
         FD_ZERO(&fd_exception);
-        for (const std::pair<NativeSocketHandle, ManagedSocket*>& socket : m_waiting_for_exception)
+        for (const std::pair<NativeSocketHandle, ManagedSocketImpl*>& socket : m_waiting_for_exception)
         {
             FD_SET(socket.first, &fd_exception);
         }
@@ -153,7 +74,7 @@ void NetworkConnectionsManager::run()
         int ret = select(-1, &fd_read_ready, &fd_write_ready, &fd_exception, &stTimeOut);
         // TODO: check for ret error
 
-        for (std::map<NativeSocketHandle, ManagedSocket*>::iterator it = m_waiting_for_write.begin(); it != m_waiting_for_write.end();)
+        for (std::map<NativeSocketHandle, ManagedSocketImpl*>::iterator it = m_waiting_for_write.begin(); it != m_waiting_for_write.end();)
         {
             if (FD_ISSET(it->first, &fd_write_ready))
             {
@@ -166,7 +87,7 @@ void NetworkConnectionsManager::run()
             }
         }
 
-        for (std::map<NativeSocketHandle, ManagedSocket*>::iterator it = m_waiting_for_read.begin(); it != m_waiting_for_read.end();)
+        for (std::map<NativeSocketHandle, ManagedSocketImpl*>::iterator it = m_waiting_for_read.begin(); it != m_waiting_for_read.end();)
         {
             if (FD_ISSET(it->first, &fd_read_ready))
             {
@@ -179,7 +100,7 @@ void NetworkConnectionsManager::run()
             }
         }
 
-        for (std::map<NativeSocketHandle, ManagedSocket*>::iterator it = m_waiting_for_exception.begin(); it != m_waiting_for_exception.end();)
+        for (std::map<NativeSocketHandle, ManagedSocketImpl*>::iterator it = m_waiting_for_exception.begin(); it != m_waiting_for_exception.end();)
         {
             if (FD_ISSET(it->first, &fd_exception))
             {
@@ -194,17 +115,96 @@ void NetworkConnectionsManager::run()
     }
 }
 
-void NetworkConnectionsManager::setWaitingForRead(NativeSocketHandle socket, ManagedSocket& callbacks)
+void NetworkConnectionsManager::setWaitingForRead(NativeSocketHandle socket, ManagedSocketImpl& callbacks)
 {
     m_waiting_for_read[socket] = &callbacks;
 }
 
-void NetworkConnectionsManager::setWaitingForWrite(NativeSocketHandle socket, ManagedSocket& callbacks)
+void NetworkConnectionsManager::setWaitingForWrite(NativeSocketHandle socket, ManagedSocketImpl& callbacks)
 {
     m_waiting_for_write[socket] = &callbacks;
 }
 
-void NetworkConnectionsManager::setWaitingForException(NativeSocketHandle socket, ManagedSocket& callbacks)
+void NetworkConnectionsManager::setWaitingForException(NativeSocketHandle socket, ManagedSocketImpl& callbacks)
 {
     m_waiting_for_exception[socket] = &callbacks;
+}
+
+NetworkConnectionsManager::ManagedSocketImpl::ManagedSocketImpl(NetworkConnectionsManager& manager,
+    TCPClientSocket&& socket, ConnectionCallbacks& callbacks)
+    : m_manager{ manager }, m_socket{ std::move(socket) }, m_callbacks{ callbacks }, m_state{ State::waiting_for_connection }
+{
+}
+
+int NetworkConnectionsManager::ManagedSocketImpl::read(ByteBuffer& buffer, size_t count, Error& error)
+{
+    int n = m_socket.read(buffer, count, error);
+    if (error)
+    {
+        if (error.code() == NetworkingErrorCategory::Value::would_block)
+        {
+            // TODO: not sure but this may cause a race condition with run() since state and the call are separate steps
+            m_state = State::waiting_for_read;
+            m_manager.setWaitingForRead(m_socket.nativeHandle(), *this);
+        }
+    }
+    return n;
+}
+
+int NetworkConnectionsManager::ManagedSocketImpl::read(char* buffer, int count, Error& error)
+{
+    int n = m_socket.read(buffer, count, error);
+    if (error)
+    {
+        if (error.code() == NetworkingErrorCategory::Value::would_block)
+        {
+            // TODO: not sure but this may cause a race condition with run() since state and the call are separate steps
+            m_state = State::waiting_for_read;
+            m_manager.setWaitingForRead(m_socket.nativeHandle(), *this);
+        }
+    }
+    return n;
+}
+
+void NetworkConnectionsManager::ManagedSocketImpl::write(const char* buffer, int count, Error& error)
+{
+    m_socket.write(buffer, count, error);
+    if (error)
+    {
+        if (error.code() == NetworkingErrorCategory::Value::would_block)
+        {
+            // TODO: not sure but this may cause a race condition with run() since state and the call are separate steps
+            m_state = State::waiting_for_write;
+            m_manager.setWaitingForWrite(m_socket.nativeHandle(), *this);
+        }
+    }
+}
+
+void NetworkConnectionsManager::ManagedSocketImpl::shutdown(Error& error)
+{
+    m_socket.shutdown(error);
+}
+
+void NetworkConnectionsManager::ManagedSocketImpl::close()
+{
+    // TODO: this needs to remove the managed socket from the NetworkConnectionManager
+    m_socket.close();
+}
+
+void NetworkConnectionsManager::ManagedSocketImpl::callback()
+{
+    switch (m_state)
+    {
+    case State::waiting_for_connection:
+        m_callbacks.onConnectionEstablished(*this);
+        break;
+
+    case State::waiting_for_read:
+        m_callbacks.onReadReady();
+        break;
+
+    case State::waiting_for_write:
+        m_callbacks.onWriteReady();
+        break;
+    }
 }
