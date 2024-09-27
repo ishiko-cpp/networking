@@ -1,8 +1,5 @@
-/*
-    Copyright (c) 2021-2022 Xavier Leclercq
-    Released under the MIT License
-    See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
-*/
+// SPDX-FileCopyrightText: 2021-2024 Xavier Leclercq
+// SPDX-License-Identifier: BSL-1.0
 
 #include "linux/TCPServerSocket.hpp"
 #include "NetworkingErrorCategory.hpp"
@@ -15,7 +12,7 @@ using namespace Ishiko;
 const IPv4Address TCPServerSocket::AllInterfaces = IPv4Address(0);
 const Port TCPServerSocket::AnyPort = Port(0);
 
-TCPServerSocket::TCPServerSocket(IPv4Address address, Port port)
+TCPServerSocket::TCPServerSocket(IPv4Address address, Port port, int socket_options)
     : m_ipAddress(std::move(address)), m_port(std::move(port))
 {
     m_socket = socket(AF_INET, SOCK_STREAM, 0);
@@ -64,7 +61,7 @@ TCPServerSocket::TCPServerSocket(IPv4Address address, Port port)
     }
 }
 
-TCPServerSocket::TCPServerSocket(IPv4Address address, Port port, Error& error) noexcept
+TCPServerSocket::TCPServerSocket(IPv4Address address, Port port, int socket_options, Error& error) noexcept
     : m_ipAddress(std::move(address)), m_port(std::move(port))
 {
     m_socket = socket(AF_INET, SOCK_STREAM, 0);
@@ -117,7 +114,7 @@ TCPServerSocket::TCPServerSocket(IPv4Address address, Port port, Error& error) n
     }
 }
 
-TCPServerSocket::TCPServerSocket(IPv6Address address, Port port)
+TCPServerSocket::TCPServerSocket(IPv6Address address, Port port, int socket_options)
     : m_ipAddress(std::move(address)), m_port(std::move(port))
 {
     m_socket = socket(AF_INET6, SOCK_STREAM, 0);
