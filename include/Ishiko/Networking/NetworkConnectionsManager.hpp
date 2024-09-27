@@ -10,7 +10,7 @@
 #include <Ishiko/Errors.hpp>
 #include <Ishiko/Memory.hpp>
 #include <boost/utility/string_view.hpp>
-#include <set>
+#include <map>
 #include <utility>
 #include <vector>
 
@@ -60,10 +60,19 @@ namespace Ishiko
             void shutdown(Error& error);
             void close();
 
-        public: // TOOD: make private
+            void callback();
+
+        private:
+            enum class State
+            {
+                waiting_for_connection,
+                waiting_for_read,
+                waiting_for_write
+            };
             NetworkConnectionsManager& m_manager;
             TCPClientSocket m_socket;
             ConnectionCallbacks& m_callbacks;
+            State m_state;
         };
 
         NetworkConnectionsManager();
@@ -73,13 +82,13 @@ namespace Ishiko
         void run();
 
         // TODO: how do I hide this from public interface?
-        void setWaitingForRead(NativeSocketHandle socket);
+        void setWaitingForRead(NativeSocketHandle socket, ManagedSocket& callbacks);
 
         // TODO: how do I hide this from public interface?
-        void setWaitingForWrite(NativeSocketHandle socket);
+        void setWaitingForWrite(NativeSocketHandle socket, ManagedSocket& callbacks);
 
         // TODO: how do I hide this from public interface?
-        void setWaitingForException(NativeSocketHandle socket);
+        void setWaitingForException(NativeSocketHandle socket, ManagedSocket& callbacks);
 
     private:
         // TODO: remove
@@ -88,9 +97,9 @@ namespace Ishiko
         // of the actual memory location which is probably what I need to do as I don't really want to give them access
         // to the sockets but I more narrow interface.
         std::vector<ManagedSocket> m_managed_sockets;
-        std::set<NativeSocketHandle> m_waiting_for_read;
-        std::set<NativeSocketHandle> m_waiting_for_write;
-        std::set<NativeSocketHandle> m_waiting_for_exception;
+        std::map<NativeSocketHandle, ManagedSocket*> m_waiting_for_read;
+        std::map<NativeSocketHandle, ManagedSocket*> m_waiting_for_write;
+        std::map<NativeSocketHandle, ManagedSocket*> m_waiting_for_exception;
     };
 }
 
