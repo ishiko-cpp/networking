@@ -98,7 +98,6 @@ library IshikoNetworking : IshikoText, IshikoMemory, IshikoErrors, IshikoBasePla
         {
             ../../src/linux/HostnameResolver.cpp
             ../../src/linux/NetworkingLibraryInitialization.cpp
-            ../../src/NetworkingUtilities.cpp
             ../../src/linux/TCPClientSocket.cpp
             ../../src/linux/TCPServerSocket.cpp
 
