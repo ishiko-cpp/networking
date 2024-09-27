@@ -91,7 +91,7 @@ library IshikoNetworking : IshikoText, IshikoMemory, IshikoErrors, IshikoBasePla
             ../../include/Ishiko/Networking/linux/TCPClientSocket.hpp
             ../../include/Ishiko/Networking/linux/TCPServerSocket.hpp
 
-            ../../src/NetworkingUtilities.hpp
+            ../../src/linux/NetworkingUtilities.hpp
         }
 
         sources
@@ -101,6 +101,8 @@ library IshikoNetworking : IshikoText, IshikoMemory, IshikoErrors, IshikoBasePla
             ../../src/NetworkingUtilities.cpp
             ../../src/linux/TCPClientSocket.cpp
             ../../src/linux/TCPServerSocket.cpp
+
+            ../../src/linux/NetworkingUtilities.cpp
         }
     }
 
@@ -116,7 +118,7 @@ library IshikoNetworking : IshikoText, IshikoMemory, IshikoErrors, IshikoBasePla
            ../../include/Ishiko/Networking/windows/TCPClientSocket.hpp
            ../../include/Ishiko/Networking/windows/TCPServerSocket.hpp
 
-           ../../src/NetworkingUtilities.hpp
+           ../../src/windows/NetworkingUtilities.hpp
         }
 
         sources
@@ -126,7 +128,7 @@ library IshikoNetworking : IshikoText, IshikoMemory, IshikoErrors, IshikoBasePla
             ../../src/windows/TCPClientSocket.cpp
             ../../src/windows/TCPServerSocket.cpp
 
-            ../../src/NetworkingUtilities.cpp
+            ../../src/windows/NetworkingUtilities.cpp
         }
     }
 }
