@@ -10,9 +10,8 @@ NetworkingErrorCategory::Value NetworkingUtilities::ConvertNativeSocketError(Nat
     switch (error)
     {
     case EAGAIN:
-        return NetworkingErrorCategory::Value::would_block;
-
-    case EWOULDBLOCK:
+        static_assert(EWOULDBLOCK == EAGAIN,
+            "NetworkingUtilities::ConvertNativeSocketError assumes EWOULDBLOCK == EAGAIN")
         return NetworkingErrorCategory::Value::would_block;
 
     default:
