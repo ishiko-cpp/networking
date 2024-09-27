@@ -33,6 +33,8 @@ void Fail(NetworkingErrorCategory::Value value, const std::string& message, cons
     Error& error) noexcept;
 void Fail(NativeSocketError native_error, const std::string& message, const char* file, int line,
     Error& error) noexcept;
+bool operator==(const ErrorCode& error, NetworkingErrorCategory::Value value);
+bool operator!=(const ErrorCode& error, NetworkingErrorCategory::Value value);
 
 }
 

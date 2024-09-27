@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: BSL-1.0
 
 #include "NetworkConnectionsManager.hpp"
+#include "NetworkingErrorCategory.hpp"
 #include <boost/utility/string_view.hpp>
 
 using namespace Ishiko;
@@ -73,11 +74,9 @@ void NetworkConnectionsManager::connect(IPv4Address address, Port port, Connecti
     socket.connect(address, port, error);
     if (error)
     {
-        int last_error = WSAGetLastError();
-        if (last_error == WSAEWOULDBLOCK)
+        if (error.code() == NetworkingErrorCategory::Value::would_block)
         {
             // TODO
-            int errrr = 0;
             FD_SET(socket.nativeHandle(), &m_write_ready);
             FD_SET(socket.nativeHandle(), &m_exception);
         }

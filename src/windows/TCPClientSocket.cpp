@@ -1,10 +1,8 @@
-/*
-    Copyright (c) 2021-2022 Xavier Leclercq
-    Released under the MIT License
-    See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
-*/
+// SPDX-FileCopyrightText: 2021-2024 Xavier Leclercq
+// SPDX-License-Identifier: BSL-1.0
 
 #include "windows/TCPClientSocket.hpp"
+#include "NativeSocketError.hpp"
 #include "NetworkingErrorCategory.hpp"
 
 using namespace Ishiko;
@@ -55,9 +53,9 @@ void TCPClientSocket::connect(IPv4Address address, Port port, Error& error) noex
         NULL, NULL);
     if (err == SOCKET_ERROR)
     {
-        int lastError = WSAGetLastError();
-        // TODO: more detailed error
-        Fail(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__, error);
+        NativeSocketError native_error{WSAGetLastError()};
+        // TODO: what should be the message here?
+        Fail(native_error, "", __FILE__, __LINE__, error);
     }
 }
 

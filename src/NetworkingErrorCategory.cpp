@@ -46,3 +46,13 @@ void Ishiko::Fail(NativeSocketError native_error, const std::string& message, co
     NetworkingErrorCategory::Value value = NetworkingUtilities::ConvertNativeSocketError(native_error);
     Ishiko::Fail(value, message, file, line, error);
 }
+
+bool Ishiko::operator==(const ErrorCode& error, NetworkingErrorCategory::Value value)
+{
+    return ((&error.category() == &NetworkingErrorCategory::Get()) && (error.value() == static_cast<int>(value)));
+}
+
+bool Ishiko::operator!=(const ErrorCode& error, NetworkingErrorCategory::Value value)
+{
+    return !(error == value);
+}

@@ -19,6 +19,7 @@ namespace Ishiko
 };
 
 Ishiko::NativeSocketError::NativeSocketError(int error) noexcept
+    : m_error{error}
 {
 }
 
