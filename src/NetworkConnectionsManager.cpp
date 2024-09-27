@@ -7,36 +7,53 @@
 
 using namespace Ishiko;
 
-NetworkConnectionsManager::ManagedSocket::ManagedSocket(NetworkConnectionsManager& manager, TCPClientSocket&& socket)
-    : m_manager{manager}, m_socket{std::move(socket)}
+NetworkConnectionsManager::ManagedSocket::ManagedSocket(NetworkConnectionsManager& manager, TCPClientSocket&& socket,
+    ConnectionCallbacks& callbacks)
+    : m_manager{manager}, m_socket{std::move(socket)}, m_callbacks{callbacks}
 {
 }
 
 int NetworkConnectionsManager::ManagedSocket::read(ByteBuffer& buffer, size_t count, Error& error)
 {
-    // TODO: if erro need to add socket to select read
-    return m_socket.read(buffer, count, error);
+    int n = m_socket.read(buffer, count, error);
+    if (error)
+    {
+        if (error.code() == NetworkingErrorCategory::Value::would_block)
+        {
+            // TODO: obviously incorrect overwrites other sockets
+            FD_ZERO(&m_manager.m_read_ready);
+            FD_ZERO(&m_manager.m_write_ready);
+            FD_ZERO(&m_manager.m_exception);
+            FD_SET(m_socket.nativeHandle(), &m_manager.m_read_ready);
+        }
+    }
+    return n;
 }
 
 int NetworkConnectionsManager::ManagedSocket::read(char* buffer, int count, Error& error)
 {
-    // TODO: if erro need to add socket to select read
     int n = m_socket.read(buffer, count, error);
     if (error)
     {
-        // TODO: obviously incorrect overwrites other sockets
-        FD_ZERO(&m_manager.m_read_ready);
-        FD_ZERO(&m_manager.m_write_ready);
-        FD_ZERO(&m_manager.m_exception);
-        FD_SET(m_socket.nativeHandle(), &m_manager.m_read_ready);
+        if (error.code() == NetworkingErrorCategory::Value::would_block)
+        {
+            // TODO: obviously incorrect overwrites other sockets
+            FD_ZERO(&m_manager.m_read_ready);
+            FD_ZERO(&m_manager.m_write_ready);
+            FD_ZERO(&m_manager.m_exception);
+            FD_SET(m_socket.nativeHandle(), &m_manager.m_read_ready);
+        }
     }
     return n;
 }
 
 void NetworkConnectionsManager::ManagedSocket::write(const char* buffer, int count, Error& error)
 {
-    // TODO: if erro need to add socket to select write
     m_socket.write(buffer, count, error);
+    if (error.code() == NetworkingErrorCategory::Value::would_block)
+    {
+        // TODO: set fd_set
+    }
 }
 
 void NetworkConnectionsManager::ManagedSocket::shutdown(Error& error)
@@ -84,8 +101,7 @@ void NetworkConnectionsManager::connect(IPv4Address address, Port port, Connecti
 
     // TODO: what if no error? Then we need to make sure is called.
 
-    m_managed_sockets.emplace_back(*this, std::move(socket));
-    m_callbacks.emplace_back(&callbacks);
+    m_managed_sockets.emplace_back(*this, std::move(socket), callbacks);
 }
 
 void NetworkConnectionsManager::run()
@@ -94,7 +110,6 @@ void NetworkConnectionsManager::run()
     // TODO: can't assume the socket index is 0
     // TODO: need to use select and iterate over all ready sockets
     ManagedSocket& socket = m_managed_sockets[0];
-    ConnectionCallbacks& callbacks = *m_callbacks[0];
 
     struct timeval stTimeOut;
     stTimeOut.tv_sec = 1;
@@ -105,11 +120,11 @@ void NetworkConnectionsManager::run()
     if (FD_ISSET(socket.m_socket.nativeHandle(), &m_write_ready))
     {
         // TODO: can't assume the socket index is 0
-        callbacks.onConnectionEstablished(m_managed_sockets[0]);
+        socket.m_callbacks.onConnectionEstablished(m_managed_sockets[0]);
     }
     if (FD_ISSET(socket.m_socket.nativeHandle(), &m_read_ready))
     {
         // TODO: can't assume the socket index is 0
-        callbacks.onReadReady();
+        socket.m_callbacks.onReadReady();
     }
 }

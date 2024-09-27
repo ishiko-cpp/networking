@@ -21,29 +21,8 @@ namespace Ishiko
     class NetworkConnectionsManager
     {
     public:
-        // TODO: find a better name for this, although maybe it's OK?
-        // TODO: Need to be able to close and shutdown the connection
-        // TODO: needs to be able to write but what about the read? Because that can be part of events?
-        // TODO: maybe it should simple read from there as well since all I'll get from select is an event saying
-        // there is data to read.
-        class ManagedSocket
-        {
-        public:
-            ManagedSocket(NetworkConnectionsManager& manager, TCPClientSocket&& socket);
-
-            int read(ByteBuffer& buffer, size_t count, Error& error);
-            int read(char* buffer, int count, Error& error);
-
-            void write(const char* buffer, int count, Error& error);
-
-            void shutdown(Error& error);
-            void close();
-
-        public:
-            // TODO: back to private
-            NetworkConnectionsManager& m_manager;
-            TCPClientSocket m_socket;
-        };
+        // TODO: can we get rid of this forward declaration?
+        class ManagedSocket;
 
         class ConnectionCallbacks
         {
@@ -62,6 +41,30 @@ namespace Ishiko
             virtual void onWriteReady() = 0;
         };
 
+        // TODO: find a better name for this, although maybe it's OK?
+        // TODO: Need to be able to close and shutdown the connection
+        // TODO: needs to be able to write but what about the read? Because that can be part of events?
+        // TODO: maybe it should simple read from there as well since all I'll get from select is an event saying
+        // there is data to read.
+        class ManagedSocket
+        {
+        public:
+            ManagedSocket(NetworkConnectionsManager& manager, TCPClientSocket&& socket, ConnectionCallbacks& callbacks);
+
+            int read(ByteBuffer& buffer, size_t count, Error& error);
+            int read(char* buffer, int count, Error& error);
+
+            void write(const char* buffer, int count, Error& error);
+
+            void shutdown(Error& error);
+            void close();
+
+        public: // TOOD: make private
+            NetworkConnectionsManager& m_manager;
+            TCPClientSocket m_socket;
+            ConnectionCallbacks& m_callbacks;
+        };
+
         NetworkConnectionsManager();
 
         void connect(IPv4Address address, Port port, ConnectionCallbacks& callbacks, Error& error);
@@ -75,7 +78,6 @@ namespace Ishiko
         // of the actual memory location which is probably what I need to do as I don't really want to give them access
         // to the sockets but I more narrow interface.
         std::vector<ManagedSocket> m_managed_sockets;
-        std::vector<ConnectionCallbacks*> m_callbacks;
     public: // TODO: private
         fd_set m_read_ready;
         fd_set m_write_ready;
