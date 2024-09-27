@@ -5,6 +5,7 @@
 #define GUARD_ISHIKO_CPP_NETWORKING_WINDOWS_TCPCLIENTSOCKET_HPP
 
 #include "../IPv4Address.hpp"
+#include "NativeSocketHandle.hpp"
 #include "../Port.hpp"
 #include "../SocketOption.hpp"
 #include <Ishiko/Errors.hpp>
@@ -44,8 +45,9 @@ public:
     IPv4Address getPeerIPAddress(Error& error) const;
     Port getPeerPort(Error& error) const;
 
-public:
-    // TODO: back to private
+    NativeSocketHandle nativeHandle();
+
+private:
     SOCKET m_socket;
 };
 

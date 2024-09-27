@@ -187,3 +187,8 @@ Port TCPClientSocket::getPeerPort(Error& error) const
 
     return Port(ntohs(boundAddress.sin_port));
 }
+
+NativeSocketHandle TCPClientSocket::nativeHandle()
+{
+    return m_socket;
+}

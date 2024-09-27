@@ -27,7 +27,7 @@ int NetworkConnectionsManager::ManagedSocket::read(char* buffer, int count, Erro
         FD_ZERO(&m_manager.m_read_ready);
         FD_ZERO(&m_manager.m_write_ready);
         FD_ZERO(&m_manager.m_exception);
-        FD_SET(m_socket.m_socket, &m_manager.m_read_ready);
+        FD_SET(m_socket.nativeHandle(), &m_manager.m_read_ready);
     }
     return n;
 }
@@ -78,8 +78,8 @@ void NetworkConnectionsManager::connect(IPv4Address address, Port port, Connecti
         {
             // TODO
             int errrr = 0;
-            FD_SET(socket.m_socket, &m_write_ready);
-            FD_SET(socket.m_socket, &m_exception);
+            FD_SET(socket.nativeHandle(), &m_write_ready);
+            FD_SET(socket.nativeHandle(), &m_exception);
         }
     }
 
@@ -103,12 +103,12 @@ void NetworkConnectionsManager::run()
     int ret = select(-1, &m_read_ready, &m_write_ready, &m_exception, &stTimeOut);
 
     // TODO: check for ret error
-    if (FD_ISSET(socket.m_socket.m_socket, &m_write_ready))
+    if (FD_ISSET(socket.m_socket.nativeHandle(), &m_write_ready))
     {
         // TODO: can't assume the socket index is 0
         callbacks.onConnectionEstablished(m_managed_sockets[0]);
     }
-    if (FD_ISSET(socket.m_socket.m_socket, &m_read_ready))
+    if (FD_ISSET(socket.m_socket.nativeHandle(), &m_read_ready))
     {
         // TODO: can't assume the socket index is 0
         callbacks.onReadReady();
