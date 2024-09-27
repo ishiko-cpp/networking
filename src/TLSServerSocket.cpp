@@ -1,8 +1,5 @@
-/*
-    Copyright (c) 2022 Xavier Leclercq
-    Released under the MIT License
-    See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
-*/
+// SPDX-FileCopyrightText: 2021-2024 Xavier Leclercq
+// SPDX-License-Identifier: BSL-1.0
 
 #include "TLSServerSocket.hpp"
 
@@ -10,7 +7,8 @@ using namespace Ishiko;
 
 TLSServerSocket::TLSServerSocket(IPv4Address address, Port port, std::string keyPath, std::string certificatePath,
     Error& error) noexcept
-    : m_socket(address, port, error), m_keyPath(std::move(keyPath)), m_certificatePath(std::move(certificatePath))
+    : m_socket(address, port, SocketOption::none, error), m_keyPath(std::move(keyPath)),
+    m_certificatePath(std::move(certificatePath))
 {
 }
 
