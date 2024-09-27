@@ -14,6 +14,7 @@
 #include "Networking/NetworkingErrorCategory.hpp"
 #include "Networking/NetworkingLibraryInitialization.hpp"
 #include "Networking/Port.hpp"
+#include "Networking/SocketOption.hpp"
 #include "Networking/TCPAcceptor.hpp"
 #include "Networking/TCPClientSocket.hpp"
 #include "Networking/TCPConnector.hpp"

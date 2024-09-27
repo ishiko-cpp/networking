@@ -1,8 +1,5 @@
-/*
-    Copyright (c) 2021-2022 Xavier Leclercq
-    Released under the MIT License
-    See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
-*/
+// SPDX-FileCopyrightText: 2021-2024 Xavier Leclercq
+// SPDX-License-Identifier: BSL-1.0
 
 #include "TCPClientSocketTests.hpp"
 #include "Ishiko/Networking/TCPClientSocket.hpp"
@@ -106,7 +103,7 @@ void TCPClientSocketTests::WriteTest1(Test& test)
         [&buffer]()
         {
             Error error;
-            TCPServerSocket socket(IPv4Address::Localhost(), 8685, error);
+            TCPServerSocket socket(IPv4Address::Localhost(), 8685, SocketOption::none, error);
             TCPClientSocket clientSocket = socket.accept(error);
 
             // This will also make sure the server stays alive until the client writes the data
@@ -162,7 +159,7 @@ void TCPClientSocketTests::ReadTest1(Test& test)
         []()
         {
             Error error;
-            TCPServerSocket socket(IPv4Address::Localhost(), 8686, error);
+            TCPServerSocket socket(IPv4Address::Localhost(), 8686, SocketOption::none, error);
             TCPClientSocket clientSocket = socket.accept(error);
             clientSocket.write("a", 1, error);
         }
@@ -205,7 +202,7 @@ void TCPClientSocketTests::CloseTest1(Test& test)
         []()
         {
             Error error;
-            TCPServerSocket socket(IPv4Address::Localhost(), 8687, error);
+            TCPServerSocket socket(IPv4Address::Localhost(), 8687, SocketOption::none, error);
             TCPClientSocket clientSocket = socket.accept(error);
 
             // This will also make sure the server stays alive until the client closes the connection
@@ -261,7 +258,7 @@ void TCPClientSocketTests::ShutdownTest1(Test& test)
         []()
     {
         Error error;
-        TCPServerSocket socket(IPv4Address::Localhost(), 8687, error);
+        TCPServerSocket socket(IPv4Address::Localhost(), 8687, SocketOption::none, error);
         TCPClientSocket clientSocket = socket.accept(error);
 
         // This will also make sure the server stays alive until the client closes the connection

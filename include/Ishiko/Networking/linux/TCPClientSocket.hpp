@@ -9,6 +9,7 @@
 
 #include "../IPv4Address.hpp"
 #include "../Port.hpp"
+#include "../SocketOption.hpp"
 #include <Ishiko/Errors.hpp>
 #include <Ishiko/Memory.hpp>
 

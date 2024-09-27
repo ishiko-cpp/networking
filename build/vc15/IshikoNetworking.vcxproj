@@ -179,6 +179,7 @@
     <ClInclude Include="..\..\include\Ishiko\Networking\NetworkingErrorCategory.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\NetworkingLibraryInitialization.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\Port.hpp" />
+    <ClInclude Include="..\..\include\Ishiko\Networking\SocketOption.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\TCPAcceptor.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\TCPClientSocket.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\TCPConnector.hpp" />
@@ -190,6 +191,7 @@
     <ClInclude Include="..\..\include\Ishiko\Networking\windows\HostnameResolver.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\windows\NativeSocketHandle.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\windows\NetworkingLibraryInitialization.hpp" />
+    <ClInclude Include="..\..\include\Ishiko\Networking\windows\SocketOption.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\windows\TCPClientSocket.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\windows\TCPServerSocket.hpp" />
   </ItemGroup>
