@@ -11,7 +11,7 @@ NetworkingErrorCategory::Value NetworkingUtilities::ConvertNativeSocketError(Nat
     {
     case EAGAIN:
         static_assert(EWOULDBLOCK == EAGAIN,
-            "NetworkingUtilities::ConvertNativeSocketError assumes EWOULDBLOCK == EAGAIN")
+            "NetworkingUtilities::ConvertNativeSocketError assumes EWOULDBLOCK == EAGAIN");
         return NetworkingErrorCategory::Value::would_block;
 
     default:
