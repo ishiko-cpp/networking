@@ -1,8 +1,5 @@
-/*
-    Copyright (c) 2021-2024 Xavier Leclercq
-    Released under the MIT License
-    See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
-*/
+// SPDX-FileCopyrightText: 2021-2024 Xavier Leclercq
+// SPDX-License-Identifier: BSL-1.0
 
 #include "linux/TCPClientSocket.hpp"
 #include "NetworkingErrorCategory.hpp"
@@ -179,4 +176,9 @@ Port TCPClientSocket::getPeerPort(Error& error) const
     }
 
     return Port(ntohs(boundAddress.sin_port));
+}
+
+NativeSocketHandle TCPClientSocket::nativeHandle()
+{
+    return m_socket;
 }
