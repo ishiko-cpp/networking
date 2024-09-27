@@ -11,6 +11,7 @@ namespace Ishiko
     public:
         enum Value
         {
+            none = 0x0,
             non_blocking = 0x1
         };
     };

@@ -13,6 +13,7 @@ namespace Ishiko
     public:
         enum Value
         {
+            none = 0,
             non_blocking = O_NONBLOCK
         };
     };
