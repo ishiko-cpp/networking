@@ -64,7 +64,7 @@ void NetworkConnectionsManager::connect(IPv4Address address, Port port, Connecti
     // TODO: this should all be asynchronous
     // TODO: proper error handling
     // TODO: needs to be marked non-blocking
-    TCPClientSocket socket(error);
+    TCPClientSocket socket(SocketOption::non_blocking, error);
     if (error)
     {
         return;

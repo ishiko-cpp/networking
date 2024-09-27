@@ -9,7 +9,7 @@
 
 using namespace Ishiko;
 
-TCPClientSocket::TCPClientSocket(Error& error) noexcept
+TCPClientSocket::TCPClientSocket(int socket_options, Error& error) noexcept
 {
     m_socket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
     if (m_socket == INVALID_SOCKET)
@@ -17,8 +17,15 @@ TCPClientSocket::TCPClientSocket(Error& error) noexcept
         // TODO: more detailed error
         Fail(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__, error);
     }
-    u_long mode = 1;  // 1 to enable non-blocking socket
-    ioctlsocket(m_socket, FIONBIO, &mode);
+    if (socket_options != SocketOption::none)
+    {
+        u_long mode = socket_options;
+        if (ioctlsocket(m_socket, FIONBIO, &mode) == SOCKET_ERROR)
+        {
+            // TODO: more detailed error
+            Fail(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__, error);
+        }
+    }
 }
 
 TCPClientSocket::TCPClientSocket(SOCKET socket) noexcept

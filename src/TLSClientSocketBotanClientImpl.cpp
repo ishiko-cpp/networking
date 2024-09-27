@@ -1,8 +1,5 @@
-/*
-    Copyright (c) 2022 Xavier Leclercq
-    Released under the MIT License
-    See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
-*/
+// SPDX-FileCopyrightText: 2021-2024 Xavier Leclercq
+// SPDX-License-Identifier: BSL-1.0
 
 #include "TLSClientSocketBotanClientImpl.hpp"
 #include <botan/x509path.h>
@@ -10,7 +7,7 @@
 using namespace Ishiko;
 
 TLSClientSocketBotanClientImpl::TLSClientSocketBotanClientImpl(Error& error) noexcept
-    : m_socket(error), m_botanTLSCallbacks(m_socket, m_buffer), m_sessionManager(m_rng)
+    : m_socket(SocketOption::none, error), m_botanTLSCallbacks(m_socket, m_buffer), m_sessionManager(m_rng)
 {
 }
 
