@@ -1,8 +1,5 @@
-/*
-    Copyright (c) 2021-2022 Xavier Leclercq
-    Released under the MIT License
-    See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
-*/
+// SPDX-FileCopyrightText: 2021-2024 Xavier Leclercq
+// SPDX-License-Identifier: BSL-1.0
 
 #include "TCPServerSocketTests.hpp"
 #include "Ishiko/Networking/TCPClientSocket.hpp"
@@ -38,7 +35,7 @@ void TCPServerSocketTests::ConstructorTest1(Test& test)
 void TCPServerSocketTests::ConstructorTest2(Test& test)
 {
     Error error;
-    TCPServerSocket socket(IPv4Address::Localhost(), 8585, error);
+    TCPServerSocket socket(IPv4Address::Localhost(), 8585, SocketOption::none, error);
 
     ISHIKO_TEST_FAIL_IF(error);
     ISHIKO_TEST_ABORT_IF_NOT(socket.ipAddress().isIPv4());
@@ -50,7 +47,7 @@ void TCPServerSocketTests::ConstructorTest2(Test& test)
 void TCPServerSocketTests::ConstructorTest3(Test& test)
 {
     Error error;
-    TCPServerSocket socket(TCPServerSocket::AllInterfaces, TCPServerSocket::AnyPort, error);
+    TCPServerSocket socket(TCPServerSocket::AllInterfaces, TCPServerSocket::AnyPort, SocketOption::none, error);
 
     ISHIKO_TEST_FAIL_IF(error);
     ISHIKO_TEST_ABORT_IF_NOT(socket.ipAddress().isIPv4());
@@ -63,7 +60,7 @@ void TCPServerSocketTests::ConstructorTest3(Test& test)
 void TCPServerSocketTests::ConstructorTest4(Test& test)
 {
     Error error;
-    TCPServerSocket socket(TCPServerSocket::AllInterfaces, TCPServerSocket::AnyPort, error);
+    TCPServerSocket socket(TCPServerSocket::AllInterfaces, TCPServerSocket::AnyPort, SocketOption::none, error);
 
     TCPServerSocket movedSocket = std::move(socket);
 
@@ -108,7 +105,7 @@ void TCPServerSocketTests::AcceptTest1(Test& test)
 void TCPServerSocketTests::AcceptTest2(Test& test)
 {
     Error error;
-    TCPServerSocket socket(IPv4Address::Localhost(), TCPServerSocket::AnyPort, error);
+    TCPServerSocket socket(IPv4Address::Localhost(), TCPServerSocket::AnyPort, SocketOption::none, error);
 
     ISHIKO_TEST_ABORT_IF(error);
 
@@ -133,7 +130,7 @@ void TCPServerSocketTests::AcceptTest2(Test& test)
 void TCPServerSocketTests::CloseTest1(Test& test)
 {
     Error error;
-    TCPServerSocket socket(IPv4Address::Localhost(), TCPServerSocket::AnyPort, error);
+    TCPServerSocket socket(IPv4Address::Localhost(), TCPServerSocket::AnyPort, SocketOption::none, error);
 
     ISHIKO_TEST_ABORT_IF(error);
 
@@ -159,7 +156,7 @@ void TCPServerSocketTests::CloseTest1(Test& test)
 void TCPServerSocketTests::CloseTest2(Test& test)
 {
     Error error;
-    TCPServerSocket socket(IPv4Address::Localhost(), TCPServerSocket::AnyPort, error);
+    TCPServerSocket socket(IPv4Address::Localhost(), TCPServerSocket::AnyPort, SocketOption::none, error);
 
     ISHIKO_TEST_ABORT_IF(error);
 
