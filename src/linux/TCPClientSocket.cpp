@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: BSL-1.0
 
 #include "linux/TCPClientSocket.hpp"
+#include "NativeSocketError.hpp"
 #include "NetworkingErrorCategory.hpp"
 #include <netinet/in.h>
 #include <sys/socket.h>
@@ -47,9 +48,9 @@ void TCPClientSocket::connect(IPv4Address address, Port port, Error& error)
     int err = ::connect(m_socket, reinterpret_cast<sockaddr*>(&linuxAddress), sizeof(linuxAddress));
     if (err == -1)
     {
-        // TODO: more detailed error
-        Fail(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__, error);
-        return;
+        NativeSocketError native_error{errno};
+        // TODO: what should be the message here?
+        Fail(native_error, "", __FILE__, __LINE__, error);
     }
 }
 
