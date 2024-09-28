@@ -39,6 +39,7 @@ library IshikoNetworking : IshikoText, IshikoMemory, IshikoErrors, IshikoBasePla
     headers
     {
         ../../include/Ishiko/Networking.hpp
+        ../../include/Ishiko/Networking/Hostname.hpp
         ../../include/Ishiko/Networking/HostnameResolver.hpp
         ../../include/Ishiko/Networking/IPAddress.hpp
         ../../include/Ishiko/Networking/IPv4Address.hpp
@@ -65,6 +66,7 @@ library IshikoNetworking : IshikoText, IshikoMemory, IshikoErrors, IshikoBasePla
 
     sources
     {
+        ../../src/Hostname.cpp
         ../../src/IPAddress.cpp
         ../../src/IPv4Address.cpp
         ../../src/IPv6Address.cpp

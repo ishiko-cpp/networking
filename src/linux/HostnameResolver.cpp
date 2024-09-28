@@ -1,8 +1,5 @@
-/*
-    Copyright (c) 2022 Xavier Leclercq
-    Released under the MIT License
-    See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
-*/
+// SPDX-FileCopyrightText: 2021-2024 Xavier Leclercq
+// SPDX-License-Identifier: BSL-1.0
 
 #include "linux/HostnameResolver.hpp"
 #include "NetworkingErrorCategory.hpp"
@@ -12,6 +9,11 @@
 #include <cstring>
 
 using namespace Ishiko;
+
+void HostnameResolver::resolve(const Hostname& name, std::vector<IPv4Address>& addresses, Error& error)
+{
+    return resolve(name, addresses, error);
+}
 
 void HostnameResolver::resolve(const std::string& name, std::vector<IPv4Address>& addresses, Error& error)
 {

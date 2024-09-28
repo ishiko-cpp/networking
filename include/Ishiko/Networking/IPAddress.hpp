@@ -1,8 +1,5 @@
-/*
-    Copyright (c) 2021-2022 Xavier Leclercq
-    Released under the MIT License
-    See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
-*/
+// SPDX-FileCopyrightText: 2021-2024 Xavier Leclercq
+// SPDX-License-Identifier: BSL-1.0
 
 #ifndef GUARD_ISHIKO_CPP_NETWORKING_IPADDRESS_HPP
 #define GUARD_ISHIKO_CPP_NETWORKING_IPADDRESS_HPP
@@ -13,24 +10,22 @@
 
 namespace Ishiko
 {
+    class IPAddress
+    {
+    public:
+        IPAddress();
+        IPAddress(IPv4Address address);
+        IPAddress(IPv6Address address);
 
-class IPAddress
-{
-public:
-    IPAddress();
-    IPAddress(IPv4Address address);
-    IPAddress(IPv6Address address);
+        bool isIPv4() const noexcept;
+        bool isIPv6() const noexcept;
 
-    bool isIPv4() const noexcept;
-    bool isIPv6() const noexcept;
+        const IPv4Address& asIPv4Address() const;
+        const IPv6Address& asIPv6Address() const;
 
-    const IPv4Address& asIPv4Address() const;
-    const IPv6Address& asIPv6Address() const;
-
-private:
-    boost::variant<IPv4Address, IPv6Address> m_address;
-};
-
+    private:
+        boost::variant<IPv4Address, IPv6Address> m_address;
+    };
 }
 
 #endif
