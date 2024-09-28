@@ -1,8 +1,5 @@
-/*
-    Copyright (c) 2021-2023 Xavier Leclercq
-    Released under the MIT License
-    See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
-*/
+// SPDX-FileCopyrightText: 2021-2024 Xavier Leclercq
+// SPDX-License-Identifier: BSL-1.0
 
 #ifndef _ISHIKO_CPP_NETWORKING_IPV4ADDRESS_HPP_
 #define _ISHIKO_CPP_NETWORKING_IPV4ADDRESS_HPP_
