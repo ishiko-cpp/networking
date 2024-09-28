@@ -10,7 +10,7 @@
 #include <Ishiko/Errors.hpp>
 #include <Ishiko/Memory.hpp>
 #include <boost/utility/string_view.hpp>
-#include <map>
+#include <set>
 #include <utility>
 #include <vector>
 
@@ -63,7 +63,6 @@ namespace Ishiko
         void run();
 
     private:
-        // TODO: can we get rid of this forward declaration
         class ManagedSocketImpl;
 
         // TODO: the things that are shared between the manager and the sockets
@@ -71,13 +70,13 @@ namespace Ishiko
         class SharedState
         {
         public:
-            void setWaitingForRead(NativeSocketHandle socket, ManagedSocketImpl& callbacks);
-            void setWaitingForWrite(NativeSocketHandle socket, ManagedSocketImpl& callbacks);
-            void setWaitingForException(NativeSocketHandle socket, ManagedSocketImpl& callbacks);
+            void setWaitingForRead(ManagedSocketImpl& callbacks);
+            void setWaitingForWrite(ManagedSocketImpl& callbacks);
+            void setWaitingForException(ManagedSocketImpl& callbacks);
 
-            std::map<NativeSocketHandle, ManagedSocketImpl*> m_waiting_for_read;
-            std::map<NativeSocketHandle, ManagedSocketImpl*> m_waiting_for_write;
-            std::map<NativeSocketHandle, ManagedSocketImpl*> m_waiting_for_exception;
+            std::set<ManagedSocketImpl*> m_waiting_for_read;
+            std::set<ManagedSocketImpl*> m_waiting_for_write;
+            std::set<ManagedSocketImpl*> m_waiting_for_exception;
         };
 
         class ManagedSocketImpl : public ManagedSocket
@@ -94,6 +93,8 @@ namespace Ishiko
             void close() override;
 
             void callback();
+
+            TCPClientSocket& socket();
 
         private:
             enum class State
