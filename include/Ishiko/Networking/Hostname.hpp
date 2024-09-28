@@ -11,8 +11,8 @@ namespace Ishiko
     class Hostname
     {
     public:
-        Hostname(const char* hostname);
-        Hostname(std::string&& hostname);
+        explicit Hostname(const char* hostname);
+        explicit Hostname(std::string&& hostname);
 
         const std::string& asString() const;
 
