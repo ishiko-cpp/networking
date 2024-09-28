@@ -4,6 +4,7 @@
 #ifndef GUARD_ISHIKO_CPP_NETWORKING_LINUX_HOSTNAMERESOLVER_HPP
 #define GUARD_ISHIKO_CPP_NETWORKING_LINUX_HOSTNAMERESOLVER_HPP
 
+#include "../Hostname.hpp"
 #include "../IPv4Address.hpp"
 #include <Ishiko/Errors.hpp>
 #include <string>
