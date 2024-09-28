@@ -15,30 +15,16 @@ NetworkConnectionsManager::NetworkConnectionsManager()
 
 void NetworkConnectionsManager::connect(IPv4Address address, Port port, ConnectionCallbacks& callbacks, Error& error)
 {
-    // TODO: this should all be asynchronous
-    // TODO: proper error handling
     TCPClientSocket socket(SocketOption::non_blocking, error);
     if (error)
     {
         return;
     }
 
-    socket.connect(address, port, error);
-    if (error)
-    {
-        if (error.code() == NetworkingErrorCategory::Value::would_block)
-        {
-            // TODO: improve this, expecially the crap with .back()
-            NativeSocketHandle handle = socket.nativeHandle();
-            m_managed_sockets.emplace_back(m_shared_state, std::move(socket), callbacks);
-            m_shared_state.setWaitingForWrite(&m_managed_sockets.back());
-            m_shared_state.setWaitingForException(&m_managed_sockets.back());
-        }
-    }
-
-    // TODO: what if no error? Then we need to make sure callback is called is called.
-
-    //m_managed_sockets.emplace_back(*this, std::move(socket), callbacks);
+    // TODO: can throw
+    // TODO: not thread-safe
+    m_managed_sockets.emplace_back(m_shared_state, std::move(socket), callbacks);
+    m_managed_sockets.back().connect(address, port);
 }
 
 void NetworkConnectionsManager::run()
@@ -138,6 +124,23 @@ NetworkConnectionsManager::ManagedSocketImpl::ManagedSocketImpl(SharedState& sha
 {
 }
 
+void NetworkConnectionsManager::ManagedSocketImpl::connect(IPv4Address address, Port port)
+{
+    // TODO: error handling
+    Error error;
+
+    m_socket.connect(address, port, error);
+    if (error)
+    {
+        if (error.code() == NetworkingErrorCategory::Value::would_block)
+        {
+            // TODO: not sure but this may cause a race condition with run() since state and the call are separate steps
+            m_shared_state.setWaitingForWrite(this);
+            m_shared_state.setWaitingForException(this);
+        }
+    }
+}
+
 int NetworkConnectionsManager::ManagedSocketImpl::read(ByteBuffer& buffer, size_t count, Error& error)
 {
     int n = m_socket.read(buffer, count, error);
@@ -195,6 +198,7 @@ void NetworkConnectionsManager::ManagedSocketImpl::close()
 
 void NetworkConnectionsManager::ManagedSocketImpl::callback()
 {
+    // TODO: need to cacth any exceptions here
     switch (m_state)
     {
     case State::waiting_for_connection:

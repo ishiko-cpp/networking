@@ -72,6 +72,8 @@ namespace Ishiko
         public:
             ManagedSocketImpl(SharedState& shared_state, TCPClientSocket&& socket, ConnectionCallbacks& callbacks);
 
+            void connect(IPv4Address address, Port port);
+
             int read(ByteBuffer& buffer, size_t count, Error& error) override;
             int read(char* buffer, int count, Error& error) override;
 
