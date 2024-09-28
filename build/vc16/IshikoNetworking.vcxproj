@@ -150,6 +150,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\Hostname.cpp" />
     <ClCompile Include="..\..\src\IPAddress.cpp" />
     <ClCompile Include="..\..\src\IPv4Address.cpp" />
     <ClCompile Include="..\..\src\IPv6Address.cpp" />
@@ -170,6 +171,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\Ishiko\Networking.hpp" />
+    <ClInclude Include="..\..\include\Ishiko\Networking\Hostname.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\HostnameResolver.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\IPAddress.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\IPv4Address.hpp" />
