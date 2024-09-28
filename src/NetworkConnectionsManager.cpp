@@ -31,8 +31,8 @@ void NetworkConnectionsManager::connect(IPv4Address address, Port port, Connecti
             // TODO: improve this, expecially the crap with .back()
             NativeSocketHandle handle = socket.nativeHandle();
             m_managed_sockets.emplace_back(m_shared_state, std::move(socket), callbacks);
-            m_shared_state.setWaitingForWrite(m_managed_sockets.back());
-            m_shared_state.setWaitingForException(m_managed_sockets.back());
+            m_shared_state.setWaitingForWrite(&m_managed_sockets.back());
+            m_shared_state.setWaitingForException(&m_managed_sockets.back());
         }
     }
 
@@ -116,24 +116,25 @@ void NetworkConnectionsManager::run()
     }
 }
 
-void NetworkConnectionsManager::SharedState::setWaitingForRead(ManagedSocketImpl& callbacks)
+void NetworkConnectionsManager::SharedState::setWaitingForRead(ManagedSocketImpl* managed_socket)
 {
-    m_waiting_for_read.insert(&callbacks);
+    m_waiting_for_read.insert(managed_socket);
 }
 
-void NetworkConnectionsManager::SharedState::setWaitingForWrite(ManagedSocketImpl& callbacks)
+void NetworkConnectionsManager::SharedState::setWaitingForWrite(ManagedSocketImpl* managed_socket)
 {
-    m_waiting_for_write.insert(&callbacks);
+    m_waiting_for_write.insert(managed_socket);
 }
 
-void NetworkConnectionsManager::SharedState::setWaitingForException(ManagedSocketImpl& callbacks)
+void NetworkConnectionsManager::SharedState::setWaitingForException(ManagedSocketImpl* managed_socket)
 {
-    m_waiting_for_exception.insert(&callbacks);
+    m_waiting_for_exception.insert(managed_socket);
 }
 
-NetworkConnectionsManager::ManagedSocketImpl::ManagedSocketImpl(SharedState& manager,
+NetworkConnectionsManager::ManagedSocketImpl::ManagedSocketImpl(SharedState& shared_state,
     TCPClientSocket&& socket, ConnectionCallbacks& callbacks)
-    : m_manager{manager}, m_socket{std::move(socket)}, m_callbacks{callbacks}, m_state{State::waiting_for_connection}
+    : m_shared_state{shared_state}, m_socket{std::move(socket)}, m_callbacks{callbacks},
+    m_state{State::waiting_for_connection}
 {
 }
 
@@ -146,7 +147,7 @@ int NetworkConnectionsManager::ManagedSocketImpl::read(ByteBuffer& buffer, size_
         {
             // TODO: not sure but this may cause a race condition with run() since state and the call are separate steps
             m_state = State::waiting_for_read;
-            m_manager.setWaitingForRead(*this);
+            m_shared_state.setWaitingForRead(this);
         }
     }
     return n;
@@ -161,7 +162,7 @@ int NetworkConnectionsManager::ManagedSocketImpl::read(char* buffer, int count, 
         {
             // TODO: not sure but this may cause a race condition with run() since state and the call are separate steps
             m_state = State::waiting_for_read;
-            m_manager.setWaitingForRead(*this);
+            m_shared_state.setWaitingForRead(this);
         }
     }
     return n;
@@ -176,7 +177,7 @@ void NetworkConnectionsManager::ManagedSocketImpl::write(const char* buffer, int
         {
             // TODO: not sure but this may cause a race condition with run() since state and the call are separate steps
             m_state = State::waiting_for_write;
-            m_manager.setWaitingForWrite(*this);
+            m_shared_state.setWaitingForWrite(this);
         }
     }
 }

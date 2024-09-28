@@ -24,9 +24,6 @@ namespace Ishiko
     public:
         // TODO: find a better name for this, although maybe it's OK?
         // TODO: Need to be able to close and shutdown the connection
-        // TODO: needs to be able to write but what about the read? Because that can be part of events?
-        // TODO: maybe it should simple read from there as well since all I'll get from select is an event saying
-        // there is data to read.
         class ManagedSocket
         {
         public:
@@ -42,17 +39,8 @@ namespace Ishiko
         class ConnectionCallbacks
         {
         public:
-            // TODO: passing a client socket here is wrong. I need something with a tailored interface and certainly not
-            // a connect and close functions.
-            // TODO: this should be useful for the client to check what it is connected to, various other parameters
             virtual void onConnectionEstablished(ManagedSocket& socket) = 0;
-
             virtual void onReadReady() = 0;
-
-            // TODO: a better name for this. A client should just try to write on the socket and if it gets an error
-            // that the call would be blocking then wait for this event. Note that as usual a client must also be ready
-            // for partial writes but in the case of a partial write he can then immediately try to write the rest (but
-            // probably then with a higher probability of a would block error).
             virtual void onWriteReady() = 0;
         };
 
@@ -70,9 +58,9 @@ namespace Ishiko
         class SharedState
         {
         public:
-            void setWaitingForRead(ManagedSocketImpl& callbacks);
-            void setWaitingForWrite(ManagedSocketImpl& callbacks);
-            void setWaitingForException(ManagedSocketImpl& callbacks);
+            void setWaitingForRead(ManagedSocketImpl* managed_socket);
+            void setWaitingForWrite(ManagedSocketImpl* managed_socket);
+            void setWaitingForException(ManagedSocketImpl* managed_socket);
 
             std::set<ManagedSocketImpl*> m_waiting_for_read;
             std::set<ManagedSocketImpl*> m_waiting_for_write;
@@ -82,7 +70,7 @@ namespace Ishiko
         class ManagedSocketImpl : public ManagedSocket
         {
         public:
-            ManagedSocketImpl(SharedState& manager, TCPClientSocket&& socket, ConnectionCallbacks& callbacks);
+            ManagedSocketImpl(SharedState& shared_state, TCPClientSocket&& socket, ConnectionCallbacks& callbacks);
 
             int read(ByteBuffer& buffer, size_t count, Error& error) override;
             int read(char* buffer, int count, Error& error) override;
@@ -103,17 +91,14 @@ namespace Ishiko
                 waiting_for_read,
                 waiting_for_write
             };
-            SharedState& m_manager;
+            SharedState& m_shared_state;
             TCPClientSocket m_socket;
             ConnectionCallbacks& m_callbacks;
             State m_state;
         };
 
-        // TODO: remove
-        Error m_temp_hack_todo;
-        // TODO: replace this with stable collection, maybe a colony? Unless I make the clients of this class agnostic
-        // of the actual memory location which is probably what I need to do as I don't really want to give them access
-        // to the sockets but I more narrow interface.
+        // TODO: replace this with stable collection, maybe a hive? Unless I make the clients of this class agnostic
+        // of the actual memory location.
         std::vector<ManagedSocketImpl> m_managed_sockets;
         SharedState m_shared_state;
     };
