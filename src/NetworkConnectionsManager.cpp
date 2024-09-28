@@ -29,9 +29,9 @@ void NetworkConnectionsManager::connect(IPv4Address address, Port port, Connecti
         if (error.code() == NetworkingErrorCategory::Value::would_block)
         {
             NativeSocketHandle handle = socket.nativeHandle();
-            m_managed_sockets.emplace_back(*this, std::move(socket), callbacks);
-            setWaitingForWrite(handle, m_managed_sockets.back());
-            setWaitingForException(handle, m_managed_sockets.back());
+            m_managed_sockets.emplace_back(m_shared_state, std::move(socket), callbacks);
+            m_shared_state.setWaitingForWrite(handle, m_managed_sockets.back());
+            m_shared_state.setWaitingForException(handle, m_managed_sockets.back());
         }
     }
 
@@ -115,24 +115,24 @@ void NetworkConnectionsManager::run()
     }
 }
 
-void NetworkConnectionsManager::setWaitingForRead(NativeSocketHandle socket, ManagedSocketImpl& callbacks)
+void NetworkConnectionsManager::SharedState::setWaitingForRead(NativeSocketHandle socket, ManagedSocketImpl& callbacks)
 {
-    m_shared_state.m_waiting_for_read[socket] = &callbacks;
+    m_waiting_for_read[socket] = &callbacks;
 }
 
-void NetworkConnectionsManager::setWaitingForWrite(NativeSocketHandle socket, ManagedSocketImpl& callbacks)
+void NetworkConnectionsManager::SharedState::setWaitingForWrite(NativeSocketHandle socket, ManagedSocketImpl& callbacks)
 {
-    m_shared_state.m_waiting_for_write[socket] = &callbacks;
+    m_waiting_for_write[socket] = &callbacks;
 }
 
-void NetworkConnectionsManager::setWaitingForException(NativeSocketHandle socket, ManagedSocketImpl& callbacks)
+void NetworkConnectionsManager::SharedState::setWaitingForException(NativeSocketHandle socket, ManagedSocketImpl& callbacks)
 {
-    m_shared_state.m_waiting_for_exception[socket] = &callbacks;
+    m_waiting_for_exception[socket] = &callbacks;
 }
 
-NetworkConnectionsManager::ManagedSocketImpl::ManagedSocketImpl(NetworkConnectionsManager& manager,
+NetworkConnectionsManager::ManagedSocketImpl::ManagedSocketImpl(SharedState& manager,
     TCPClientSocket&& socket, ConnectionCallbacks& callbacks)
-    : m_manager{ manager }, m_socket{ std::move(socket) }, m_callbacks{ callbacks }, m_state{ State::waiting_for_connection }
+    : m_manager{manager}, m_socket{std::move(socket)}, m_callbacks{callbacks}, m_state{State::waiting_for_connection}
 {
 }
 

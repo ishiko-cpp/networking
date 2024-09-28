@@ -66,22 +66,15 @@ namespace Ishiko
         // TODO: can we get rid of this forward declaration
         class ManagedSocketImpl;
 
-    public:
-        // TODO: how do I hide this from public interface?
-        void setWaitingForRead(NativeSocketHandle socket, ManagedSocketImpl& callbacks);
-
-        // TODO: how do I hide this from public interface?
-        void setWaitingForWrite(NativeSocketHandle socket, ManagedSocketImpl& callbacks);
-
-        // TODO: how do I hide this from public interface?
-        void setWaitingForException(NativeSocketHandle socket, ManagedSocketImpl& callbacks);
-
-    private:
         // TODO: the things that are shared between the manager and the sockets
         // TODO: this is an experiment: can I isolate everything that may suffer data races
         class SharedState
         {
         public:
+            void setWaitingForRead(NativeSocketHandle socket, ManagedSocketImpl& callbacks);
+            void setWaitingForWrite(NativeSocketHandle socket, ManagedSocketImpl& callbacks);
+            void setWaitingForException(NativeSocketHandle socket, ManagedSocketImpl& callbacks);
+
             std::map<NativeSocketHandle, ManagedSocketImpl*> m_waiting_for_read;
             std::map<NativeSocketHandle, ManagedSocketImpl*> m_waiting_for_write;
             std::map<NativeSocketHandle, ManagedSocketImpl*> m_waiting_for_exception;
@@ -90,7 +83,7 @@ namespace Ishiko
         class ManagedSocketImpl : public ManagedSocket
         {
         public:
-            ManagedSocketImpl(NetworkConnectionsManager& manager, TCPClientSocket&& socket, ConnectionCallbacks& callbacks);
+            ManagedSocketImpl(SharedState& manager, TCPClientSocket&& socket, ConnectionCallbacks& callbacks);
 
             int read(ByteBuffer& buffer, size_t count, Error& error) override;
             int read(char* buffer, int count, Error& error) override;
@@ -109,7 +102,7 @@ namespace Ishiko
                 waiting_for_read,
                 waiting_for_write
             };
-            NetworkConnectionsManager& m_manager;
+            SharedState& m_manager;
             TCPClientSocket m_socket;
             ConnectionCallbacks& m_callbacks;
             State m_state;
