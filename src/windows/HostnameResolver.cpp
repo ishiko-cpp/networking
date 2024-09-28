@@ -9,7 +9,7 @@ using namespace Ishiko;
 
 void HostnameResolver::resolve(const Hostname& name, std::vector<IPv4Address>& addresses, Error& error)
 {
-    return resolve(name, addresses, error);
+    return resolve(name.asString(), addresses, error);
 }
 
 void HostnameResolver::resolve(const std::string& name, std::vector<IPv4Address>& addresses, Error& error)
