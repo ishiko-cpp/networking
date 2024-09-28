@@ -10,6 +10,7 @@
 #include <Ishiko/Errors.hpp>
 #include <Ishiko/Memory.hpp>
 #include <boost/utility/string_view.hpp>
+#include <set>
 #include <utility>
 #include <vector>
 
@@ -23,42 +24,23 @@ namespace Ishiko
     public:
         // TODO: find a better name for this, although maybe it's OK?
         // TODO: Need to be able to close and shutdown the connection
-        // TODO: needs to be able to write but what about the read? Because that can be part of events?
-        // TODO: maybe it should simple read from there as well since all I'll get from select is an event saying
-        // there is data to read.
         class ManagedSocket
         {
         public:
-            ManagedSocket(NetworkConnectionsManager& manager, TCPClientSocket&& socket);
+            virtual int read(ByteBuffer& buffer, size_t count, Error& error) = 0;
+            virtual int read(char* buffer, int count, Error& error) = 0;
 
-            int read(ByteBuffer& buffer, size_t count, Error& error);
-            int read(char* buffer, int count, Error& error);
+            virtual void write(const char* buffer, int count, Error& error) = 0;
 
-            void write(const char* buffer, int count, Error& error);
-
-            void shutdown(Error& error);
-            void close();
-
-        public:
-            // TODO: back to private
-            NetworkConnectionsManager& m_manager;
-            TCPClientSocket m_socket;
+            virtual void shutdown(Error& error) = 0;
+            virtual void close() = 0;
         };
 
         class ConnectionCallbacks
         {
         public:
-            // TODO: passing a client socket here is wrong. I need something with a tailored interface and certainly not
-            // a connect and close functions.
-            // TODO: this should be useful for the client to check what it is connected to, various other parameters
             virtual void onConnectionEstablished(ManagedSocket& socket) = 0;
-
             virtual void onReadReady() = 0;
-
-            // TODO: a better name for this. A client should just try to write on the socket and if it gets an error
-            // that the call would be blocking then wait for this event. Note that as usual a client must also be ready
-            // for partial writes but in the case of a partial write he can then immediately try to write the rest (but
-            // probably then with a higher probability of a would block error).
             virtual void onWriteReady() = 0;
         };
 
@@ -69,17 +51,58 @@ namespace Ishiko
         void run();
 
     private:
-        // TODO: remove
-        Error m_temp_hack_todo;
-        // TODO: replace this with stable collection, maybe a colony? Unless I make the clients of this class agnostic
-        // of the actual memory location which is probably what I need to do as I don't really want to give them access
-        // to the sockets but I more narrow interface.
-        std::vector<ManagedSocket> m_managed_sockets;
-        std::vector<ConnectionCallbacks*> m_callbacks;
-    public: // TODO: private
-        fd_set m_read_ready;
-        fd_set m_write_ready;
-        fd_set m_exception;
+        class ManagedSocketImpl;
+
+        // TODO: the things that are shared between the manager and the sockets
+        // TODO: this is an experiment: can I isolate everything that may suffer data races
+        class SharedState
+        {
+        public:
+            void setWaitingForRead(ManagedSocketImpl* managed_socket);
+            void setWaitingForWrite(ManagedSocketImpl* managed_socket);
+            void setWaitingForException(ManagedSocketImpl* managed_socket);
+
+            std::set<ManagedSocketImpl*> m_waiting_for_read;
+            std::set<ManagedSocketImpl*> m_waiting_for_write;
+            std::set<ManagedSocketImpl*> m_waiting_for_exception;
+        };
+
+        class ManagedSocketImpl : public ManagedSocket
+        {
+        public:
+            ManagedSocketImpl(SharedState& shared_state, TCPClientSocket&& socket, ConnectionCallbacks& callbacks);
+
+            void connect(IPv4Address address, Port port);
+
+            int read(ByteBuffer& buffer, size_t count, Error& error) override;
+            int read(char* buffer, int count, Error& error) override;
+
+            void write(const char* buffer, int count, Error& error) override;
+
+            void shutdown(Error& error) override;
+            void close() override;
+
+            void callback();
+
+            TCPClientSocket& socket();
+
+        private:
+            enum class State
+            {
+                waiting_for_connection,
+                waiting_for_read,
+                waiting_for_write
+            };
+            SharedState& m_shared_state;
+            TCPClientSocket m_socket;
+            ConnectionCallbacks& m_callbacks;
+            State m_state;
+        };
+
+        // TODO: replace this with stable collection, maybe a hive? Unless I make the clients of this class agnostic
+        // of the actual memory location.
+        std::vector<ManagedSocketImpl> m_managed_sockets;
+        SharedState m_shared_state;
     };
 }
 
