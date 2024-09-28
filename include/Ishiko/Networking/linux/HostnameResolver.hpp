@@ -1,11 +1,8 @@
-/*
-    Copyright (c) 2022 Xavier Leclercq
-    Released under the MIT License
-    See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
-*/
+// SPDX-FileCopyrightText: 2021-2024 Xavier Leclercq
+// SPDX-License-Identifier: BSL-1.0
 
-#ifndef _ISHIKO_CPP_NETWORKING_LINUX_HOSTNAMERESOLVER_HPP_
-#define _ISHIKO_CPP_NETWORKING_LINUX_HOSTNAMERESOLVER_HPP_
+#ifndef GUARD_ISHIKO_CPP_NETWORKING_LINUX_HOSTNAMERESOLVER_HPP
+#define GUARD_ISHIKO_CPP_NETWORKING_LINUX_HOSTNAMERESOLVER_HPP
 
 #include "../IPv4Address.hpp"
 #include <Ishiko/Errors.hpp>
@@ -14,13 +11,12 @@
 
 namespace Ishiko
 {
-
-class HostnameResolver
-{
-public:
-    void resolve(const std::string& name, std::vector<IPv4Address>& addresses, Error& error);
-};
-
+    class HostnameResolver
+    {
+    public:
+        void resolve(const Hostname& name, std::vector<IPv4Address>& addresses, Error& error);
+        void resolve(const std::string& name, std::vector<IPv4Address>& addresses, Error& error);
+    };
 }
 
 #endif
