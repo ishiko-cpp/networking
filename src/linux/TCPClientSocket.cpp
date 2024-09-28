@@ -61,8 +61,9 @@ int TCPClientSocket::read(ByteBuffer& buffer, size_t count, Error& error)
     int err = recv(m_socket, reinterpret_cast<char*>(buffer.data()), count, 0);
     if (err == -1)
     {
-        // TODO: more detailed error
-        Fail(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__, error);
+        NativeSocketError native_error{errno};
+        // TODO: what should be the message here?
+        Fail(native_error, "", __FILE__, __LINE__, error);
     }
     return err;
 }
@@ -74,8 +75,9 @@ int TCPClientSocket::read(ByteBuffer& buffer, size_t offset, size_t count, Error
     int err = recv(m_socket, reinterpret_cast<char*>(buffer.data() + offset), count, 0);
     if (err == -1)
     {
-        // TODO: more detailed error
-        Fail(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__, error);
+        NativeSocketError native_error{errno};
+        // TODO: what should be the message here?
+        Fail(native_error, "", __FILE__, __LINE__, error);
     }
     return err;
 }
@@ -85,8 +87,9 @@ int TCPClientSocket::read(char* buffer, int count, Error& error)
     int err = recv(m_socket, buffer, count, 0);
     if (err == -1)
     {
-        // TODO: more detailed error
-        Fail(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__, error);
+        NativeSocketError native_error{errno};
+        // TODO: what should be the message here?
+        Fail(native_error, "", __FILE__, __LINE__, error);
     }
     return err;
 }
@@ -96,9 +99,9 @@ void TCPClientSocket::write(const char* buffer, int count, Error& error)
     int err = send(m_socket, buffer, count, 0);
     if (err == -1)
     {
-        // TODO: more detailed error
-        Fail(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__, error);
-        return;
+        NativeSocketError native_error{errno};
+        // TODO: what should be the message here?
+        Fail(native_error, "", __FILE__, __LINE__, error);
     }
 }
 
