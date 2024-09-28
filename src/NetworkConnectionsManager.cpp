@@ -48,21 +48,21 @@ void NetworkConnectionsManager::run()
     {
         fd_set fd_read_ready;
         FD_ZERO(&fd_read_ready);
-        for (const std::pair<NativeSocketHandle, ManagedSocketImpl*>& socket : m_waiting_for_read)
+        for (const std::pair<NativeSocketHandle, ManagedSocketImpl*>& socket : m_shared_state.m_waiting_for_read)
         {
             FD_SET(socket.first, &fd_read_ready);
         }
 
         fd_set fd_write_ready;
         FD_ZERO(&fd_write_ready);
-        for (const std::pair<NativeSocketHandle, ManagedSocketImpl*>& socket : m_waiting_for_write)
+        for (const std::pair<NativeSocketHandle, ManagedSocketImpl*>& socket : m_shared_state.m_waiting_for_write)
         {
             FD_SET(socket.first, &fd_write_ready);
         }
 
         fd_set fd_exception;
         FD_ZERO(&fd_exception);
-        for (const std::pair<NativeSocketHandle, ManagedSocketImpl*>& socket : m_waiting_for_exception)
+        for (const std::pair<NativeSocketHandle, ManagedSocketImpl*>& socket : m_shared_state.m_waiting_for_exception)
         {
             FD_SET(socket.first, &fd_exception);
         }
@@ -74,12 +74,12 @@ void NetworkConnectionsManager::run()
         int ret = select(-1, &fd_read_ready, &fd_write_ready, &fd_exception, &stTimeOut);
         // TODO: check for ret error
 
-        for (std::map<NativeSocketHandle, ManagedSocketImpl*>::iterator it = m_waiting_for_write.begin(); it != m_waiting_for_write.end();)
+        for (std::map<NativeSocketHandle, ManagedSocketImpl*>::iterator it = m_shared_state.m_waiting_for_write.begin(); it != m_shared_state.m_waiting_for_write.end();)
         {
             if (FD_ISSET(it->first, &fd_write_ready))
             {
                 it->second->callback();
-                it = m_waiting_for_write.erase(it);
+                it = m_shared_state.m_waiting_for_write.erase(it);
             }
             else
             {
@@ -87,12 +87,12 @@ void NetworkConnectionsManager::run()
             }
         }
 
-        for (std::map<NativeSocketHandle, ManagedSocketImpl*>::iterator it = m_waiting_for_read.begin(); it != m_waiting_for_read.end();)
+        for (std::map<NativeSocketHandle, ManagedSocketImpl*>::iterator it = m_shared_state.m_waiting_for_read.begin(); it != m_shared_state.m_waiting_for_read.end();)
         {
             if (FD_ISSET(it->first, &fd_read_ready))
             {
                 it->second->callback();
-                it = m_waiting_for_read.erase(it);
+                it = m_shared_state.m_waiting_for_read.erase(it);
             }
             else
             {
@@ -100,12 +100,12 @@ void NetworkConnectionsManager::run()
             }
         }
 
-        for (std::map<NativeSocketHandle, ManagedSocketImpl*>::iterator it = m_waiting_for_exception.begin(); it != m_waiting_for_exception.end();)
+        for (std::map<NativeSocketHandle, ManagedSocketImpl*>::iterator it = m_shared_state.m_waiting_for_exception.begin(); it != m_shared_state.m_waiting_for_exception.end();)
         {
             if (FD_ISSET(it->first, &fd_exception))
             {
                 it->second->callback();
-                it = m_waiting_for_exception.erase(it);
+                it = m_shared_state.m_waiting_for_exception.erase(it);
             }
             else
             {
@@ -117,17 +117,17 @@ void NetworkConnectionsManager::run()
 
 void NetworkConnectionsManager::setWaitingForRead(NativeSocketHandle socket, ManagedSocketImpl& callbacks)
 {
-    m_waiting_for_read[socket] = &callbacks;
+    m_shared_state.m_waiting_for_read[socket] = &callbacks;
 }
 
 void NetworkConnectionsManager::setWaitingForWrite(NativeSocketHandle socket, ManagedSocketImpl& callbacks)
 {
-    m_waiting_for_write[socket] = &callbacks;
+    m_shared_state.m_waiting_for_write[socket] = &callbacks;
 }
 
 void NetworkConnectionsManager::setWaitingForException(NativeSocketHandle socket, ManagedSocketImpl& callbacks)
 {
-    m_waiting_for_exception[socket] = &callbacks;
+    m_shared_state.m_waiting_for_exception[socket] = &callbacks;
 }
 
 NetworkConnectionsManager::ManagedSocketImpl::ManagedSocketImpl(NetworkConnectionsManager& manager,

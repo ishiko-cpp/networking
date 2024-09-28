@@ -77,6 +77,16 @@ namespace Ishiko
         void setWaitingForException(NativeSocketHandle socket, ManagedSocketImpl& callbacks);
 
     private:
+        // TODO: the things that are shared between the manager and the sockets
+        // TODO: this is an experiment: can I isolate everything that may suffer data races
+        class SharedState
+        {
+        public:
+            std::map<NativeSocketHandle, ManagedSocketImpl*> m_waiting_for_read;
+            std::map<NativeSocketHandle, ManagedSocketImpl*> m_waiting_for_write;
+            std::map<NativeSocketHandle, ManagedSocketImpl*> m_waiting_for_exception;
+        };
+
         class ManagedSocketImpl : public ManagedSocket
         {
         public:
@@ -111,9 +121,7 @@ namespace Ishiko
         // of the actual memory location which is probably what I need to do as I don't really want to give them access
         // to the sockets but I more narrow interface.
         std::vector<ManagedSocketImpl> m_managed_sockets;
-        std::map<NativeSocketHandle, ManagedSocketImpl*> m_waiting_for_read;
-        std::map<NativeSocketHandle, ManagedSocketImpl*> m_waiting_for_write;
-        std::map<NativeSocketHandle, ManagedSocketImpl*> m_waiting_for_exception;
+        SharedState m_shared_state;
     };
 }
 
