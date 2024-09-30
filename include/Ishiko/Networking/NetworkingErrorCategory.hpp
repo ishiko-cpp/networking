@@ -16,7 +16,8 @@ public:
     enum class Value
     {
         generic_error = -1,
-        would_block = -2
+        networking_library_not_initialized = -2,
+        would_block = -3,
     };
 
     static const NetworkingErrorCategory& Get() noexcept;

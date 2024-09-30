@@ -1,8 +1,5 @@
-/*
-    Copyright (c) 2022 Xavier Leclercq
-    Released under the MIT License
-    See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
-*/
+// SPDX - FileCopyrightText: 2021 - 2024 Xavier Leclercq
+// SPDX-License-Identifier: BSL-1.0
 
 #include "TLSServerSocketTests.hpp"
 #include "Ishiko/Networking/TLSClientSocket.hpp"
@@ -47,7 +44,7 @@ void TLSServerSocketTests::AcceptTest1(Test& test)
         [listeningPort]()
         {
             Error error;
-            TLSClientSocket clientSocket(error);
+            TLSClientSocket clientSocket(SocketOption::none, error);
             clientSocket.connect(IPv4Address::Localhost(), listeningPort, "example.org", error);
         });
 

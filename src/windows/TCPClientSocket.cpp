@@ -12,8 +12,9 @@ TCPClientSocket::TCPClientSocket(int socket_options, Error& error) noexcept
     m_socket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
     if (m_socket == INVALID_SOCKET)
     {
-        // TODO: more detailed error
-        Fail(NetworkingErrorCategory::Value::generic_error, "", __FILE__, __LINE__, error);
+        NativeSocketError native_error{WSAGetLastError()};
+        // TODO: what should be the message here?
+        Fail(native_error, "", __FILE__, __LINE__, error);
     }
     if (socket_options != SocketOption::none)
     {

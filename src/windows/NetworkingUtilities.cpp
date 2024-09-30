@@ -14,6 +14,9 @@ NetworkingErrorCategory::Value NetworkingUtilities::ConvertNativeSocketError(Nat
     case WSAEWOULDBLOCK:
         return NetworkingErrorCategory::Value::would_block;
 
+    case WSANOTINITIALISED:
+        return NetworkingErrorCategory::Value::networking_library_not_initialized;
+
     default:
         return NetworkingErrorCategory::Value::generic_error;
     }

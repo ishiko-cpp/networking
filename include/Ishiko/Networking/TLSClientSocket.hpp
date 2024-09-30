@@ -1,11 +1,8 @@
-/*
-    Copyright (c) 2022 Xavier Leclercq
-    Released under the MIT License
-    See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
-*/
+// SPDX-FileCopyrightText: 2021-2024 Xavier Leclercq
+// SPDX-License-Identifier: BSL-1.0
 
-#ifndef _ISHIKO_CPP_NETWORKING_TLSCLIENTSOCKET_HPP_
-#define _ISHIKO_CPP_NETWORKING_TLSCLIENTSOCKET_HPP_
+#ifndef GUARD_ISHIKO_CPP_NETWORKING_TLSCLIENTSOCKET_HPP
+#define GUARD_ISHIKO_CPP_NETWORKING_TLSCLIENTSOCKET_HPP
 
 #include "IPv4Address.hpp"
 #include "Port.hpp"
@@ -20,7 +17,7 @@ namespace Ishiko
 class TLSClientSocket
 {
 public:
-    TLSClientSocket(Error& error) noexcept;
+    TLSClientSocket(int socket_options, Error& error) noexcept;
     TLSClientSocket(TCPClientSocket&& socket, const std::string& keyPath, const std::string& certificatePath,
         Error& error) noexcept;
     TLSClientSocket(const TLSClientSocket& other) = delete;
@@ -43,6 +40,14 @@ public:
     IPv4Address getPeerIPAddress(Error& error) const;
     Port getPeerPort(Error& error) const;
 
+    TCPClientSocket& socket();
+
+    // TODO: not sure about this, just a way to know if handshake is finished for now
+    bool isConnected() const;
+
+    // TODO: Not sure about this function, see how everything should fit together
+    void onCallback();
+
 private:
     friend class TLSClientSocketBotanClientImpl;
     friend class TLSClientSocketBotanServerImpl;
@@ -56,6 +61,9 @@ private:
         virtual int read(char* buffer, int length, Error& error) = 0;
         virtual void write(const char* buffer, int length, Error& error) = 0;
         virtual const TCPClientSocket& socket() const noexcept = 0;
+        virtual TCPClientSocket& socket() noexcept = 0;
+        virtual bool isConnected() const = 0;
+        virtual void onCallback() = 0;
     };
 
     std::unique_ptr<Impl> m_impl;

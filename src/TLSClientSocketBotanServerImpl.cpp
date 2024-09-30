@@ -1,8 +1,5 @@
-/*
-    Copyright (c) 2022 Xavier Leclercq
-    Released under the MIT License
-    See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
-*/
+// SPDX-FileCopyrightText: 2021-2024 Xavier Leclercq
+// SPDX-License-Identifier: BSL-1.0
 
 #include "TLSClientSocketBotanServerImpl.hpp"
 #include <botan/certstor_system.h>
@@ -101,6 +98,22 @@ void TLSClientSocketBotanServerImpl::write(const char* buffer, int length, Error
 const TCPClientSocket& TLSClientSocketBotanServerImpl::socket() const noexcept
 {
     return m_socket;
+}
+
+TCPClientSocket& TLSClientSocketBotanServerImpl::socket() noexcept
+{
+    return m_socket;
+}
+
+bool TLSClientSocketBotanServerImpl::isConnected() const
+{
+    // TODO
+    return false;
+}
+
+void TLSClientSocketBotanServerImpl::onCallback()
+{
+    // TODO
 }
 
 TLSClientSocketBotanServerImpl::BotanTLSCallbacks::BotanTLSCallbacks(TCPClientSocket& socket, std::string& buffer)

@@ -1,11 +1,8 @@
-/*
-    Copyright (c) 2022 Xavier Leclercq
-    Released under the MIT License
-    See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
-*/
+// SPDX-FileCopyrightText: 2021-2024 Xavier Leclercq
+// SPDX-License-Identifier: BSL-1.0
 
-#ifndef _ISHIKO_CPP_NETWORKING_TLSCLIENTSOCKETBOTANSERVERIMPL_HPP_
-#define _ISHIKO_CPP_NETWORKING_TLSCLIENTSOCKETBOTANSERVERIMPL_HPP_
+#ifndef GUARD_ISHIKO_CPP_NETWORKING_TLSCLIENTSOCKETBOTANSERVERIMPL_HPP
+#define GUARD_ISHIKO_CPP_NETWORKING_TLSCLIENTSOCKETBOTANSERVERIMPL_HPP
 
 #include "TCPClientSocket.hpp"
 #include "TLSClientSocket.hpp"
@@ -27,6 +24,9 @@ public:
     virtual int read(char* buffer, int length, Error& error) override;
     virtual void write(const char* buffer, int length, Error& error) override;
     const TCPClientSocket& socket() const noexcept override;
+    TCPClientSocket& socket() noexcept override;
+    bool isConnected() const override;
+    void onCallback() override;
 
 private:
     class BotanTLSCallbacks : public Botan::TLS::Callbacks

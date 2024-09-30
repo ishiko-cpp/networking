@@ -1,8 +1,5 @@
-/*
-    Copyright (c) 2022 Xavier Leclercq
-    Released under the MIT License
-    See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
-*/
+// SPDX-FileCopyrightText: 2021-2024 Xavier Leclercq
+// SPDX-License-Identifier: BSL-1.0
 
 #include "TLSClientSocketTests.hpp"
 #include "Ishiko/Networking/TLSClientSocket.hpp"
@@ -22,7 +19,7 @@ TLSClientSocketTests::TLSClientSocketTests(const TestNumber& number, const TestC
 void TLSClientSocketTests::ConstructorTest1(Test& test)
 {
     Error error;
-    TLSClientSocket socket(error);
+    TLSClientSocket socket(SocketOption::none, error);
 
     ISHIKO_TEST_FAIL_IF(error);
     ISHIKO_TEST_PASS();
@@ -50,7 +47,7 @@ void TLSClientSocketTests::WriteTest1(Test& test)
     std::this_thread::sleep_for(std::chrono::seconds(1));
 
     Error error;
-    TLSClientSocket socket(error);
+    TLSClientSocket socket(SocketOption::none, error);
 
     ISHIKO_TEST_FAIL_IF(error);
 
@@ -107,7 +104,7 @@ void TLSClientSocketTests::ReadTest1(Test& test)
     std::this_thread::sleep_for(std::chrono::seconds(1));
     
     Error error;
-    TLSClientSocket socket(error);
+    TLSClientSocket socket(SocketOption::none, error);
 
     ISHIKO_TEST_FAIL_IF(error);
 
