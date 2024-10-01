@@ -31,6 +31,8 @@ public:
     // empty though
     void connect(IPv4Address address, Port port, const std::string& hostname, Error& error) noexcept;
 
+    void handshake(Error& error) noexcept;
+
     // TODO: should length be size_t, same for return value
     int read(char* buffer, int length, Error& error);
     // TODO: always blocking at the moment, if this is non-blocking then would need to return the actual number of
@@ -53,6 +55,7 @@ private:
         virtual ~Impl() = default;
 
         virtual void connect(IPv4Address address, Port port, const std::string& hostname, Error& error) noexcept = 0;
+        virtual void handshake(Error& error) noexcept = 0;
         virtual int read(char* buffer, int length, Error& error) = 0;
         virtual void write(const char* buffer, int length, Error& error) = 0;
         virtual const TCPClientSocket& socket() const noexcept = 0;

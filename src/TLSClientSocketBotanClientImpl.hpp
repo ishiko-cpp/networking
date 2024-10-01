@@ -29,6 +29,7 @@ public:
     TLSClientSocketBotanClientImpl(Error& error) noexcept;
 
     void connect(IPv4Address address, Port port, const std::string& hostname, Error& error) noexcept override;
+    void handshake(Error& error) noexcept override;
     int read(char* buffer, int length, Error& error) override;
     void write(const char* buffer, int length, Error& error) override;
     const TCPClientSocket& socket() const noexcept override;
@@ -80,6 +81,8 @@ private:
     Botan::TLS::Strict_Policy m_policy;
     // TODO: I needed to make this a pointer because the port is only known when connect(...) is called.
     std::unique_ptr<Botan::TLS::Client> m_tlsClient;
+    std::string m_hostname;
+    Port m_port;
     std::string m_buffer;
 };
 
