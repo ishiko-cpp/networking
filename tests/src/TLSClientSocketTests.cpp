@@ -55,6 +55,10 @@ void TLSClientSocketTests::WriteTest1(Test& test)
 
     ISHIKO_TEST_FAIL_IF(error);
 
+    socket.handshake(error);
+
+    ISHIKO_TEST_FAIL_IF(error);
+
     IPv4Address localAddress = socket.getLocalIPAddress(error);
 
     ISHIKO_TEST_FAIL_IF(error);
@@ -110,6 +114,10 @@ void TLSClientSocketTests::ReadTest1(Test& test)
 
     socket.connect(IPv4Address::Localhost(), 8886, "example.org", error);
     
+    ISHIKO_TEST_FAIL_IF(error);
+
+    socket.handshake(error);
+
     ISHIKO_TEST_FAIL_IF(error);
 
     char buffer1[1];
