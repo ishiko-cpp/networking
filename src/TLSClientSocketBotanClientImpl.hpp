@@ -35,7 +35,7 @@ public:
     void onCallback() override;
 
 private:
-    void doHandshake(Port port, const std::string& hostname);
+    void doHandshake(Port port, const std::string& hostname, Error& error);
     void doReadDuringHandshake(Error& error);
 
     class BotanTLSCallbacks : public Botan::TLS::Callbacks
@@ -94,8 +94,6 @@ private:
     Botan::TLS::Strict_Policy m_policy;
     // TODO: I needed to make this a pointer because the port is only known when connect(...) is called.
     std::unique_ptr<Botan::TLS::Client> m_tlsClient;
-    std::string m_hostname;
-    Port m_port;
     std::string m_buffer;
 
     // TODO: move this into the state class?

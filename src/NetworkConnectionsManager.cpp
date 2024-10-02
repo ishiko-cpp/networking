@@ -46,7 +46,7 @@ void NetworkConnectionsManager::connectWithTLS(IPv4Address address, Port port, c
 void NetworkConnectionsManager::run()
 {
     // TODO: proper way to terminate
-    size_t hack = 10;
+    size_t hack = 50;
     while (--hack)
     {
         fd_set fd_read_ready;
@@ -321,8 +321,24 @@ void NetworkConnectionsManager::ManagedTLSSocketImpl::connect(IPv4Address addres
         {
             // TODO: not sure but this may cause a race condition with run() since state and the call are separate steps
             // TODO: make this work with TLS
+            m_state = State::waiting_for_connection;
             m_shared_state.setWaitingForWrite(this);
             m_shared_state.setWaitingForException(this);
+        }
+    }
+}
+
+void NetworkConnectionsManager::ManagedTLSSocketImpl::handshake(Error& error)
+{
+    m_socket.handshake(error);
+    if (error)
+    {
+        if (error.code() == NetworkingErrorCategory::Value::would_block)
+        {
+            // TODO: not sure but this may cause a race condition with run() since state and the call are separate steps
+            // TODO: make this work with TLS
+            m_state = State::waiting_for_handshake;
+            m_shared_state.setWaitingForRead(this);
         }
     }
 }
@@ -375,6 +391,10 @@ void NetworkConnectionsManager::ManagedTLSSocketImpl::callback()
     switch (m_state)
     {
     case State::waiting_for_connection:
+        m_callbacks.onConnectionEstablished(*this);
+        break;
+
+	case State::waiting_for_handshake:
         // TODO: if the socket gets connected here it means the connect call blocked and the TLS handshaked wasn't
         // completed. Call onCallback to continue the handshake.
         m_socket.onCallback();
@@ -384,14 +404,15 @@ void NetworkConnectionsManager::ManagedTLSSocketImpl::callback()
             // TLS handshake hasn't finished
             // TODO: could be waiting for a read or write, can I improve this?
             m_shared_state.setWaitingForRead(this);
+            // TODO: for now I have made sure writes are handled locally by retrying in a loop
             // TODO: actually waiting for both definitely will cause trouble as the write will never be reset
             // TODO: I definitely need to know which to wait on
-            m_shared_state.setWaitingForWrite(this);
+            //m_shared_state.setWaitingForWrite(this);
         }
         else
         {
-            std::cerr << "connected" << std::endl;
-            m_callbacks.onConnectionEstablished(*this);
+            std::cerr << "m_callbacks.onHandshake" << std::endl;
+            m_callbacks.onHandshake();
         }
         break;
 
