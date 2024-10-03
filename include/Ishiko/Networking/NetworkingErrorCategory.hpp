@@ -17,7 +17,7 @@ public:
     {
         generic_error = -1,
         networking_library_not_initialized = -2,
-        would_block = -3,
+        would_block = -3
     };
 
     static const NetworkingErrorCategory& Get() noexcept;

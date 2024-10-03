@@ -51,6 +51,8 @@ namespace Ishiko
         class ManagedTLSSocket
         {
         public:
+            virtual void handshake(Error& error) = 0;
+
             virtual int read(char* buffer, int count, Error& error) = 0;
 
             virtual void write(const char* buffer, int count, Error& error) = 0;
@@ -64,6 +66,7 @@ namespace Ishiko
         {
         public:
             virtual void onConnectionEstablished(ManagedTLSSocket& socket) = 0;
+            virtual void onHandshake() = 0;
             virtual void onReadReady() = 0;
             virtual void onWriteReady() = 0;
         };
@@ -139,6 +142,8 @@ namespace Ishiko
 
             void connect(IPv4Address address, Port port, const Hostname& hostname);
 
+            void handshake(Error& error) override;
+
             int read(char* buffer, int count, Error& error) override;
 
             void write(const char* buffer, int count, Error& error) override;
@@ -154,6 +159,7 @@ namespace Ishiko
             enum class State
             {
                 waiting_for_connection,
+                waiting_for_handshake,
                 waiting_for_read,
                 waiting_for_write
             };

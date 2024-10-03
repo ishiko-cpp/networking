@@ -26,6 +26,7 @@ public:
     TLSClientSocketBotanClientImpl(int socket_options, Error& error) noexcept;
 
     void connect(IPv4Address address, Port port, const std::string& hostname, Error& error) noexcept override;
+    void handshake(Error& error) noexcept override;
     int read(char* buffer, int length, Error& error) override;
     void write(const char* buffer, int length, Error& error) override;
     const TCPClientSocket& socket() const noexcept override;
@@ -76,7 +77,7 @@ private:
     enum class State
     {
         error,
-        waiting_for_connection,
+        handshake_in_progress,
         waiting_for_read_during_handshake,
         waiting_for_write_during_handshake,
         waiting_for_read

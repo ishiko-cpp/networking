@@ -25,7 +25,7 @@ void TLSClientSocketBotanClientImpl::connect(IPv4Address address, Port port, con
             // connected
             m_port = port;
             m_hostname = hostname;
-            m_state = State::waiting_for_connection;
+            m_state = State::handshake_in_progress;
 
             // TODO: I want TLS v.1.3 but only available in Botan 3.0.0. which is not released yet
     // TODO: what of TLS 1.2 is not supported, can I safely downgrade?
@@ -48,6 +48,10 @@ void TLSClientSocketBotanClientImpl::connect(IPv4Address address, Port port, con
 
     // Connection successful, do the handshake
     doHandshake(port, hostname);
+}
+
+void TLSClientSocketBotanClientImpl::handshake(Error& error) noexcept
+{
 }
 
 int TLSClientSocketBotanClientImpl::read(char* buffer, int length, Error& error)
@@ -135,7 +139,7 @@ void TLSClientSocketBotanClientImpl::onCallback()
     Error error;
     switch (m_state)
     {
-    case State::waiting_for_connection:
+    case State::handshake_in_progress:
         doHandshake(m_port, m_hostname);
         break;
 

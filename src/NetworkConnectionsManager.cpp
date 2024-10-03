@@ -46,7 +46,7 @@ void NetworkConnectionsManager::connectWithTLS(IPv4Address address, Port port, c
 void NetworkConnectionsManager::run()
 {
     // TODO: proper way to terminate
-    size_t hack = 10;
+    size_t hack = 50;
     while (--hack)
     {
         fd_set fd_read_ready;
@@ -327,6 +327,17 @@ void NetworkConnectionsManager::ManagedTLSSocketImpl::connect(IPv4Address addres
     }
 }
 
+void NetworkConnectionsManager::ManagedTLSSocketImpl::handshake(Error& error)
+{
+    m_socket.handshake(error);
+    if (error)
+    {
+        if (error.code() == NetworkingErrorCategory::Value::would_block)
+        {
+        }
+    }
+}
+
 int NetworkConnectionsManager::ManagedTLSSocketImpl::read(char* buffer, int count, Error& error)
 {
     int n = m_socket.read(buffer, count, error);
@@ -393,6 +404,9 @@ void NetworkConnectionsManager::ManagedTLSSocketImpl::callback()
             std::cerr << "connected" << std::endl;
             m_callbacks.onConnectionEstablished(*this);
         }
+        break;
+		
+    case State::waiting_for_handshake:
         break;
 
     case State::waiting_for_read:
