@@ -26,11 +26,6 @@ void TLSClientSocket::connect(IPv4Address address, Port port, const std::string&
     m_impl->connect(address, port, hostname, error);
 }
 
-void TLSClientSocket::handshake(Error& error) noexcept
-{
-    m_impl->handshake(error);
-}
-
 int TLSClientSocket::read(char* buffer, int length, Error& error)
 {
     return m_impl->read(buffer, length, error);

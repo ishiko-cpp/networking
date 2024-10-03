@@ -21,7 +21,6 @@ public:
         const std::string& certificatePath, Error& error) noexcept;
 
     void connect(IPv4Address address, Port port, const std::string& hostname, Error& error) noexcept override;
-    void handshake(Error& error) noexcept override;
     virtual int read(char* buffer, int length, Error& error) override;
     virtual void write(const char* buffer, int length, Error& error) override;
     const TCPClientSocket& socket() const noexcept override;

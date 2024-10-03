@@ -46,7 +46,6 @@ void TLSServerSocketTests::AcceptTest1(Test& test)
             Error error;
             TLSClientSocket clientSocket(SocketOption::none, error);
             clientSocket.connect(IPv4Address::Localhost(), listeningPort, "example.org", error);
-            clientSocket.handshake(error);
         });
 
     TLSClientSocket clientSocket = socket.accept(error);

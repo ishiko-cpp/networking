@@ -16,8 +16,6 @@ TLSClientSocketBotanClientImpl::TLSClientSocketBotanClientImpl(int socket_option
 void TLSClientSocketBotanClientImpl::connect(IPv4Address address, Port port, const std::string& hostname,
     Error& error) noexcept
 {
-    m_hostname = hostname;
-    m_port = port;
     m_socket.connect(address, port, error);
     if (error)
     {
@@ -28,6 +26,12 @@ void TLSClientSocketBotanClientImpl::connect(IPv4Address address, Port port, con
             m_port = port;
             m_hostname = hostname;
             m_state = State::waiting_for_connection;
+
+            // TODO: I want TLS v.1.3 but only available in Botan 3.0.0. which is not released yet
+    // TODO: what of TLS 1.2 is not supported, can I safely downgrade?
+            m_tlsClient.reset(new Botan::TLS::Client(m_botanTLSCallbacks, m_sessionManager, m_credentials, m_policy, m_rng,
+                Botan::TLS::Server_Information(hostname, port.number()), Botan::TLS::Protocol_Version::TLS_V12));
+
         }
         else
         {
@@ -35,17 +39,15 @@ void TLSClientSocketBotanClientImpl::connect(IPv4Address address, Port port, con
         }
         return;
     }
-}
 
-void TLSClientSocketBotanClientImpl::handshake(Error& error) noexcept
-{
     // TODO: I want TLS v.1.3 but only available in Botan 3.0.0. which is not released yet
     // TODO: what of TLS 1.2 is not supported, can I safely downgrade?
     m_tlsClient.reset(new Botan::TLS::Client(m_botanTLSCallbacks, m_sessionManager, m_credentials, m_policy, m_rng,
-        Botan::TLS::Server_Information(m_hostname, m_port.number()), Botan::TLS::Protocol_Version::TLS_V12));
+        Botan::TLS::Server_Information(hostname, port.number()), Botan::TLS::Protocol_Version::TLS_V12));
+
 
     // Connection successful, do the handshake
-    doHandshake(m_port, m_hostname, error);
+    doHandshake(port, hostname);
 }
 
 int TLSClientSocketBotanClientImpl::read(char* buffer, int length, Error& error)
@@ -67,7 +69,7 @@ int TLSClientSocketBotanClientImpl::read(char* buffer, int length, Error& error)
     }
 
     // TODO: buffer size?
-    ByteBuffer localBuffer(100 * 1024);
+    ByteBuffer localBuffer(10 * 1024);
     // TODO: handle error
     int n = m_socket.read(localBuffer, localBuffer.capacity(), error);
     if (error)
@@ -133,9 +135,12 @@ void TLSClientSocketBotanClientImpl::onCallback()
     Error error;
     switch (m_state)
     {
+    case State::waiting_for_connection:
+        doHandshake(m_port, m_hostname);
+        break;
+
     case State::waiting_for_read_during_handshake:
         doReadDuringHandshake(error);
-        // TODO: ideally an error here shoiuld trigger a wait and not the isConnected call above
         break;
 
     case State::waiting_for_write_during_handshake:
@@ -152,9 +157,10 @@ void TLSClientSocketBotanClientImpl::onCallback()
     }
 }
 
-void TLSClientSocketBotanClientImpl::doHandshake(Port port, const std::string& hostname, Error& error)
+void TLSClientSocketBotanClientImpl::doHandshake(Port port, const std::string& hostname)
 {
     // TODO: handle errors
+    Error todo_error;
 
     // When the Botan TLS client is active it means the handshake has finished and we can start sending data so we
     // consider the connection has now been established and we return to the caller.
@@ -162,10 +168,10 @@ void TLSClientSocketBotanClientImpl::doHandshake(Port port, const std::string& h
     {
         // TODO: what if a write blocks during this loop?
 
-        doReadDuringHandshake(error);
-        if (error)
+        doReadDuringHandshake(todo_error);
+        if (todo_error)
         {
-            if (error.code() == NetworkingErrorCategory::Value::would_block)
+            if (todo_error.code() == NetworkingErrorCategory::Value::would_block)
             {
                 m_state = State::waiting_for_read_during_handshake;
             }
@@ -190,7 +196,7 @@ void TLSClientSocketBotanClientImpl::doReadDuringHandshake(Error& error)
         // TODO: what if a write blocks during this loop?
 
         // TODO: buffer size?
-        ByteBuffer buffer(100 * 1024);
+        ByteBuffer buffer(10 * 1024);
 
         // TODO: handle error
         int n = m_socket.read(buffer, buffer.capacity(), error);
@@ -198,6 +204,7 @@ void TLSClientSocketBotanClientImpl::doReadDuringHandshake(Error& error)
         {
             if (error.code() == NetworkingErrorCategory::Value::would_block)
             {
+                std::cerr << "TLSClientSocketBotanClientImpl::doReadDuringHandshake would block" << std::endl;
                 m_state = State::waiting_for_read_during_handshake;
             }
             else
@@ -235,12 +242,7 @@ void TLSClientSocketBotanClientImpl::BotanTLSCallbacks::tls_emit_data(const uint
 {
     // TODO: how do I handle errors
     Error error;
-
-    // TODO: for now busy retry because I don't want to deal with complexity of figuring out if it's a read or write that blocked
-    do
-    {
-        m_socket.write((const char*)data, size, error);
-    } while (error && (error.code() == NetworkingErrorCategory::Value::would_block));
+    m_socket.write((const char*)data, size, error);
 
     if (error)
     {

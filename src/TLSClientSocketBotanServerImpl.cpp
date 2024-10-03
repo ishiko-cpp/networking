@@ -41,11 +41,6 @@ void TLSClientSocketBotanServerImpl::connect(IPv4Address address, Port port, con
     // TODO: assert
 }
 
-void TLSClientSocketBotanServerImpl::handshake(Error& error) noexcept
-{
-    // TODO: do we need this in the server case?
-}
-
 int TLSClientSocketBotanServerImpl::read(char* buffer, int length, Error& error)
 {
     // TODO: how much TLS encoded data do I need to read to get the amount requested by the client?

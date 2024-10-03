@@ -26,7 +26,6 @@ public:
     TLSClientSocketBotanClientImpl(int socket_options, Error& error) noexcept;
 
     void connect(IPv4Address address, Port port, const std::string& hostname, Error& error) noexcept override;
-    void handshake(Error& error) noexcept override;
     int read(char* buffer, int length, Error& error) override;
     void write(const char* buffer, int length, Error& error) override;
     const TCPClientSocket& socket() const noexcept override;
@@ -35,7 +34,7 @@ public:
     void onCallback() override;
 
 private:
-    void doHandshake(Port port, const std::string& hostname, Error& error);
+    void doHandshake(Port port, const std::string& hostname);
     void doReadDuringHandshake(Error& error);
 
     class BotanTLSCallbacks : public Botan::TLS::Callbacks
