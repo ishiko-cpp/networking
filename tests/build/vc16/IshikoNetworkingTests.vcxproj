@@ -156,8 +156,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\AsyncTCPClientTests.cpp" />
-    <ClCompile Include="..\..\src\AsyncTLSClientTests.cpp" />
+    <ClCompile Include="..\..\src\AsyncTCPClientSocketTests.cpp" />
+    <ClCompile Include="..\..\src\AsyncTLSClientSocketTests.cpp" />
     <ClCompile Include="..\..\src\HostnameResolverTests.cpp" />
     <ClCompile Include="..\..\src\IPAddressTests.cpp" />
     <ClCompile Include="..\..\src\IPv4AddressTests.cpp" />
@@ -171,8 +171,8 @@
     <ClCompile Include="..\..\src\TLSServerSocketTests.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\AsyncTCPClientTests.hpp" />
-    <ClInclude Include="..\..\src\AsyncTLSClientTests.hpp" />
+    <ClInclude Include="..\..\src\AsyncTCPClientSocketTests.hpp" />
+    <ClInclude Include="..\..\src\AsyncTLSClientSocketTests.hpp" />
     <ClInclude Include="..\..\src\HostnameResolverTests.hpp" />
     <ClInclude Include="..\..\src\IPAddressTests.hpp" />
     <ClInclude Include="..\..\src\IPv4AddressTests.hpp" />

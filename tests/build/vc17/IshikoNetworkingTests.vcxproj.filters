@@ -17,10 +17,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\AsyncTCPClientTests.hpp">
+    <ClInclude Include="..\..\src\AsyncTCPClientSocketTests.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\AsyncTLSClientTests.hpp">
+    <ClInclude Include="..\..\src\AsyncTLSClientSocketTests.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\HostnameResolverTests.hpp">
@@ -55,10 +55,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\AsyncTCPClientTests.cpp">
+    <ClCompile Include="..\..\src\AsyncTCPClientSocketTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\AsyncTLSClientTests.cpp">
+    <ClCompile Include="..\..\src\AsyncTLSClientSocketTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\HostnameResolverTests.cpp">
