@@ -106,8 +106,11 @@ void NetworkConnectionsManager::run()
         {
             if (FD_ISSET((*it)->socket().socket().nativeHandle(), &fd_write_ready))
             {
-                (*it)->callback();
+                // We must call the callback after removing the socket from the waiting list because the callback may
+                // readd it to that same list.
+                ManagedTLSSocketImpl* managed_socket = *it;
                 it = m_shared_state.m_waiting_for_write2.erase(it);
+                managed_socket->callback();
             }
             else
             {
@@ -132,8 +135,11 @@ void NetworkConnectionsManager::run()
         {
             if (FD_ISSET((*it)->socket().socket().nativeHandle(), &fd_read_ready))
             {
-                (*it)->callback();
+                // We must call the callback after removing the socket from the waiting list because the callback may
+                // readd it to that same list.
+                ManagedTLSSocketImpl* managed_socket = *it;
                 it = m_shared_state.m_waiting_for_read2.erase(it);
+                managed_socket->callback();
             }
             else
             {
@@ -321,7 +327,7 @@ void NetworkConnectionsManager::ManagedTLSSocketImpl::connect(IPv4Address addres
         {
             // TODO: not sure but this may cause a race condition with run() since state and the call are separate steps
             // TODO: make this work with TLS
-            // TODO: set state here
+            // TODO: add state
             m_shared_state.setWaitingForWrite(this);
             m_shared_state.setWaitingForException(this);
         }
@@ -339,7 +345,6 @@ void NetworkConnectionsManager::ManagedTLSSocketImpl::handshake(Error& error)
             // TODO: make this work with TLS
             m_state = State::waiting_for_handshake;
             m_shared_state.setWaitingForRead(this);
-            m_shared_state.setWaitingForWrite(this);
         }
     }
 }
@@ -408,7 +413,7 @@ void NetworkConnectionsManager::ManagedTLSSocketImpl::callback()
             m_shared_state.setWaitingForRead(this);
             // TODO: actually waiting for both definitely will cause trouble as the write will never be reset
             // TODO: I definitely need to know which to wait on
-            m_shared_state.setWaitingForWrite(this);
+            //m_shared_state.setWaitingForWrite(this);
         }
         else
         {
