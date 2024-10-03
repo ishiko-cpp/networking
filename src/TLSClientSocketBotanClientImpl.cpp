@@ -242,7 +242,12 @@ void TLSClientSocketBotanClientImpl::BotanTLSCallbacks::tls_emit_data(const uint
 {
     // TODO: how do I handle errors
     Error error;
-    m_socket.write((const char*)data, size, error);
+
+    // TODO: for now busy retry because I don't want to deal with complexity of figuring out if it's a read or write that blocked
+    do
+    {
+        m_socket.write((const char*)data, size, error);
+    } while (error && (error.code() == NetworkingErrorCategory::Value::would_block));
 
     if (error)
     {
