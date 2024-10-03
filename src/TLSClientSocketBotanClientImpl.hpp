@@ -35,7 +35,7 @@ public:
     void onCallback() override;
 
 private:
-    void doHandshake(Port port, const std::string& hostname);
+    void doHandshake(Port port, const std::string& hostname, Error& error);
     void doReadDuringHandshake(Error& error);
 
     class BotanTLSCallbacks : public Botan::TLS::Callbacks
@@ -77,6 +77,7 @@ private:
     enum class State
     {
         error,
+        init,
         handshake_in_progress,
         waiting_for_read_during_handshake,
         waiting_for_write_during_handshake,

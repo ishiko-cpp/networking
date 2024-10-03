@@ -321,6 +321,7 @@ void NetworkConnectionsManager::ManagedTLSSocketImpl::connect(IPv4Address addres
         {
             // TODO: not sure but this may cause a race condition with run() since state and the call are separate steps
             // TODO: make this work with TLS
+            // TODO: set state here
             m_shared_state.setWaitingForWrite(this);
             m_shared_state.setWaitingForException(this);
         }
@@ -334,6 +335,11 @@ void NetworkConnectionsManager::ManagedTLSSocketImpl::handshake(Error& error)
     {
         if (error.code() == NetworkingErrorCategory::Value::would_block)
         {
+            // TODO: not sure but this may cause a race condition with run() since state and the call are separate steps
+            // TODO: make this work with TLS
+            m_state = State::waiting_for_handshake;
+            m_shared_state.setWaitingForRead(this);
+            m_shared_state.setWaitingForWrite(this);
         }
     }
 }
@@ -386,6 +392,11 @@ void NetworkConnectionsManager::ManagedTLSSocketImpl::callback()
     switch (m_state)
     {
     case State::waiting_for_connection:
+        std::cerr << "connected" << std::endl;
+        m_callbacks.onConnectionEstablished(*this);
+        break;
+		
+    case State::waiting_for_handshake:
         // TODO: if the socket gets connected here it means the connect call blocked and the TLS handshaked wasn't
         // completed. Call onCallback to continue the handshake.
         m_socket.onCallback();
@@ -401,12 +412,8 @@ void NetworkConnectionsManager::ManagedTLSSocketImpl::callback()
         }
         else
         {
-            std::cerr << "connected" << std::endl;
-            m_callbacks.onConnectionEstablished(*this);
+            m_callbacks.onHandshake();
         }
-        break;
-		
-    case State::waiting_for_handshake:
         break;
 
     case State::waiting_for_read:
