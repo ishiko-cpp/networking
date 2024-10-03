@@ -4,4 +4,15 @@
 #ifndef GUARD_ISHIKO_CPP_NETWORKING_ASYNCTCPCLIENTSOCKET_HPP
 #define GUARD_ISHIKO_CPP_NETWORKING_ASYNCTCPCLIENTSOCKET_HPP
 
+#include <Ishiko/Errors.hpp>
+
+namespace Ishiko
+{
+    class AsyncTCPClientSocket
+    {
+    public:
+        AsyncTCPClientSocket(Error& error) noexcept;
+    };
+}
+
 #endif

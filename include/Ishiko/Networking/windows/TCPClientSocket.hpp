@@ -15,42 +15,40 @@
 
 namespace Ishiko
 {
+    class TCPClientSocket
+    {
+    public:
+        TCPClientSocket(int socket_options, Error& error) noexcept;
+        TCPClientSocket(SOCKET socket) noexcept;
+        TCPClientSocket(const TCPClientSocket& other) = delete;
+        TCPClientSocket(TCPClientSocket&& other);
+        ~TCPClientSocket();
 
-class TCPClientSocket
-{
-public:
-    TCPClientSocket(int socket_options, Error& error) noexcept;
-    TCPClientSocket(SOCKET socket) noexcept;
-    TCPClientSocket(const TCPClientSocket& other) = delete;
-    TCPClientSocket(TCPClientSocket&& other);
-    ~TCPClientSocket();
+        void connect(IPv4Address address, Port port, Error& error) noexcept;
 
-    void connect(IPv4Address address, Port port, Error& error) noexcept;
+        // TODO: should return value be size_t
+        int read(ByteBuffer& buffer, size_t count, Error& error);
+        int read(ByteBuffer& buffer, size_t offset, size_t count, Error& error);
+        // TODO: should length be size_t, same for return value
+        int read(char* buffer, int count, Error& error);
+        // TODO: always blocking at the moment, if this is non-blocking then would need to return the actual number of
+        // bytes sent
+        // TODO: should length be size_t
+        void write(const char* buffer, int count, Error& error);
 
-    // TODO: should return value be size_t
-    int read(ByteBuffer& buffer, size_t count, Error& error);
-    int read(ByteBuffer& buffer, size_t offset, size_t count, Error& error);
-    // TODO: should length be size_t, same for return value
-    int read(char* buffer, int count, Error& error);
-    // TODO: always blocking at the moment, if this is non-blocking then would need to return the actual number of
-    // bytes sent
-    // TODO: should length be size_t
-    void write(const char* buffer, int count, Error& error);
+        void shutdown(Error& error);
+        void close();
 
-    void shutdown(Error& error);
-    void close();
+        IPv4Address getLocalIPAddress(Error& error) const;
+        Port getLocalPort(Error& error) const;
+        IPv4Address getPeerIPAddress(Error& error) const;
+        Port getPeerPort(Error& error) const;
 
-    IPv4Address getLocalIPAddress(Error& error) const;
-    Port getLocalPort(Error& error) const;
-    IPv4Address getPeerIPAddress(Error& error) const;
-    Port getPeerPort(Error& error) const;
+        NativeSocketHandle nativeHandle();
 
-    NativeSocketHandle nativeHandle();
-
-private:
-    SOCKET m_socket;
-};
-
+    private:
+        SOCKET m_socket;
+    };
 }
 
 #endif

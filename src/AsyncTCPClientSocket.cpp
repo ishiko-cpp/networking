@@ -2,3 +2,9 @@
 // SPDX-License-Identifier: BSL-1.0
 
 #include "AsyncTCPClientSocket.hpp"
+
+using namespace Ishiko;
+
+AsyncTCPClientSocket::AsyncTCPClientSocket(Error& error) noexcept
+{
+}
