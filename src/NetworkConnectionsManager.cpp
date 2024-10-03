@@ -4,7 +4,9 @@
 #include "NetworkConnectionsManager.hpp"
 #include "NetworkingErrorCategory.hpp"
 #include <boost/utility/string_view.hpp>
-#include <iostream>
+#include <chrono>
+#include <thread>
+#include <iostream> // TODO: remove
 
 using namespace Ishiko;
 
@@ -49,35 +51,60 @@ void NetworkConnectionsManager::run()
     size_t hack = 50;
     while (--hack)
     {
+        // We take a copy of the current state of the waiting lists and clear the originals. This allows the callbacks
+        // to add sockets to the list without interference.
+        // TODO: should I actually convert this to a vector?
+        // TODO: thread safety
+        std::set<ManagedSocketImpl*> waiting_for_read{m_shared_state.m_waiting_for_read};
+        m_shared_state.m_waiting_for_read.clear();
+        std::set<ManagedSocketImpl*> waiting_for_write{m_shared_state.m_waiting_for_write};
+        m_shared_state.m_waiting_for_write.clear();
+        std::set<ManagedSocketImpl*> waiting_for_exception{m_shared_state.m_waiting_for_exception};
+        m_shared_state.m_waiting_for_exception.clear();
+        std::set<ManagedTLSSocketImpl*> waiting_for_read2{m_shared_state.m_waiting_for_read2};
+        m_shared_state.m_waiting_for_read2.clear();
+        std::set<ManagedTLSSocketImpl*> waiting_for_write2{m_shared_state.m_waiting_for_write2};
+        m_shared_state.m_waiting_for_write2.clear();
+        std::set<ManagedTLSSocketImpl*> waiting_for_exception2{m_shared_state.m_waiting_for_exception2};
+        m_shared_state.m_waiting_for_exception2.clear();
+
+        if (waiting_for_read.empty() && waiting_for_write.empty() && waiting_for_exception.empty()
+            && waiting_for_read2.empty() && waiting_for_write2.empty() && waiting_for_exception2.empty())
+        {
+            // TODO: for now sleep but should block or something
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            continue;
+        }
+
         fd_set fd_read_ready;
         FD_ZERO(&fd_read_ready);
-        for (ManagedSocketImpl* managed_socket : m_shared_state.m_waiting_for_read)
+        for (ManagedSocketImpl* managed_socket : waiting_for_read)
         {
             FD_SET(managed_socket->socket().nativeHandle(), &fd_read_ready);
         }
-        for (ManagedTLSSocketImpl* managed_socket : m_shared_state.m_waiting_for_read2)
+        for (ManagedTLSSocketImpl* managed_socket : waiting_for_read2)
         {
             FD_SET(managed_socket->socket().socket().nativeHandle(), &fd_read_ready);
         }
 
         fd_set fd_write_ready;
         FD_ZERO(&fd_write_ready);
-        for (ManagedSocketImpl* managed_socket : m_shared_state.m_waiting_for_write)
+        for (ManagedSocketImpl* managed_socket :waiting_for_write)
         {
             FD_SET(managed_socket->socket().nativeHandle(), &fd_write_ready);
         }
-        for (ManagedTLSSocketImpl* managed_socket : m_shared_state.m_waiting_for_write2)
+        for (ManagedTLSSocketImpl* managed_socket :waiting_for_write2)
         {
             FD_SET(managed_socket->socket().socket().nativeHandle(), &fd_write_ready);
         }
 
         fd_set fd_exception;
         FD_ZERO(&fd_exception);
-        for (ManagedSocketImpl* managed_socket : m_shared_state.m_waiting_for_exception)
+        for (ManagedSocketImpl* managed_socket : waiting_for_exception)
         {
             FD_SET(managed_socket->socket().nativeHandle(), &fd_exception);
         }
-        for (ManagedTLSSocketImpl* managed_socket : m_shared_state.m_waiting_for_exception2)
+        for (ManagedTLSSocketImpl* managed_socket : waiting_for_exception2)
         {
             FD_SET(managed_socket->socket().socket().nativeHandle(), &fd_exception);
         }
@@ -89,87 +116,51 @@ void NetworkConnectionsManager::run()
         int ret = select(-1, &fd_read_ready, &fd_write_ready, &fd_exception, &stTimeOut);
         // TODO: check for ret error
 
-        for (std::set<ManagedSocketImpl*>::iterator it = m_shared_state.m_waiting_for_write.begin(); it != m_shared_state.m_waiting_for_write.end();)
+        for (ManagedSocketImpl* managed_socket : waiting_for_write)
         {
-            if (FD_ISSET((*it)->socket().nativeHandle(), &fd_write_ready))
+            if (FD_ISSET(managed_socket->socket().nativeHandle(), &fd_write_ready))
             {
-                (*it)->callback();
-                it = m_shared_state.m_waiting_for_write.erase(it);
-            }
-            else
-            {
-                ++it;
-            }
-        }
-
-        for (std::set<ManagedTLSSocketImpl*>::iterator it = m_shared_state.m_waiting_for_write2.begin(); it != m_shared_state.m_waiting_for_write2.end();)
-        {
-            if (FD_ISSET((*it)->socket().socket().nativeHandle(), &fd_write_ready))
-            {
-                // We must call the callback after removing the socket from the waiting list because the callback may
-                // readd it to that same list.
-                ManagedTLSSocketImpl* managed_socket = *it;
-                it = m_shared_state.m_waiting_for_write2.erase(it);
                 managed_socket->callback();
             }
-            else
-            {
-                ++it;
-            }
         }
 
-        for (std::set<ManagedSocketImpl*>::iterator it = m_shared_state.m_waiting_for_read.begin(); it != m_shared_state.m_waiting_for_read.end();)
+        for (ManagedTLSSocketImpl* managed_socket : waiting_for_write2)
         {
-            if (FD_ISSET((*it)->socket().nativeHandle(), &fd_read_ready))
+            if (FD_ISSET(managed_socket->socket().socket().nativeHandle(), &fd_write_ready))
             {
-                (*it)->callback();
-                it = m_shared_state.m_waiting_for_read.erase(it);
-            }
-            else
-            {
-                ++it;
-            }
-        }
-
-        for (std::set<ManagedTLSSocketImpl*>::iterator it = m_shared_state.m_waiting_for_read2.begin(); it != m_shared_state.m_waiting_for_read2.end();)
-        {
-            if (FD_ISSET((*it)->socket().socket().nativeHandle(), &fd_read_ready))
-            {
-                // We must call the callback after removing the socket from the waiting list because the callback may
-                // readd it to that same list.
-                ManagedTLSSocketImpl* managed_socket = *it;
-                it = m_shared_state.m_waiting_for_read2.erase(it);
                 managed_socket->callback();
             }
-            else
+        }
+
+        for (ManagedSocketImpl* managed_socket : waiting_for_read)
+        {
+            if (FD_ISSET(managed_socket->socket().nativeHandle(), &fd_read_ready))
             {
-                ++it;
+                managed_socket->callback();
             }
         }
 
-        for (std::set<ManagedSocketImpl*>::iterator it = m_shared_state.m_waiting_for_exception.begin(); it != m_shared_state.m_waiting_for_exception.end();)
+        for (ManagedTLSSocketImpl* managed_socket : waiting_for_read2)
         {
-            if (FD_ISSET((*it)->socket().nativeHandle(), &fd_exception))
+            if (FD_ISSET(managed_socket->socket().socket().nativeHandle(), &fd_read_ready))
             {
-                (*it)->callback();
-                it = m_shared_state.m_waiting_for_exception.erase(it);
-            }
-            else
-            {
-                ++it;
+                managed_socket->callback();
             }
         }
 
-        for (std::set<ManagedTLSSocketImpl*>::iterator it = m_shared_state.m_waiting_for_exception2.begin(); it != m_shared_state.m_waiting_for_exception2.end();)
+        for (ManagedSocketImpl* managed_socket : waiting_for_exception)
         {
-            if (FD_ISSET((*it)->socket().socket().nativeHandle(), &fd_exception))
+            if (FD_ISSET(managed_socket->socket().nativeHandle(), &fd_exception))
             {
-                (*it)->callback();
-                it = m_shared_state.m_waiting_for_exception2.erase(it);
+                managed_socket->callback();
             }
-            else
+        }
+
+        for (ManagedTLSSocketImpl* managed_socket : waiting_for_exception2)
+        {
+            if (FD_ISSET(managed_socket->socket().socket().nativeHandle(), &fd_exception))
             {
-                ++it;
+                managed_socket->callback();
             }
         }
     }
