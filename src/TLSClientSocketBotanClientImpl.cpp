@@ -28,7 +28,9 @@ void TLSClientSocketBotanClientImpl::handshake(Error& error) noexcept
     m_state = State::handshake_in_progress;
 
     // TODO: I want TLS v.1.3 but only available in Botan 3.0.0. which is not released yet
-    // TODO: what of TLS 1.2 is not supported, can I safely downgrade?
+    // TODO: what if TLS 1.2 is not supported, can I safely downgrade?
+
+    // TODO: IMPORTANT: the Botan::TLS:Client does a write in the statement below.
     m_tlsClient.reset(new Botan::TLS::Client(m_botanTLSCallbacks, m_sessionManager, m_credentials, m_policy, m_rng,
         Botan::TLS::Server_Information(m_hostname, m_port.number()), Botan::TLS::Protocol_Version::TLS_V12));
 
