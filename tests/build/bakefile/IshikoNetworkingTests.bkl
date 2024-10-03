@@ -24,11 +24,13 @@ program IshikoNetworkingTests : IshikoNetworking, IshikoTestFrameworkCore
 
     headers
     {
-        ../../src/NetworkConnectionsManagerTests.hpp
+        ../../src/AsyncTCPClientTests.hpp
+        ../../src/AsyncTLSClientTests.hpp
         ../../src/HostnameResolverTests.hpp
         ../../src/IPAddressTests.hpp
         ../../src/IPv4AddressTests.hpp
         ../../src/IPv6AddressTests.hpp
+        ../../src/NetworkConnectionsManagerTests.hpp
         ../../src/PortTests.hpp
         ../../src/TCPClientSocketTests.hpp
         ../../src/TCPServerSocketTests.hpp
@@ -38,12 +40,14 @@ program IshikoNetworkingTests : IshikoNetworking, IshikoTestFrameworkCore
 
     sources
     {
-        ../../src/NetworkConnectionsManagerTests.cpp
+        ../../src/AsyncTCPClientTests.cpp
+        ../../src/AsyncTLSClientTests.cpp
         ../../src/HostnameResolverTests.cpp
         ../../src/IPAddressTests.cpp
         ../../src/IPv4AddressTests.cpp
         ../../src/IPv6AddressTests.cpp
         ../../src/main.cpp
+        ../../src/NetworkConnectionsManagerTests.cpp
         ../../src/PortTests.cpp
         ../../src/TCPClientSocketTests.cpp
         ../../src/TCPServerSocketTests.cpp
