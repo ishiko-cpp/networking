@@ -1,11 +1,8 @@
-/*
-    Copyright (c) 2022 Xavier Leclercq
-    Released under the MIT License
-    See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
-*/
+// SPDX-FileCopyrightText: 2021-2024 Xavier Leclercq
+// SPDX-License-Identifier: BSL-1.0
 
-#ifndef _ISHIKO_CPP_NETWORKING_TLSCLIENTSOCKETBOTANCLIENTIMPL_HPP_
-#define _ISHIKO_CPP_NETWORKING_TLSCLIENTSOCKETBOTANCLIENTIMPL_HPP_
+#ifndef GUARD_ISHIKO_CPP_NETWORKING_TLSCLIENTSOCKETBOTANCLIENTIMPL_HPP
+#define GUARD_ISHIKO_CPP_NETWORKING_TLSCLIENTSOCKETBOTANCLIENTIMPL_HPP
 
 #include "TCPClientSocket.hpp"
 #include "TLSClientSocket.hpp"
@@ -26,15 +23,20 @@ namespace Ishiko
 class TLSClientSocketBotanClientImpl : public TLSClientSocket::Impl
 {
 public:
-    TLSClientSocketBotanClientImpl(Error& error) noexcept;
+    TLSClientSocketBotanClientImpl(int socket_options, Error& error) noexcept;
 
     void connect(IPv4Address address, Port port, const std::string& hostname, Error& error) noexcept override;
     void handshake(Error& error) noexcept override;
     int read(char* buffer, int length, Error& error) override;
     void write(const char* buffer, int length, Error& error) override;
     const TCPClientSocket& socket() const noexcept override;
+    TCPClientSocket& socket() noexcept override;
+    bool isConnected() const override;
+    void onCallback() override;
 
 private:
+    void doHandshake(Error& error);
+
     class BotanTLSCallbacks : public Botan::TLS::Callbacks
     {
     public:
@@ -71,7 +73,18 @@ private:
         std::vector<Botan::Certificate_Store*> m_stores;
     };
 
+    enum class State
+    {
+        error,
+        init,
+        handshake_in_progress,
+        waiting_for_read_during_handshake,
+        waiting_for_write_during_handshake,
+        waiting_for_read
+    };
+
     TCPClientSocket m_socket;
+    State m_state;
     BotanTLSCallbacks m_botanTLSCallbacks;
     // TODO: what is the autoseed RNG, is it safe enough
     Botan::AutoSeeded_RNG m_rng;
@@ -81,9 +94,11 @@ private:
     Botan::TLS::Strict_Policy m_policy;
     // TODO: I needed to make this a pointer because the port is only known when connect(...) is called.
     std::unique_ptr<Botan::TLS::Client> m_tlsClient;
-    std::string m_hostname;
-    Port m_port;
     std::string m_buffer;
+
+    // TODO: move this into the state class?
+    Port m_port;
+    std::string m_hostname;
 };
 
 }

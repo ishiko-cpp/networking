@@ -1,8 +1,5 @@
-/*
-    Copyright (c) 2022 Xavier Leclercq
-    Released under the MIT License
-    See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
-*/
+// SPDX-FileCopyrightText: 2021-2024 Xavier Leclercq
+// SPDX-License-Identifier: BSL-1.0
 
 #include "TLSClientSocket.hpp"
 #include "TLSClientSocketBotanClientImpl.hpp"
@@ -11,9 +8,9 @@
 
 using namespace Ishiko;
 
-TLSClientSocket::TLSClientSocket(Error& error) noexcept
+TLSClientSocket::TLSClientSocket(int socket_options, Error& error) noexcept
 // TODO: can't allocate memory here
-    : m_impl(new TLSClientSocketBotanClientImpl(error))
+    : m_impl(new TLSClientSocketBotanClientImpl(socket_options, error))
 {
 }
 
@@ -62,4 +59,19 @@ IPv4Address TLSClientSocket::getPeerIPAddress(Error& error) const
 Port TLSClientSocket::getPeerPort(Error& error) const
 {
     return m_impl->socket().getPeerPort(error);
+}
+
+TCPClientSocket& TLSClientSocket::socket()
+{
+    return m_impl->socket();
+}
+
+bool TLSClientSocket::isConnected() const
+{
+    return m_impl->isConnected();
+}
+
+void TLSClientSocket::onCallback()
+{
+    m_impl->onCallback();
 }
