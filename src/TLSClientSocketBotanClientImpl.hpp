@@ -35,8 +35,7 @@ public:
     void onCallback() override;
 
 private:
-    void doHandshake(Port port, const std::string& hostname, Error& error);
-    void doReadDuringHandshake(Error& error);
+    void doHandshake(Error& error);
 
     class BotanTLSCallbacks : public Botan::TLS::Callbacks
     {

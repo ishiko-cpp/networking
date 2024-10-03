@@ -32,7 +32,7 @@ void TLSClientSocketBotanClientImpl::handshake(Error& error) noexcept
     m_tlsClient.reset(new Botan::TLS::Client(m_botanTLSCallbacks, m_sessionManager, m_credentials, m_policy, m_rng,
         Botan::TLS::Server_Information(m_hostname, m_port.number()), Botan::TLS::Protocol_Version::TLS_V12));
 
-    doHandshake(m_port, m_hostname, error);
+    doHandshake(error);
 }
 
 int TLSClientSocketBotanClientImpl::read(char* buffer, int length, Error& error)
@@ -124,12 +124,12 @@ void TLSClientSocketBotanClientImpl::onCallback()
         {
             // TODO
             Error todo_error;
-            doHandshake(m_port, m_hostname, todo_error);
+            doHandshake(todo_error);
         }
         break;
 
     case State::waiting_for_read_during_handshake:
-        doReadDuringHandshake(error);
+        doHandshake(error);
         break;
 
     case State::waiting_for_write_during_handshake:
@@ -146,38 +146,9 @@ void TLSClientSocketBotanClientImpl::onCallback()
     }
 }
 
-void TLSClientSocketBotanClientImpl::doHandshake(Port port, const std::string& hostname, Error& error)
+void TLSClientSocketBotanClientImpl::doHandshake(Error& error)
 {
-    // TODO: handle errors
-
-    // When the Botan TLS client is active it means the handshake has finished and we can start sending data so we
-    // consider the connection has now been established and we return to the caller.
-    while (!m_tlsClient->is_closed() && !m_tlsClient->is_active())
-    {
-        // TODO: what if a write blocks during this loop?
-
-        doReadDuringHandshake(error);
-        if (error)
-        {
-            if (error.code() == NetworkingErrorCategory::Value::would_block)
-            {
-                m_state = State::waiting_for_read_during_handshake;
-            }
-            else
-            {
-                // TODO
-                m_state = State::error;
-            }
-            break;
-        }
-    }
-
-    // TODO: need to change state here if we are closed or active
-}
-
-void TLSClientSocketBotanClientImpl::doReadDuringHandshake(Error& error)
-{
-    // TODO: handle errors
+   // TODO: handle errors
 
     while (!m_tlsClient->is_closed() && !m_tlsClient->is_active())
     {
