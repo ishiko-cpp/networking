@@ -2,47 +2,39 @@
 // SPDX-License-Identifier: BSL-1.0
 
 #include "TLSClientSocketBotanClientImpl.hpp"
+#include "NetworkingErrorCategory.hpp"
 #include <botan/x509path.h>
+#include <iostream>
 
 using namespace Ishiko;
 
-TLSClientSocketBotanClientImpl::TLSClientSocketBotanClientImpl(Error& error) noexcept
-    : m_socket(SocketOption::none, error), m_botanTLSCallbacks(m_socket, m_buffer), m_sessionManager(m_rng), m_port(0)
+TLSClientSocketBotanClientImpl::TLSClientSocketBotanClientImpl(int socket_options, Error& error) noexcept
+    : m_socket{socket_options, error}, m_state{State::init}, m_botanTLSCallbacks{m_socket, m_buffer},
+    m_sessionManager{m_rng}, m_port{0}
 {
 }
 
 void TLSClientSocketBotanClientImpl::connect(IPv4Address address, Port port, const std::string& hostname,
     Error& error) noexcept
 {
-    m_hostname = hostname;
     m_port = port;
+    m_hostname = hostname;
+
     m_socket.connect(address, port, error);
 }
 
 void TLSClientSocketBotanClientImpl::handshake(Error& error) noexcept
 {
+    m_state = State::handshake_in_progress;
+
     // TODO: I want TLS v.1.3 but only available in Botan 3.0.0. which is not released yet
-    // TODO: what of TLS 1.2 is not supported, can I safely downgrade?
+    // TODO: what if TLS 1.2 is not supported, can I safely downgrade?
+
+    // TODO: IMPORTANT: the Botan::TLS:Client does a write in the statement below.
     m_tlsClient.reset(new Botan::TLS::Client(m_botanTLSCallbacks, m_sessionManager, m_credentials, m_policy, m_rng,
         Botan::TLS::Server_Information(m_hostname, m_port.number()), Botan::TLS::Protocol_Version::TLS_V12));
 
-    // When the Botan TLS client is active it means the handshake has finished and we can start sending data so we
-    // consider the connection has now been established and we return to the caller.
-    while (!m_tlsClient->is_closed() && !m_tlsClient->is_active())
-    {
-        // TODO: buffer size?
-        ByteBuffer buffer(10 * 1024);
-        // TODO: handle error
-        int n = m_socket.read(buffer, buffer.capacity(), error);
-
-        // TODO: is there not an issue that I may read data from the server past the handshake. So application data
-        // might be called. This would only happen if the server pushes data. So I need to buffer everything received
-        // by tls_record_received
-
-        // TODO: this returns the amount of data needed to complete the next record. Do I need to do something with
-        // this.
-        size_t needed = m_tlsClient->received_data((const uint8_t*)buffer.data(), n);
-    }
+    doHandshake(error);
 }
 
 int TLSClientSocketBotanClientImpl::read(char* buffer, int length, Error& error)
@@ -67,6 +59,15 @@ int TLSClientSocketBotanClientImpl::read(char* buffer, int length, Error& error)
     ByteBuffer localBuffer(10 * 1024);
     // TODO: handle error
     int n = m_socket.read(localBuffer, localBuffer.capacity(), error);
+    if (error)
+    {
+        if (error.code() == NetworkingErrorCategory::Value::would_block)
+        {
+            m_state = State::waiting_for_read;
+            // TODO: should this return 0, that is usually used to indicate socket has been closed
+            return 0;
+        }
+    }
     if (n == 0)
     {
         // TODO: socket was closed on the other end
@@ -90,6 +91,7 @@ int TLSClientSocketBotanClientImpl::read(char* buffer, int length, Error& error)
         return count;
     }
 
+    // TODO: should this return 0, that is usually used to indicate socket has been closed
     return 0;
 }
 
@@ -104,6 +106,94 @@ const TCPClientSocket& TLSClientSocketBotanClientImpl::socket() const noexcept
     return m_socket;
 }
 
+TCPClientSocket& TLSClientSocketBotanClientImpl::socket() noexcept
+{
+    return m_socket;
+}
+
+bool TLSClientSocketBotanClientImpl::isConnected() const
+{
+    return m_tlsClient->is_active();
+}
+
+void TLSClientSocketBotanClientImpl::onCallback()
+{
+    // TODO: erro handling
+    Error error;
+    switch (m_state)
+    {
+    case State::handshake_in_progress:
+        {
+            // TODO
+            Error todo_error;
+            doHandshake(todo_error);
+        }
+        break;
+
+    case State::waiting_for_read_during_handshake:
+        doHandshake(error);
+        break;
+
+    case State::waiting_for_write_during_handshake:
+        // TODO
+        break;
+
+    case State::waiting_for_read:
+        // TODO: I think I don't need to do anything here
+        break;
+
+    case State::error:
+        // TODO
+        break;
+    }
+}
+
+void TLSClientSocketBotanClientImpl::doHandshake(Error& error)
+{
+   // TODO: handle errors
+
+    while (!m_tlsClient->is_closed() && !m_tlsClient->is_active())
+    {
+        // TODO: what if a write blocks during this loop?
+
+        // TODO: buffer size?
+        ByteBuffer buffer(10 * 1024);
+
+        // TODO: handle error
+        int n = m_socket.read(buffer, buffer.capacity(), error);
+        if (error)
+        {
+            if (error.code() == NetworkingErrorCategory::Value::would_block)
+            {
+                std::cerr << "TLSClientSocketBotanClientImpl::doReadDuringHandshake would block" << std::endl;
+                m_state = State::waiting_for_read_during_handshake;
+            }
+            else
+            {
+                // TODO
+                m_state = State::error;
+            }
+            break;
+        }
+        if (n == 0)
+        {
+            std::cerr << "Returning 0" << std::endl;
+        }
+
+        // TODO: how do I handle socket close here?
+
+        // TODO: is there not an issue that I may read data from the server past the handshake. So application data
+        // might be called. This would only happen if the server pushes data. So I need to buffer everything received
+        // by tls_record_received
+
+        // TODO: this returns the amount of data needed to complete the next record. Do I need to do something with
+        // this.
+        size_t needed = m_tlsClient->received_data((const uint8_t*)buffer.data(), n);
+    }
+
+    // TODO: need to change state here if we are closed or active
+}
+
 TLSClientSocketBotanClientImpl::BotanTLSCallbacks::BotanTLSCallbacks(TCPClientSocket& socket, std::string& buffer)
     : m_socket(socket), m_buffer(buffer)
 {
@@ -113,7 +203,20 @@ void TLSClientSocketBotanClientImpl::BotanTLSCallbacks::tls_emit_data(const uint
 {
     // TODO: how do I handle errors
     Error error;
-    m_socket.write((const char*)data, size, error);
+
+    // TODO: for now busy retry because I don't want to deal with complexity of figuring out if it's a read or write that blocked
+    do
+    {
+        m_socket.write((const char*)data, size, error);
+    } while (error && (error.code() == NetworkingErrorCategory::Value::would_block));
+
+    if (error)
+    {
+        // TODO
+        std::cerr << "Error tls_emit_data" << std::endl;
+    }
+
+    // TODO: handle would_block error, unlikely to happen so I leave it for now
 }
 
 void TLSClientSocketBotanClientImpl::BotanTLSCallbacks::tls_record_received(uint64_t seq_no, const uint8_t data[],

@@ -24,6 +24,12 @@ const char* NetworkingErrorCategory::message(int ev, char* buffer, size_t len) c
     case Value::generic_error:
         return "generic error";
 
+    case Value::networking_library_not_initialized:
+        return "networking library not initialized";
+
+    case Value::would_block:
+        return "would block";
+
     default:
         return "unknown value";
     }
