@@ -91,6 +91,9 @@ void AsyncTCPClientSocketTests::ConnectTest1(Test& test)
         }
     );
 
+    // TODO: this is flaky, should be able to fix once I get async server
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+
     Error error;
     NetworkConnectionsManager connection_manager;
     TestCallbacks callbacks;
