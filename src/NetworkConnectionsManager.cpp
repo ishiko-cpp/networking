@@ -151,7 +151,12 @@ void NetworkConnectionsManager::run(bool (*stop_function)(NetworkConnectionsMana
         for (std::set<ManagedTLSSocketImpl*>::iterator it = m_waiting_for_connection2.begin(); it != m_waiting_for_connection2.end();)
         {
             ManagedTLSSocketImpl* managed_socket = *it;
-            if (FD_ISSET(managed_socket->socket().socket().nativeHandle(), &fd_exception))
+            if (FD_ISSET(managed_socket->socket().socket().nativeHandle(), &fd_write_ready))
+            {
+                managed_socket->callback();
+                it = m_waiting_for_connection2.erase(it);
+            }
+            else if (FD_ISSET(managed_socket->socket().socket().nativeHandle(), &fd_exception))
             {
                 managed_socket->callback();
                 it = m_waiting_for_connection2.erase(it);

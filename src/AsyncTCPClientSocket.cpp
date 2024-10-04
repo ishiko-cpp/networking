@@ -3,11 +3,14 @@
 
 #include "AsyncTCPClientSocket.hpp"
 #include "NetworkingErrorCategory.hpp"
+// TODO
+#include <iostream>
 
 using namespace Ishiko;
 
 void AsyncTCPClientSocket::Callbacks::onConnectionEstablished(NetworkConnectionsManager::ManagedSocket& socket)
 {
+    std::cerr << "AsyncTCPClientSocket::Callbacks::onConnectionEstablished(NetworkConnectionsManager::ManagedSocket& socket)" << std::endl;
     m_socket = &socket;
 
     // TODO: error?
@@ -35,15 +38,14 @@ void AsyncTCPClientSocket::connect(IPv4Address address, Port port) noexcept
 {
     Error error;
     m_connections_manager.connect(address, port, m_callbacks, error);
-    if (!error || (error.code() != NetworkingErrorCategory::Value::would_block))
-    {
-        // There was no error meaning the connect succeeded immediately or there was an error different than
-        // 'would_block'. In either case we can call the callback immediately.
-        m_callbacks.onConnectionEstablished(error);
-    }
+    // TODO: even if there is no error the NetworkConnectionsManager will trigger the callback
 }
 
 void AsyncTCPClientSocket::close() noexcept
 {
+    std::cerr << "AsyncTCPClientSocket::close 1" << std::endl;
+
     m_callbacks.m_socket->close();
+
+    std::cerr << "AsyncTCPClientSocket::close 2" << std::endl;
 }
