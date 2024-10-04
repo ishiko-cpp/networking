@@ -29,6 +29,7 @@ public:
     void handshake(Error& error) noexcept override;
     int read(char* buffer, int length, Error& error) override;
     void write(const char* buffer, int length, Error& error) override;
+    void close() override;
     const TCPClientSocket& socket() const noexcept override;
     TCPClientSocket& socket() noexcept override;
     bool isConnected() const override;

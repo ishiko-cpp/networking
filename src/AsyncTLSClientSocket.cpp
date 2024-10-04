@@ -5,12 +5,42 @@
 
 using namespace Ishiko;
 
-AsyncTLSClientSocket::AsyncTLSClientSocket(Error& error) noexcept
+void AsyncTLSClientSocket::Callbacks::onConnectionEstablished(NetworkConnectionsManager::ManagedTLSSocket& socket)
 {
-    // TODO
+    m_socket = &socket;
+
+    // TODO: error?
+    Error error;
+    onConnectionEstablished(error);
 }
 
-void AsyncTLSClientSocket::connect(IPv4Address address, Port port, Error& error) noexcept
+void AsyncTLSClientSocket::Callbacks::onHandshake()
 {
-    // TODO
+}
+
+void AsyncTLSClientSocket::Callbacks::onReadReady()
+{
+}
+
+void AsyncTLSClientSocket::Callbacks::onWriteReady()
+{
+}
+
+AsyncTLSClientSocket::AsyncTLSClientSocket(NetworkConnectionsManager& connections_manager, Callbacks& callbacks,
+    Error& error) noexcept
+    : m_connections_manager{connections_manager}, m_callbacks{callbacks}
+{
+    // TODO: socket creation should happen here, none of that managed socket stuff
+}
+
+void AsyncTLSClientSocket::connect(IPv4Address address, Port port, const Hostname& hostname) noexcept
+{
+    Error error;
+    m_connections_manager.connectWithTLS(address, port, hostname, m_callbacks, error);
+    // TODO: even if there is no error the NetworkConnectionsManager will trigger the callback
+}
+
+void AsyncTLSClientSocket::close() noexcept
+{
+    m_callbacks.m_socket->close();
 }

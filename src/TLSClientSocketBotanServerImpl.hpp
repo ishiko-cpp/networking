@@ -22,8 +22,9 @@ public:
 
     void connect(IPv4Address address, Port port, const std::string& hostname, Error& error) noexcept override;
     void handshake(Error& error) noexcept override;
-    virtual int read(char* buffer, int length, Error& error) override;
-    virtual void write(const char* buffer, int length, Error& error) override;
+    int read(char* buffer, int length, Error& error) override;
+    void write(const char* buffer, int length, Error& error) override;
+    void close() override;
     const TCPClientSocket& socket() const noexcept override;
     TCPClientSocket& socket() noexcept override;
     bool isConnected() const override;
