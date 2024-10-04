@@ -4,8 +4,8 @@
 #ifndef GUARD_ISHIKO_CPP_NETWORKING_WINDOWS_TCPCLIENTSOCKET_HPP
 #define GUARD_ISHIKO_CPP_NETWORKING_WINDOWS_TCPCLIENTSOCKET_HPP
 
-#include "../IPv4Address.hpp"
 #include "NativeSocketHandle.hpp"
+#include "../IPv4Address.hpp"
 #include "../Port.hpp"
 #include "../SocketOption.hpp"
 #include <Ishiko/Errors.hpp>

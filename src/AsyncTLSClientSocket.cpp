@@ -7,4 +7,10 @@ using namespace Ishiko;
 
 AsyncTLSClientSocket::AsyncTLSClientSocket(Error& error) noexcept
 {
+    // TODO
+}
+
+void AsyncTLSClientSocket::connect(IPv4Address address, Port port, Error& error) noexcept
+{
+    // TODO
 }

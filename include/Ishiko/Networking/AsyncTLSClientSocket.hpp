@@ -4,6 +4,8 @@
 #ifndef GUARD_ISHIKO_CPP_NETWORKING_ASYNCTLSCLIENTSOCKET_HPP
 #define GUARD_ISHIKO_CPP_NETWORKING_ASYNCTLSCLIENTSOCKET_HPP
 
+#include "IPv4Address.hpp"
+#include "Port.hpp"
 #include <Ishiko/Errors.hpp>
 
 namespace Ishiko
@@ -12,6 +14,8 @@ namespace Ishiko
     {
     public:
         AsyncTLSClientSocket(Error& error) noexcept;
+
+        void connect(IPv4Address address, Port port, Error& error) noexcept;
     };
 }
 

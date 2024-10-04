@@ -3,7 +3,6 @@
 
 #include "AsyncTLSClientSocketTests.hpp"
 #include "Ishiko/Networking/AsyncTLSClientSocket.hpp"
-#include <thread>
 
 using namespace Ishiko;
 
