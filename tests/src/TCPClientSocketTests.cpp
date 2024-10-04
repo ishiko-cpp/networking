@@ -256,15 +256,15 @@ void TCPClientSocketTests::ShutdownTest1(Test& test)
 
     std::thread serverThread(
         []()
-    {
-        Error error;
-        TCPServerSocket socket(IPv4Address::Localhost(), 8687, SocketOption::none, error);
-        TCPClientSocket clientSocket = socket.accept(error);
+        {
+            Error error;
+            TCPServerSocket socket(IPv4Address::Localhost(), 8687, SocketOption::none, error);
+            TCPClientSocket clientSocket = socket.accept(error);
 
-        // This will also make sure the server stays alive until the client closes the connection
-        char buffer[1];
-        clientSocket.read(buffer, 1, error);
-    }
+            // This will also make sure the server stays alive until the client closes the connection
+            char buffer[1];
+            clientSocket.read(buffer, 1, error);
+        }
     );
 
     // TODO: this is flaky, should be able to fix once I get async server

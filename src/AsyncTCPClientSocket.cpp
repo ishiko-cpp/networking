@@ -8,6 +8,8 @@ using namespace Ishiko;
 
 void AsyncTCPClientSocket::Callbacks::onConnectionEstablished(NetworkConnectionsManager::ManagedSocket& socket)
 {
+    m_socket = &socket;
+
     // TODO: error?
     Error error;
     onConnectionEstablished(error);
@@ -15,12 +17,10 @@ void AsyncTCPClientSocket::Callbacks::onConnectionEstablished(NetworkConnections
 
 void AsyncTCPClientSocket::Callbacks::onReadReady()
 {
-
 }
 
 void AsyncTCPClientSocket::Callbacks::onWriteReady()
 {
-
 }
 
 AsyncTCPClientSocket::AsyncTCPClientSocket(NetworkConnectionsManager& connections_manager, Callbacks& callbacks,
@@ -33,10 +33,10 @@ void AsyncTCPClientSocket::connect(IPv4Address address, Port port) noexcept
 {
     Error error;
     m_connections_manager.connect(address, port, m_callbacks, error);
-    if (!error || (error.code() != NetworkingErrorCategory::Value::would_block))
-    {
-        // There was no error meaning the connect succeeded immediately or there was an error different than
-        // 'would_block'. In either case we can call the callback immediately.
-        m_callbacks.onConnectionEstablished(error);
-    }
+    // TODO: even if there is no error the NetworkConnectionsManager will trigger the callback
+}
+
+void AsyncTCPClientSocket::close() noexcept
+{
+    m_callbacks.m_socket->close();
 }

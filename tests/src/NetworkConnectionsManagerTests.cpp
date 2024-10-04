@@ -10,11 +10,25 @@ NetworkConnectionsManagerTests::NetworkConnectionsManagerTests(const TestNumber&
     : TestSequence(number, "NetworkConnectionsManager tests", context)
 {
     append<HeapAllocationErrorsTest>("Constructor test 1", ConstructorTest1);
+    append<HeapAllocationErrorsTest>("run test 1", RunTest1);
 }
 
 void NetworkConnectionsManagerTests::ConstructorTest1(Test& test)
 {
     NetworkConnectionsManager connection_manager;
+
+    ISHIKO_TEST_PASS();
+}
+
+void NetworkConnectionsManagerTests::RunTest1(Test& test)
+{
+    NetworkConnectionsManager connection_manager;
+
+    connection_manager.run(
+        [](NetworkConnectionsManager& connections_manager)
+        {
+            return true;
+        });
 
     ISHIKO_TEST_PASS();
 }
