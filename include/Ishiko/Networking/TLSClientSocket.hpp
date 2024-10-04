@@ -37,6 +37,8 @@ public:
     // TODO: should length be size_t
     void write(const char* buffer, int length, Error& error);
 
+    void close();
+
     IPv4Address getLocalIPAddress(Error& error) const;
     Port getLocalPort(Error& error) const;
     IPv4Address getPeerIPAddress(Error& error) const;
@@ -63,6 +65,7 @@ private:
         virtual void handshake(Error& error) noexcept = 0;
         virtual int read(char* buffer, int length, Error& error) = 0;
         virtual void write(const char* buffer, int length, Error& error) = 0;
+        virtual void close() = 0;
         virtual const TCPClientSocket& socket() const noexcept = 0;
         virtual TCPClientSocket& socket() noexcept = 0;
         virtual bool isConnected() const = 0;
