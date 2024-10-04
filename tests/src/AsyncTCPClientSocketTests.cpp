@@ -84,6 +84,10 @@ void AsyncTCPClientSocketTests::ConnectTest1(Test& test)
             Error error;
             TCPServerSocket socket(IPv4Address::Localhost(), 9685, SocketOption::none, error);
             TCPClientSocket clientSocket = socket.accept(error);
+
+            // This will also make sure the server stays alive until the client closes the connection
+            char buffer[1];
+            clientSocket.read(buffer, 1, error);
         }
     );
 
@@ -102,6 +106,8 @@ void AsyncTCPClientSocketTests::ConnectTest1(Test& test)
         {
             return connections_manager.idle();
         });
+
+    socket.close();
 
     serverThread.join();
 

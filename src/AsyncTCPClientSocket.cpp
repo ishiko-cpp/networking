@@ -8,6 +8,8 @@ using namespace Ishiko;
 
 void AsyncTCPClientSocket::Callbacks::onConnectionEstablished(NetworkConnectionsManager::ManagedSocket& socket)
 {
+    m_socket = &socket;
+
     // TODO: error?
     Error error;
     onConnectionEstablished(error);
@@ -39,4 +41,9 @@ void AsyncTCPClientSocket::connect(IPv4Address address, Port port) noexcept
         // 'would_block'. In either case we can call the callback immediately.
         m_callbacks.onConnectionEstablished(error);
     }
+}
+
+void AsyncTCPClientSocket::close() noexcept
+{
+    m_callbacks.m_socket->close();
 }
