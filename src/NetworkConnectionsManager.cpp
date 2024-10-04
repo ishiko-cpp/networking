@@ -18,11 +18,15 @@ NetworkConnectionsManager::NetworkConnectionsManager()
 
 void NetworkConnectionsManager::connect(IPv4Address address, Port port, ConnectionCallbacks& callbacks, Error& error)
 {
+    std::cerr << "NetworkConnectionsManager::connect 1" << std::endl;
+
     TCPClientSocket socket(SocketOption::non_blocking, error);
     if (error)
     {
         return;
     }
+
+    std::cerr << "NetworkConnectionsManager::connect 2" << std::endl;
 
     // TODO: can throw
     // TODO: not thread-safe
@@ -30,11 +34,15 @@ void NetworkConnectionsManager::connect(IPv4Address address, Port port, Connecti
     m_managed_sockets.back().connect(address, port, error);
     if (!error)
     {
+        std::cerr << "NetworkConnectionsManager::connect 3" << std::endl;
+
         // TODO: this is bad and shows why the approach of returning ManagedSocket doesn't work. If the call succeed
         // we still have to call the callback but the client doesn't really expect a callback in non blocking/not async
         // socket
         callbacks.onConnectionEstablished(m_managed_sockets.back());
     }
+
+    std::cerr << "NetworkConnectionsManager::connect 4" << std::endl;
 }
 
 void NetworkConnectionsManager::connectWithTLS(IPv4Address address, Port port, const Hostname& hostname,
