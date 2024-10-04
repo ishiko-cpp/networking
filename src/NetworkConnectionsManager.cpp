@@ -6,7 +6,6 @@
 #include <boost/utility/string_view.hpp>
 #include <chrono>
 #include <thread>
-#include <iostream> // TODO: remove
 
 using namespace Ishiko;
 
@@ -27,7 +26,14 @@ void NetworkConnectionsManager::connect(IPv4Address address, Port port, Connecti
     // TODO: can throw
     // TODO: not thread-safe
     m_managed_sockets.emplace_back(m_shared_state, std::move(socket), callbacks);
-    m_managed_sockets.back().connect(address, port);
+    m_managed_sockets.back().connect(address, port, error);
+    if (!error)
+    {
+        // TODO: this is bad and shows why the approach of returning ManagedSocket doesn't work. If the call succeed
+        // we still have to call the callback but the client doesn't really expect a callback in non blocking/not async
+        // socket
+        callbacks.onConnectionEstablished(m_managed_sockets.back());
+    }
 }
 
 void NetworkConnectionsManager::connectWithTLS(IPv4Address address, Port port, const Hostname& hostname,
@@ -42,72 +48,76 @@ void NetworkConnectionsManager::connectWithTLS(IPv4Address address, Port port, c
     // TODO: can throw
     // TODO: not thread-safe
     m_managed_tls_sockets.emplace_back(m_shared_state, std::move(socket), callbacks);
-    m_managed_tls_sockets.back().connect(address, port, hostname);
+    m_managed_tls_sockets.back().connect(address, port, hostname, error);
 }
 
-void NetworkConnectionsManager::run()
+void NetworkConnectionsManager::run(bool (*stop_function)(NetworkConnectionsManager& connections_manager))
 {
-    // TODO: proper way to terminate
-    size_t hack = 50;
-    while (--hack)
+    while (!stop_function(*this))
     {
-        // We take a copy of the current state of the waiting lists and clear the originals. This allows the callbacks
-        // to add sockets to the list without interference.
-        // TODO: should I actually convert this to a vector?
-        // TODO: thread safety
-        std::set<ManagedSocketImpl*> waiting_for_read{m_shared_state.m_waiting_for_read};
-        m_shared_state.m_waiting_for_read.clear();
-        std::set<ManagedSocketImpl*> waiting_for_write{m_shared_state.m_waiting_for_write};
-        m_shared_state.m_waiting_for_write.clear();
-        std::set<ManagedSocketImpl*> waiting_for_exception{m_shared_state.m_waiting_for_exception};
-        m_shared_state.m_waiting_for_exception.clear();
-        std::set<ManagedTLSSocketImpl*> waiting_for_read2{m_shared_state.m_waiting_for_read2};
-        m_shared_state.m_waiting_for_read2.clear();
-        std::set<ManagedTLSSocketImpl*> waiting_for_write2{m_shared_state.m_waiting_for_write2};
-        m_shared_state.m_waiting_for_write2.clear();
-        std::set<ManagedTLSSocketImpl*> waiting_for_exception2{m_shared_state.m_waiting_for_exception2};
-        m_shared_state.m_waiting_for_exception2.clear();
-
-        if (waiting_for_read.empty() && waiting_for_write.empty() && waiting_for_exception.empty()
-            && waiting_for_read2.empty() && waiting_for_write2.empty() && waiting_for_exception2.empty())
+        if (idle())
         {
             // TODO: for now sleep but should block or something
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
             continue;
         }
 
+        // Merge the new sockets
+        // TODO: thread safety
+        m_waiting_for_connection.insert(m_shared_state.m_new_waiting_for_connection.begin(),
+            m_shared_state.m_new_waiting_for_connection.end());
+        m_shared_state.m_new_waiting_for_connection.clear();
+        m_waiting_for_read.insert(m_shared_state.m_new_waiting_for_read.begin(),
+            m_shared_state.m_new_waiting_for_read.end());
+        m_shared_state.m_new_waiting_for_read.clear();
+        m_waiting_for_write.insert(m_shared_state.m_new_waiting_for_write.begin(),
+            m_shared_state.m_new_waiting_for_write.end());
+        m_shared_state.m_new_waiting_for_write.clear();
+        m_waiting_for_connection2.insert(m_shared_state.m_new_waiting_for_connection2.begin(),
+            m_shared_state.m_new_waiting_for_connection2.end());
+        m_shared_state.m_new_waiting_for_connection2.clear();
+        m_waiting_for_read2.insert(m_shared_state.m_new_waiting_for_read2.begin(),
+            m_shared_state.m_new_waiting_for_read2.end());
+        m_shared_state.m_new_waiting_for_read2.clear();
+        m_waiting_for_write2.insert(m_shared_state.m_new_waiting_for_write2.begin(),
+            m_shared_state.m_new_waiting_for_write2.end());
+        m_shared_state.m_new_waiting_for_write2.clear();
+
         fd_set fd_read_ready;
         FD_ZERO(&fd_read_ready);
-        for (ManagedSocketImpl* managed_socket : waiting_for_read)
+        fd_set fd_write_ready;
+        FD_ZERO(&fd_write_ready);
+        fd_set fd_exception;
+        FD_ZERO(&fd_exception);
+
+        for (ManagedSocketImpl* managed_socket : m_waiting_for_connection)
+        {
+            FD_SET(managed_socket->socket().nativeHandle(), &fd_write_ready);
+            FD_SET(managed_socket->socket().nativeHandle(), &fd_exception);
+        }
+        for (ManagedTLSSocketImpl* managed_socket : m_waiting_for_connection2)
+        {
+            FD_SET(managed_socket->socket().socket().nativeHandle(), &fd_write_ready);
+            FD_SET(managed_socket->socket().socket().nativeHandle(), &fd_exception);
+        }
+
+        for (ManagedSocketImpl* managed_socket : m_waiting_for_read)
         {
             FD_SET(managed_socket->socket().nativeHandle(), &fd_read_ready);
         }
-        for (ManagedTLSSocketImpl* managed_socket : waiting_for_read2)
+        for (ManagedTLSSocketImpl* managed_socket : m_waiting_for_read2)
         {
             FD_SET(managed_socket->socket().socket().nativeHandle(), &fd_read_ready);
         }
-
-        fd_set fd_write_ready;
-        FD_ZERO(&fd_write_ready);
-        for (ManagedSocketImpl* managed_socket :waiting_for_write)
+                
+        for (ManagedSocketImpl* managed_socket : m_waiting_for_write)
         {
             FD_SET(managed_socket->socket().nativeHandle(), &fd_write_ready);
         }
-        for (ManagedTLSSocketImpl* managed_socket :waiting_for_write2)
+        for (ManagedTLSSocketImpl* managed_socket : m_waiting_for_write2)
         {
             FD_SET(managed_socket->socket().socket().nativeHandle(), &fd_write_ready);
-        }
-
-        fd_set fd_exception;
-        FD_ZERO(&fd_exception);
-        for (ManagedSocketImpl* managed_socket : waiting_for_exception)
-        {
-            FD_SET(managed_socket->socket().nativeHandle(), &fd_exception);
-        }
-        for (ManagedTLSSocketImpl* managed_socket : waiting_for_exception2)
-        {
-            FD_SET(managed_socket->socket().socket().nativeHandle(), &fd_exception);
-        }
+        }      
 
         // TODO: make this configurable?
         struct timeval stTimeOut;
@@ -115,85 +125,142 @@ void NetworkConnectionsManager::run()
         stTimeOut.tv_usec = 0;
         int ret = select(-1, &fd_read_ready, &fd_write_ready, &fd_exception, &stTimeOut);
         // TODO: check for ret error
+        // TODO: if it is 0 then timeout occurred
 
-        for (ManagedSocketImpl* managed_socket : waiting_for_write)
+        for (std::set<ManagedSocketImpl*>::iterator it = m_waiting_for_connection.begin(); it != m_waiting_for_connection.end();)
         {
+            ManagedSocketImpl* managed_socket = *it;
             if (FD_ISSET(managed_socket->socket().nativeHandle(), &fd_write_ready))
             {
                 managed_socket->callback();
+                it = m_waiting_for_connection.erase(it);
+            }
+            else if (FD_ISSET(managed_socket->socket().nativeHandle(), &fd_exception))
+            {
+                // TODO: report error
+                managed_socket->callback();
+                it = m_waiting_for_connection.erase(it);
+            }
+            else
+            {
+                ++it;
             }
         }
 
-        for (ManagedTLSSocketImpl* managed_socket : waiting_for_write2)
+        for (std::set<ManagedTLSSocketImpl*>::iterator it = m_waiting_for_connection2.begin(); it != m_waiting_for_connection2.end();)
         {
+            ManagedTLSSocketImpl* managed_socket = *it;
             if (FD_ISSET(managed_socket->socket().socket().nativeHandle(), &fd_write_ready))
             {
                 managed_socket->callback();
+                it = m_waiting_for_connection2.erase(it);
+            }
+            else if (FD_ISSET(managed_socket->socket().socket().nativeHandle(), &fd_exception))
+            {
+                managed_socket->callback();
+                it = m_waiting_for_connection2.erase(it);
+            }
+            else
+            {
+                ++it;
             }
         }
 
-        for (ManagedSocketImpl* managed_socket : waiting_for_read)
+        for (std::set<ManagedSocketImpl*>::iterator it = m_waiting_for_read.begin(); it != m_waiting_for_read.end();)
         {
+            ManagedSocketImpl* managed_socket = *it;
             if (FD_ISSET(managed_socket->socket().nativeHandle(), &fd_read_ready))
             {
                 managed_socket->callback();
+                it = m_waiting_for_read.erase(it);
+            }
+            else
+            {
+                ++it;
             }
         }
 
-        for (ManagedTLSSocketImpl* managed_socket : waiting_for_read2)
+        for (std::set<ManagedTLSSocketImpl*>::iterator it = m_waiting_for_read2.begin(); it != m_waiting_for_read2.end();)
         {
+            ManagedTLSSocketImpl* managed_socket = *it;
             if (FD_ISSET(managed_socket->socket().socket().nativeHandle(), &fd_read_ready))
             {
                 managed_socket->callback();
+                it = m_waiting_for_read2.erase(it);
+            }
+            else
+            {
+                ++it;
             }
         }
 
-        for (ManagedSocketImpl* managed_socket : waiting_for_exception)
+        for (std::set<ManagedSocketImpl*>::iterator it = m_waiting_for_write.begin(); it != m_waiting_for_write.end();)
         {
-            if (FD_ISSET(managed_socket->socket().nativeHandle(), &fd_exception))
+            ManagedSocketImpl* managed_socket = *it;
+            if (FD_ISSET(managed_socket->socket().nativeHandle(), &fd_write_ready))
             {
                 managed_socket->callback();
+                it = m_waiting_for_write.erase(it);
+            }
+            else
+            {
+                ++it;
             }
         }
 
-        for (ManagedTLSSocketImpl* managed_socket : waiting_for_exception2)
+        for (std::set<ManagedTLSSocketImpl*>::iterator it = m_waiting_for_write2.begin(); it != m_waiting_for_write2.end();)
         {
-            if (FD_ISSET(managed_socket->socket().socket().nativeHandle(), &fd_exception))
+            ManagedTLSSocketImpl* managed_socket = *it;
+            if (FD_ISSET(managed_socket->socket().socket().nativeHandle(), &fd_write_ready))
             {
                 managed_socket->callback();
+                it = m_waiting_for_write2.erase(it);
+            }
+            else
+            {
+                ++it;
             }
         }
     }
 }
 
+bool NetworkConnectionsManager::idle() const
+{
+    return (m_shared_state.m_new_waiting_for_read.empty() && m_shared_state.m_new_waiting_for_write.empty()
+        && m_shared_state.m_new_waiting_for_connection.empty() && m_shared_state.m_new_waiting_for_read2.empty()
+        && m_shared_state.m_new_waiting_for_write2.empty() && m_shared_state.m_new_waiting_for_connection2.empty()
+        && m_waiting_for_connection.empty() && m_waiting_for_read.empty() && m_waiting_for_write.empty()
+        && m_waiting_for_connection2.empty() && m_waiting_for_read2.empty() && m_waiting_for_write2.empty());
+}
+
 void NetworkConnectionsManager::SharedState::setWaitingForRead(ManagedSocketImpl* managed_socket)
 {
-    m_waiting_for_read.insert(managed_socket);
+    m_new_waiting_for_read.insert(managed_socket);
 }
 
 void NetworkConnectionsManager::SharedState::setWaitingForWrite(ManagedSocketImpl* managed_socket)
 {
-    m_waiting_for_write.insert(managed_socket);
+    m_new_waiting_for_write.insert(managed_socket);
 }
 
-void NetworkConnectionsManager::SharedState::setWaitingForException(ManagedSocketImpl* managed_socket)
+void NetworkConnectionsManager::SharedState::setWaitingForConnection(ManagedSocketImpl* managed_socket)
 {
-    m_waiting_for_exception.insert(managed_socket);
+    m_new_waiting_for_connection.insert(managed_socket);
 }
 
 void NetworkConnectionsManager::SharedState::setWaitingForRead(ManagedTLSSocketImpl* managed_socket)
 {
-    m_waiting_for_read2.insert(managed_socket);
+    m_new_waiting_for_read2.insert(managed_socket);
 }
 
 void NetworkConnectionsManager::SharedState::setWaitingForWrite(ManagedTLSSocketImpl* managed_socket)
 {
-    m_waiting_for_write2.insert(managed_socket);
+    m_new_waiting_for_write2.insert(managed_socket);
 }
 
-void NetworkConnectionsManager::SharedState::setWaitingForException(ManagedTLSSocketImpl* managed_socket)
+void NetworkConnectionsManager::SharedState::setWaitingForConnection(ManagedTLSSocketImpl* managed_socket)
 {
-    m_waiting_for_exception2.insert(managed_socket);
+    m_new_waiting_for_connection2.insert(managed_socket);
 }
 
 NetworkConnectionsManager::ManagedSocketImpl::ManagedSocketImpl(SharedState& shared_state,
@@ -203,19 +270,15 @@ NetworkConnectionsManager::ManagedSocketImpl::ManagedSocketImpl(SharedState& sha
 {
 }
 
-void NetworkConnectionsManager::ManagedSocketImpl::connect(IPv4Address address, Port port)
+void NetworkConnectionsManager::ManagedSocketImpl::connect(IPv4Address address, Port port, Error& error)
 {
-    // TODO: error handling
-    Error error;
-
     m_socket.connect(address, port, error);
     if (error)
     {
         if (error.code() == NetworkingErrorCategory::Value::would_block)
         {
             // TODO: not sure but this may cause a race condition with run() since state and the call are separate steps
-            m_shared_state.setWaitingForWrite(this);
-            m_shared_state.setWaitingForException(this);
+            m_shared_state.setWaitingForConnection(this);
         }
     }
 }
@@ -306,11 +369,9 @@ NetworkConnectionsManager::ManagedTLSSocketImpl::ManagedTLSSocketImpl(SharedStat
 {
 }
 
-void NetworkConnectionsManager::ManagedTLSSocketImpl::connect(IPv4Address address, Port port, const Hostname& hostname)
+void NetworkConnectionsManager::ManagedTLSSocketImpl::connect(IPv4Address address, Port port, const Hostname& hostname,
+    Error& error)
 {
-    // TODO: error handling
-    Error error;
-
     m_socket.connect(address, port, hostname.asString(), error);
     if (error)
     {
@@ -319,8 +380,7 @@ void NetworkConnectionsManager::ManagedTLSSocketImpl::connect(IPv4Address addres
             // TODO: not sure but this may cause a race condition with run() since state and the call are separate steps
             // TODO: make this work with TLS
             // TODO: add state
-            m_shared_state.setWaitingForWrite(this);
-            m_shared_state.setWaitingForException(this);
+            m_shared_state.setWaitingForConnection(this);
         }
     }
 }
@@ -388,7 +448,6 @@ void NetworkConnectionsManager::ManagedTLSSocketImpl::callback()
     switch (m_state)
     {
     case State::waiting_for_connection:
-        std::cerr << "connected" << std::endl;
         m_callbacks.onConnectionEstablished(*this);
         break;
 		

@@ -4,6 +4,8 @@
 #include "AsyncTCPClientSocketTests.hpp"
 #include "Ishiko/Networking/AsyncTCPClientSocket.hpp"
 #include "Ishiko/Networking/NetworkConnectionsManager.hpp"
+#include "Ishiko/Networking/TCPServerSocket.hpp"
+#include <thread>
 
 using namespace Ishiko;
 
@@ -12,6 +14,8 @@ namespace
     class TestCallbacks : public AsyncTCPClientSocket::Callbacks
     {
     public:
+        TestCallbacks();
+
         void onConnectionEstablished(const Error& error) override;
         void onReadReady(const Error& error) override;
         void onWriteReady(const Error& error) override;
@@ -23,6 +27,11 @@ namespace
         bool m_connection_established_called;
         ErrorCode m_connection_established_called_error;
     };
+
+    TestCallbacks::TestCallbacks()
+        : m_connection_established_called{false}
+    {
+    }
 
     void TestCallbacks::onConnectionEstablished(const Error& error)
     {
@@ -69,18 +78,43 @@ void AsyncTCPClientSocketTests::ConstructorTest1(Test& test)
 
 void AsyncTCPClientSocketTests::ConnectTest1(Test& test)
 {
+    std::thread serverThread(
+        []()
+        {
+            Error error;
+            TCPServerSocket socket(IPv4Address::Localhost(), 9685, SocketOption::none, error);
+            TCPClientSocket clientSocket = socket.accept(error);
+
+            // This will also make sure the server stays alive until the client closes the connection
+            char buffer[1];
+            clientSocket.read(buffer, 1, error);
+        }
+    );
+
+    // TODO: this is flaky, should be able to fix once I get async server
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+
     Error error;
     NetworkConnectionsManager connection_manager;
     TestCallbacks callbacks;
     AsyncTCPClientSocket socket{connection_manager, callbacks, error};
 
-    // TODO: assign unique port number
-    socket.connect(IPv4Address::Localhost(), 8685);
+    ISHIKO_TEST_ABORT_IF(error);
 
-    connection_manager.run();
+    // TODO: assign unique port number
+    socket.connect(IPv4Address::Localhost(), 9685);
+
+    connection_manager.run(
+        [](NetworkConnectionsManager& connections_manager)
+        {
+            return connections_manager.idle();
+        });
+
+    socket.close();
+
+    serverThread.join();
 
     ISHIKO_TEST_FAIL_IF_NOT(callbacks.connectionEstablishedCalled());
     ISHIKO_TEST_FAIL_IF(callbacks.connectionEstablishedCalledError());
-    ISHIKO_TEST_FAIL_IF(error);
     ISHIKO_TEST_PASS();
 }

@@ -25,12 +25,17 @@ namespace Ishiko
             void onConnectionEstablished(NetworkConnectionsManager::ManagedSocket& socket) override;
             void onReadReady() override;
             void onWriteReady() override;
+
+        public: // TOOD
+            NetworkConnectionsManager::ManagedSocket* m_socket;
         };
 
         AsyncTCPClientSocket(NetworkConnectionsManager& connections_manager, Callbacks& callbacks,
             Error& error) noexcept;
 
         void connect(IPv4Address address, Port port) noexcept;
+
+        void close() noexcept;
 
     private:
         NetworkConnectionsManager& m_connections_manager;

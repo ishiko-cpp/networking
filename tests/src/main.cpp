@@ -43,12 +43,12 @@ int main(int argc, char* argv[])
         theTests.append<PortTests>();
         theTests.append<TCPServerSocketTests>();
         theTests.append<TCPClientSocketTests>();
-        theTests.append<AsyncTCPClientSocketTests>();
         theTests.append<TLSServerSocketTests>();
         theTests.append<TLSClientSocketTests>();
-        theTests.append<AsyncTLSClientSocketTests>();
         theTests.append<HostnameResolverTests>();
         theTests.append<NetworkConnectionsManagerTests>();
+        theTests.append<AsyncTCPClientSocketTests>();
+        theTests.append<AsyncTLSClientSocketTests>();
 
         return theTestHarness.run();
     }
