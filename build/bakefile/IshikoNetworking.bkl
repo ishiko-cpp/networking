@@ -67,7 +67,7 @@ library IshikoNetworking : IshikoText, IshikoMemory, IshikoErrors, IshikoBasePla
     }
 
     sources
-   {
+    {
         ../../src/AsyncTCPClientSocket.cpp
         ../../src/AsyncTLSClientSocket.cpp
         ../../src/Hostname.cpp
