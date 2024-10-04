@@ -84,7 +84,7 @@ void AsyncTCPClientSocketTests::ConnectTest1(Test& test)
     ISHIKO_TEST_ABORT_IF(error);
 
     // TODO: assign unique port number
-    socket.connect(IPv4Address::Localhost(), 8685);
+    socket.connect(IPv4Address::Localhost(), 9685);
 
     connection_manager.run(
         [](NetworkConnectionsManager& connections_manager)
