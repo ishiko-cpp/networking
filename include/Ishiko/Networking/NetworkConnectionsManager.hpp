@@ -12,6 +12,7 @@
 #include <Ishiko/Errors.hpp>
 #include <Ishiko/Memory.hpp>
 #include <boost/utility/string_view.hpp>
+#include <functional>
 #include <set>
 #include <utility>
 #include <vector>
@@ -77,7 +78,8 @@ namespace Ishiko
         void connectWithTLS(IPv4Address address, Port port, const Hostname& hostname,
             TLSConnectionCallbacks& callbacks, Error& error);
 
-        void run();
+        void run(bool (*stop_function)(NetworkConnectionsManager& connections_manager));
+        bool idle() const;
 
     private:
         class ManagedSocketImpl;
@@ -88,19 +90,19 @@ namespace Ishiko
         class SharedState
         {
         public:
+            void setWaitingForConnection(ManagedSocketImpl* managed_socket);
             void setWaitingForRead(ManagedSocketImpl* managed_socket);
             void setWaitingForWrite(ManagedSocketImpl* managed_socket);
-            void setWaitingForException(ManagedSocketImpl* managed_socket);
+            void setWaitingForConnection(ManagedTLSSocketImpl* managed_socket);
             void setWaitingForRead(ManagedTLSSocketImpl* managed_socket);
             void setWaitingForWrite(ManagedTLSSocketImpl* managed_socket);
-            void setWaitingForException(ManagedTLSSocketImpl* managed_socket);
 
-            std::set<ManagedSocketImpl*> m_waiting_for_read;
-            std::set<ManagedSocketImpl*> m_waiting_for_write;
-            std::set<ManagedSocketImpl*> m_waiting_for_exception;
-            std::set<ManagedTLSSocketImpl*> m_waiting_for_read2;
-            std::set<ManagedTLSSocketImpl*> m_waiting_for_write2;
-            std::set<ManagedTLSSocketImpl*> m_waiting_for_exception2;
+            std::set<ManagedSocketImpl*> m_new_waiting_for_connection;
+            std::set<ManagedSocketImpl*> m_new_waiting_for_read;
+            std::set<ManagedSocketImpl*> m_new_waiting_for_write;
+            std::set<ManagedTLSSocketImpl*> m_new_waiting_for_connection2;
+            std::set<ManagedTLSSocketImpl*> m_new_waiting_for_read2;
+            std::set<ManagedTLSSocketImpl*> m_new_waiting_for_write2;
         };
 
         class ManagedSocketImpl : public ManagedSocket
@@ -108,7 +110,7 @@ namespace Ishiko
         public:
             ManagedSocketImpl(SharedState& shared_state, TCPClientSocket&& socket, ConnectionCallbacks& callbacks);
 
-            void connect(IPv4Address address, Port port);
+            void connect(IPv4Address address, Port port, Error& error);
 
             int read(ByteBuffer& buffer, size_t count, Error& error) override;
             int read(char* buffer, int count, Error& error) override;
@@ -140,7 +142,7 @@ namespace Ishiko
         public:
             ManagedTLSSocketImpl(SharedState& shared_state, TLSClientSocket&& socket, TLSConnectionCallbacks& callbacks);
 
-            void connect(IPv4Address address, Port port, const Hostname& hostname);
+            void connect(IPv4Address address, Port port, const Hostname& hostname, Error& error);
 
             void handshake(Error& error) override;
 
@@ -176,6 +178,12 @@ namespace Ishiko
         // of the actual memory location.
         std::vector<ManagedTLSSocketImpl> m_managed_tls_sockets;
         SharedState m_shared_state;
+        std::set<ManagedSocketImpl*> m_waiting_for_connection;
+        std::set<ManagedSocketImpl*> m_waiting_for_read;
+        std::set<ManagedSocketImpl*> m_waiting_for_write;
+        std::set<ManagedTLSSocketImpl*> m_waiting_for_connection2;
+        std::set<ManagedTLSSocketImpl*> m_waiting_for_read2;
+        std::set<ManagedTLSSocketImpl*> m_waiting_for_write2;
     };
 }
 

@@ -12,6 +12,8 @@ namespace
     class TestCallbacks : public AsyncTCPClientSocket::Callbacks
     {
     public:
+        TestCallbacks();
+
         void onConnectionEstablished(const Error& error) override;
         void onReadReady(const Error& error) override;
         void onWriteReady(const Error& error) override;
@@ -23,6 +25,11 @@ namespace
         bool m_connection_established_called;
         ErrorCode m_connection_established_called_error;
     };
+
+    TestCallbacks::TestCallbacks()
+        : m_connection_established_called{false}
+    {
+    }
 
     void TestCallbacks::onConnectionEstablished(const Error& error)
     {
@@ -74,13 +81,18 @@ void AsyncTCPClientSocketTests::ConnectTest1(Test& test)
     TestCallbacks callbacks;
     AsyncTCPClientSocket socket{connection_manager, callbacks, error};
 
+    ISHIKO_TEST_ABORT_IF(error);
+
     // TODO: assign unique port number
     socket.connect(IPv4Address::Localhost(), 8685);
 
-    connection_manager.run();
+    connection_manager.run(
+        [](NetworkConnectionsManager& connections_manager)
+        {
+            return connections_manager.idle();
+        });
 
     ISHIKO_TEST_FAIL_IF_NOT(callbacks.connectionEstablishedCalled());
     ISHIKO_TEST_FAIL_IF(callbacks.connectionEstablishedCalledError());
-    ISHIKO_TEST_FAIL_IF(error);
     ISHIKO_TEST_PASS();
 }
