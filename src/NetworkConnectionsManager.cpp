@@ -28,6 +28,13 @@ void NetworkConnectionsManager::connect(IPv4Address address, Port port, Connecti
     // TODO: not thread-safe
     m_managed_sockets.emplace_back(m_shared_state, std::move(socket), callbacks);
     m_managed_sockets.back().connect(address, port, error);
+    if (!error)
+    {
+        // TODO: this is bad and shows why the approach of returning ManagedSocket doesn't work. If the call succeed
+        // we still have to call the callback but the client doesn't really expect a callback in non blocking/not async
+        // socket
+        callbacks.onConnectionEstablished(m_managed_sockets.back());
+    }
 }
 
 void NetworkConnectionsManager::connectWithTLS(IPv4Address address, Port port, const Hostname& hostname,
