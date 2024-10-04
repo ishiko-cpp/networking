@@ -41,6 +41,11 @@ void TLSClientSocket::write(const char* buffer, int length, Error& error)
     m_impl->write(buffer, length, error);
 }
 
+void TLSClientSocket::close()
+{
+    m_impl->close();
+}
+
 IPv4Address TLSClientSocket::getLocalIPAddress(Error& error) const
 {
     return m_impl->socket().getLocalIPAddress(error);

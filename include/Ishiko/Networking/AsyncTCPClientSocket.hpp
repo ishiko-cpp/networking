@@ -26,7 +26,7 @@ namespace Ishiko
             void onReadReady() override;
             void onWriteReady() override;
 
-        public: // TOOD
+        public: // TODO
             NetworkConnectionsManager::ManagedSocket* m_socket;
         };
 

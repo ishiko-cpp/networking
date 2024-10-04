@@ -24,6 +24,12 @@ TLSClientSocketBotanServerImpl::TLSClientSocketBotanServerImpl(TCPClientSocket&&
         // TODO: handle error
         int n = m_socket.read(buffer, buffer.capacity(), error);
 
+        // TODO: this means the socket was close
+        if (n == 0)
+        {
+            return;
+        }
+
         // TODO: is there not an issue that I may read data from the server past the handshake. So application data
         // might be called. This would only happen if the server pushes data. So I need to buffer everything received
         // by tls_record_received
@@ -98,6 +104,12 @@ void TLSClientSocketBotanServerImpl::write(const char* buffer, int length, Error
 {
     // TODO: how do we handle errors?
     m_tlsServer.send((const uint8_t*)buffer, length);
+}
+
+void TLSClientSocketBotanServerImpl::close()
+{
+    // TODO: do I need to do something to TLS client?
+    m_socket.close();
 }
 
 const TCPClientSocket& TLSClientSocketBotanServerImpl::socket() const noexcept

@@ -27,6 +27,7 @@ AsyncTCPClientSocket::AsyncTCPClientSocket(NetworkConnectionsManager& connection
     Error& error) noexcept
     : m_connections_manager{connections_manager}, m_callbacks{callbacks}
 {
+    // TODO: socket creation should happen here, none of that managed socket stuff
 }
 
 void AsyncTCPClientSocket::connect(IPv4Address address, Port port) noexcept

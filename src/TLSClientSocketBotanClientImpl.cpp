@@ -101,6 +101,12 @@ void TLSClientSocketBotanClientImpl::write(const char* buffer, int length, Error
     m_tlsClient->send((const uint8_t*)buffer, length);
 }
 
+void TLSClientSocketBotanClientImpl::close()
+{
+    // TODO: do I need to do something to TLS client?
+    m_socket.close();
+}
+
 const TCPClientSocket& TLSClientSocketBotanClientImpl::socket() const noexcept
 {
     return m_socket;

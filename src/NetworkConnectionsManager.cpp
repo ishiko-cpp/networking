@@ -379,7 +379,6 @@ void NetworkConnectionsManager::ManagedTLSSocketImpl::connect(IPv4Address addres
         {
             // TODO: not sure but this may cause a race condition with run() since state and the call are separate steps
             // TODO: make this work with TLS
-            // TODO: add state
             m_shared_state.setWaitingForConnection(this);
         }
     }
@@ -439,7 +438,7 @@ void NetworkConnectionsManager::ManagedTLSSocketImpl::close()
 {
     // TODO: this needs to remove the managed socket from the NetworkConnectionManager
     // TODO: Do I need this on TLS sockets?
-    //m_socket.close();
+    m_socket.close();
 }
 
 void NetworkConnectionsManager::ManagedTLSSocketImpl::callback()
