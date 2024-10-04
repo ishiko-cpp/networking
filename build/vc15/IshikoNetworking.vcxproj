@@ -150,6 +150,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\AsyncTCPClientSocket.cpp" />
+    <ClCompile Include="..\..\src\AsyncTLSClientSocket.cpp" />
     <ClCompile Include="..\..\src\Hostname.cpp" />
     <ClCompile Include="..\..\src\IPAddress.cpp" />
     <ClCompile Include="..\..\src\IPv4Address.cpp" />
@@ -171,6 +173,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\Ishiko\Networking.hpp" />
+    <ClInclude Include="..\..\include\Ishiko\Networking\AsyncTCPClientSocket.hpp" />
+    <ClInclude Include="..\..\include\Ishiko\Networking\AsyncTLSClientSocket.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\Hostname.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\HostnameResolver.hpp" />
     <ClInclude Include="..\..\include\Ishiko\Networking\IPAddress.hpp" />

@@ -12,6 +12,7 @@
 
 namespace Ishiko
 {
+    // TODO: mention that the resolver can "resolve" IP addresses
     class HostnameResolver
     {
     public:
