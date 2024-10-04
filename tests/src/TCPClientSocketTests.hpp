@@ -1,11 +1,8 @@
-/*
-    Copyright (c) 2021-2022 Xavier Leclercq
-    Released under the MIT License
-    See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
-*/
+// SPDX-FileCopyrightText: 2021-2024 Xavier Leclercq
+// SPDX-License-Identifier: BSL-1.0
 
-#ifndef _ISHIKO_CPP_NETWORKING_TESTS_TCPCLIENTSOCKETTESTS_HPP_
-#define _ISHIKO_CPP_NETWORKING_TESTS_TCPCLIENTSOCKETTESTS_HPP_
+#ifndef GUARD_ISHIKO_CPP_NETWORKING_TESTS_TCPCLIENTSOCKETTESTS_HPP
+#define GUARD_ISHIKO_CPP_NETWORKING_TESTS_TCPCLIENTSOCKETTESTS_HPP
 
 #include <Ishiko/TestFramework/Core.hpp>
 

@@ -4,6 +4,8 @@
 #ifndef GUARD_ISHIKO_CPP_NETWORKING_HPP
 #define GUARD_ISHIKO_CPP_NETWORKING_HPP
 
+#include "Networking/AsyncTCPClientSocket.hpp"
+#include "Networking/AsyncTLSClientSocket.hpp"
 #include "Networking/Hostname.hpp"
 #include "Networking/HostnameResolver.hpp"
 #include "Networking/IPAddress.hpp"

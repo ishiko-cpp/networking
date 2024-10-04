@@ -1,6 +1,8 @@
 // SPDX-FileCopyrightText: 2021-2024 Xavier Leclercq
 // SPDX-License-Identifier: BSL-1.0
 
+#include "AsyncTCPClientSocketTests.hpp"
+#include "AsyncTLSClientSocketTests.hpp"
 #include "HostnameResolverTests.hpp"
 #include "IPAddressTests.hpp"
 #include "IPv4AddressTests.hpp"
@@ -41,8 +43,10 @@ int main(int argc, char* argv[])
         theTests.append<PortTests>();
         theTests.append<TCPServerSocketTests>();
         theTests.append<TCPClientSocketTests>();
+        theTests.append<AsyncTCPClientSocketTests>();
         theTests.append<TLSServerSocketTests>();
         theTests.append<TLSClientSocketTests>();
+        theTests.append<AsyncTLSClientSocketTests>();
         theTests.append<HostnameResolverTests>();
         theTests.append<NetworkConnectionsManagerTests>();
 
