@@ -124,8 +124,14 @@ void NetworkConnectionsManager::run(bool (*stop_function)(NetworkConnectionsMana
         for (std::set<ManagedSocketImpl*>::iterator it = m_waiting_for_connection.begin(); it != m_waiting_for_connection.end();)
         {
             ManagedSocketImpl* managed_socket = *it;
-            if (FD_ISSET(managed_socket->socket().nativeHandle(), &fd_exception))
+            if (FD_ISSET(managed_socket->socket().nativeHandle(), &fd_write_ready))
             {
+                managed_socket->callback();
+                it = m_waiting_for_connection.erase(it);
+            }
+            else if (FD_ISSET(managed_socket->socket().nativeHandle(), &fd_exception))
+            {
+                // TODO: report error
                 managed_socket->callback();
                 it = m_waiting_for_connection.erase(it);
             }
@@ -152,7 +158,7 @@ void NetworkConnectionsManager::run(bool (*stop_function)(NetworkConnectionsMana
         for (std::set<ManagedSocketImpl*>::iterator it = m_waiting_for_read.begin(); it != m_waiting_for_read.end();)
         {
             ManagedSocketImpl* managed_socket = *it;
-            if (FD_ISSET(managed_socket->socket().nativeHandle(), &fd_exception))
+            if (FD_ISSET(managed_socket->socket().nativeHandle(), &fd_read_ready))
             {
                 managed_socket->callback();
                 it = m_waiting_for_read.erase(it);
@@ -166,7 +172,7 @@ void NetworkConnectionsManager::run(bool (*stop_function)(NetworkConnectionsMana
         for (std::set<ManagedTLSSocketImpl*>::iterator it = m_waiting_for_read2.begin(); it != m_waiting_for_read2.end();)
         {
             ManagedTLSSocketImpl* managed_socket = *it;
-            if (FD_ISSET(managed_socket->socket().socket().nativeHandle(), &fd_exception))
+            if (FD_ISSET(managed_socket->socket().socket().nativeHandle(), &fd_read_ready))
             {
                 managed_socket->callback();
                 it = m_waiting_for_read2.erase(it);
@@ -180,7 +186,7 @@ void NetworkConnectionsManager::run(bool (*stop_function)(NetworkConnectionsMana
         for (std::set<ManagedSocketImpl*>::iterator it = m_waiting_for_write.begin(); it != m_waiting_for_write.end();)
         {
             ManagedSocketImpl* managed_socket = *it;
-            if (FD_ISSET(managed_socket->socket().nativeHandle(), &fd_exception))
+            if (FD_ISSET(managed_socket->socket().nativeHandle(), &fd_write_ready))
             {
                 managed_socket->callback();
                 it = m_waiting_for_write.erase(it);
@@ -194,7 +200,7 @@ void NetworkConnectionsManager::run(bool (*stop_function)(NetworkConnectionsMana
         for (std::set<ManagedTLSSocketImpl*>::iterator it = m_waiting_for_write2.begin(); it != m_waiting_for_write2.end();)
         {
             ManagedTLSSocketImpl* managed_socket = *it;
-            if (FD_ISSET(managed_socket->socket().socket().nativeHandle(), &fd_exception))
+            if (FD_ISSET(managed_socket->socket().socket().nativeHandle(), &fd_write_ready))
             {
                 managed_socket->callback();
                 it = m_waiting_for_write2.erase(it);

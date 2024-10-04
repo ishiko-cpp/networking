@@ -4,6 +4,8 @@
 #include "AsyncTCPClientSocketTests.hpp"
 #include "Ishiko/Networking/AsyncTCPClientSocket.hpp"
 #include "Ishiko/Networking/NetworkConnectionsManager.hpp"
+#include "Ishiko/Networking/TCPServerSocket.hpp"
+#include <thread>
 
 using namespace Ishiko;
 
@@ -76,6 +78,15 @@ void AsyncTCPClientSocketTests::ConstructorTest1(Test& test)
 
 void AsyncTCPClientSocketTests::ConnectTest1(Test& test)
 {
+    std::thread serverThread(
+        []()
+        {
+            Error error;
+            TCPServerSocket socket(IPv4Address::Localhost(), 9685, SocketOption::none, error);
+            TCPClientSocket clientSocket = socket.accept(error);
+        }
+    );
+
     Error error;
     NetworkConnectionsManager connection_manager;
     TestCallbacks callbacks;
@@ -91,6 +102,8 @@ void AsyncTCPClientSocketTests::ConnectTest1(Test& test)
         {
             return connections_manager.idle();
         });
+
+    serverThread.join();
 
     ISHIKO_TEST_FAIL_IF_NOT(callbacks.connectionEstablishedCalled());
     ISHIKO_TEST_FAIL_IF(callbacks.connectionEstablishedCalledError());
