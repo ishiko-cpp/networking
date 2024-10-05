@@ -37,7 +37,7 @@ NetworkConnectionsManager::NetworkConnectionsManager()
 }
 
 NetworkConnectionsManager::Registration NetworkConnectionsManager::registerSocketAndCallbacks(
-    NativeSocketHandle socket_handle, ConnectionCallbacks2& callbacks, void* callback_data)
+    NativeSocketHandle socket_handle, ConnectionCallbacks& callbacks, void* callback_data)
 {
     // TODO: duplicate and error management
     m_sockets_and_callbacks.emplace_back(socket_handle, &callbacks, callback_data);
@@ -397,7 +397,7 @@ TLSClientSocket& NetworkConnectionsManager::ManagedTLSSocketImpl::socket()
 }
 
 NetworkConnectionsManager::SocketAndCallbacks::SocketAndCallbacks(NativeSocketHandle socket_handle,
-    ConnectionCallbacks2* callbacks, void* callback_data)
+    ConnectionCallbacks* callbacks, void* callback_data)
     : m_socket_handle{socket_handle}, m_callbacks{callbacks}, m_callback_data{callback_data}
 {
 }

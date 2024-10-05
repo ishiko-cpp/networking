@@ -49,8 +49,7 @@ namespace Ishiko
             SharedState* m_shared_state;
         };
 
-        // TODO: rename this when I remove ConnectionCallbacks(1)
-        class ConnectionCallbacks2
+        class ConnectionCallbacks
         {
         public:
             virtual void onConnectionEstablished(void* callback_data) = 0;
@@ -90,7 +89,7 @@ namespace Ishiko
         NetworkConnectionsManager& operator=(NetworkConnectionsManager&& other) = delete;
         ~NetworkConnectionsManager() = default;
 
-        Registration registerSocketAndCallbacks(NativeSocketHandle socket_handle, ConnectionCallbacks2& callbacks,
+        Registration registerSocketAndCallbacks(NativeSocketHandle socket_handle, ConnectionCallbacks& callbacks,
             void* callback_data);
 
         void connectWithTLS(IPv4Address address, Port port, const Hostname& hostname,
@@ -162,11 +161,11 @@ namespace Ishiko
         class SocketAndCallbacks
         {
         public:
-            SocketAndCallbacks(NativeSocketHandle socket_handle, ConnectionCallbacks2* callbacks, void* callback_data);
+            SocketAndCallbacks(NativeSocketHandle socket_handle, ConnectionCallbacks* callbacks, void* callback_data);
 
         public: // TODO
             NativeSocketHandle m_socket_handle;
-            ConnectionCallbacks2* m_callbacks;
+            ConnectionCallbacks* m_callbacks;
             void* m_callback_data;
         };
 

@@ -14,7 +14,7 @@ namespace Ishiko
     class AsyncTCPClientSocket
     {
     public:
-        class Callbacks : public NetworkConnectionsManager::ConnectionCallbacks2
+        class Callbacks : public NetworkConnectionsManager::ConnectionCallbacks
         {
         public:
             virtual void onConnectionEstablished(const Error& error, AsyncTCPClientSocket& socket) = 0;
