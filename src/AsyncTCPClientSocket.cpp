@@ -6,35 +6,14 @@
 
 using namespace Ishiko;
 
-void AsyncTCPClientSocket::Callbacks::onConnectionEstablished(void* callback_data)
-{
-    // TODO: error?
-    Error error;
-    onConnectionEstablished(error, *static_cast<AsyncTCPClientSocket*>(callback_data));
-}
-
-void AsyncTCPClientSocket::Callbacks::onReadReady(void* callback_data)
-{
-    // TODO: error?
-    Error error;
-    onReadReady(error, *static_cast<AsyncTCPClientSocket*>(callback_data));
-}
-
-void AsyncTCPClientSocket::Callbacks::onWriteReady(void* callback_data)
-{
-    // TODO: error?
-    Error error;
-    onWriteReady(error, *static_cast<AsyncTCPClientSocket*>(callback_data));
-}
-
 AsyncTCPClientSocket::AsyncTCPClientSocket(NetworkConnectionsManager& connections_manager, Callbacks& callbacks,
     Error& error) noexcept
-    : m_socket{SocketOption::non_blocking, error}, m_connections_manager{connections_manager}, m_callbacks{callbacks}
+    : m_socket{SocketOption::non_blocking, error}, m_callbacks{callbacks}
 {
     if (!error)
     {
         // TODO: need to unregister somewhere
-        m_registration = m_connections_manager.registerSocketAndCallbacks(m_socket.nativeHandle(), m_callbacks, this);
+        m_registration = connections_manager.registerSocketAndCallbacks(m_socket.nativeHandle(), EventHandler, this);
     }
 }
 
@@ -92,4 +71,26 @@ void AsyncTCPClientSocket::close() noexcept
 {
     m_socket.close();
     // TODO: unregister
+}
+
+void AsyncTCPClientSocket::EventHandler(NetworkConnectionsManager::Event evt, void* data)
+{
+    // TODO: error handling
+    Error error;
+
+    AsyncTCPClientSocket* socket = static_cast<AsyncTCPClientSocket*>(data);
+    switch (evt)
+    {
+    case NetworkConnectionsManager::Event::connection_ready:
+        socket->m_callbacks.onConnectionEstablished(error, *socket);
+        break;
+
+    case NetworkConnectionsManager::Event::read_ready:
+        socket->m_callbacks.onReadReady(error, *socket);
+        break;
+
+    case NetworkConnectionsManager::Event::write_ready:
+        socket->m_callbacks.onWriteReady(error, *socket);
+        break;
+    }
 }

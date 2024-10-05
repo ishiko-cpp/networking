@@ -26,30 +26,26 @@ namespace Ishiko
     class NetworkConnectionsManager
     {
     public:
-        // TODO: better name?
-        // TODO: I feel I can merge Registration and SocketAndCallbacks
+        enum class Event
+        {
+            connection_ready,
+            read_ready,
+            write_ready
+        };
+
         class Registration
         {
         public:
             Registration();
-            // TODO: public function depends on a private classes BAD
             Registration(NetworkConnectionsManager* connections_manager, void* impl);
 
             void setWaitingForConnection();
             void setWaitingForRead();
             void setWaitingForWrite();
 
-        public: // TODO: back to private
+        private:
             NetworkConnectionsManager* m_connections_manager;
             void* m_impl;
-        };
-
-        class ConnectionCallbacks
-        {
-        public:
-            virtual void onConnectionEstablished(void* callback_data) = 0;
-            virtual void onReadReady(void* callback_data) = 0;
-            virtual void onWriteReady(void* callback_data) = 0;
         };
 
         // TODO: find a better name for this, although maybe it's OK?
@@ -84,8 +80,8 @@ namespace Ishiko
         NetworkConnectionsManager& operator=(NetworkConnectionsManager&& other) = delete;
         ~NetworkConnectionsManager() = default;
 
-        Registration registerSocketAndCallbacks(NativeSocketHandle socket_handle, ConnectionCallbacks& callbacks,
-            void* callback_data);
+        Registration registerSocketAndCallbacks(NativeSocketHandle socket_handle,
+            void (*event_handler)(Event evt, void* data), void* event_handler_data);
 
         void connectWithTLS(IPv4Address address, Port port, const Hostname& hostname,
             TLSConnectionCallbacks& callbacks, Error& error);
@@ -99,12 +95,13 @@ namespace Ishiko
         class RegistrationImpl
         {
         public:
-            RegistrationImpl(NativeSocketHandle socket_handle, ConnectionCallbacks* callbacks, void* callback_data);
+            RegistrationImpl(NativeSocketHandle socket_handle, void (*event_handler)(Event evt, void* data),
+                void* event_handler_data);
 
         public: // TODO
             NativeSocketHandle m_socket_handle;
-            ConnectionCallbacks* m_callbacks;
-            void* m_callback_data;
+            void (*m_event_handler)(Event evt, void* data);
+            void* m_event_handler_data;
         };
 
         // TODO: the things that are shared between the manager and the sockets

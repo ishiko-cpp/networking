@@ -41,10 +41,10 @@ NetworkConnectionsManager::NetworkConnectionsManager()
 }
 
 NetworkConnectionsManager::Registration NetworkConnectionsManager::registerSocketAndCallbacks(
-    NativeSocketHandle socket_handle, ConnectionCallbacks& callbacks, void* callback_data)
+    NativeSocketHandle socket_handle, void (*event_handler)(Event evt, void* data), void* event_handler_data)
 {
     // TODO: duplicate and error management
-    m_registrations.emplace_back(socket_handle, &callbacks, callback_data);
+    m_registrations.emplace_back(socket_handle, event_handler, event_handler_data);
     return Registration{this, &m_registrations.back()};
 }
 
@@ -145,13 +145,13 @@ void NetworkConnectionsManager::run(bool (*stop_function)(NetworkConnectionsMana
             RegistrationImpl* managed_socket = *it;
             if (FD_ISSET(managed_socket->m_socket_handle, &fd_write_ready))
             {
-                managed_socket->m_callbacks->onConnectionEstablished(managed_socket->m_callback_data);
+                managed_socket->m_event_handler(Event::connection_ready, managed_socket->m_event_handler_data);
                 it = m_waiting_for_connection3.erase(it);
             }
             else if (FD_ISSET(managed_socket->m_socket_handle, &fd_exception))
             {
                 // TODO: report error
-                managed_socket->m_callbacks->onConnectionEstablished(managed_socket->m_callback_data);
+                managed_socket->m_event_handler(Event::connection_ready, managed_socket->m_event_handler_data);
                 it = m_waiting_for_connection3.erase(it);
             }
             else
@@ -165,7 +165,7 @@ void NetworkConnectionsManager::run(bool (*stop_function)(NetworkConnectionsMana
             RegistrationImpl* managed_socket = *it;
             if (FD_ISSET(managed_socket->m_socket_handle, &fd_read_ready))
             {
-                managed_socket->m_callbacks->onReadReady(managed_socket->m_callback_data);
+                managed_socket->m_event_handler(Event::read_ready, managed_socket->m_event_handler_data);
                 it = m_waiting_for_read3.erase(it);
             }
             else
@@ -179,7 +179,7 @@ void NetworkConnectionsManager::run(bool (*stop_function)(NetworkConnectionsMana
             RegistrationImpl* managed_socket = *it;
             if (FD_ISSET(managed_socket->m_socket_handle, &fd_write_ready))
             {
-                managed_socket->m_callbacks->onWriteReady(managed_socket->m_callback_data);
+                managed_socket->m_event_handler(Event::write_ready, managed_socket->m_event_handler_data);
                 it = m_waiting_for_write3.erase(it);
             }
             else
@@ -401,7 +401,7 @@ TLSClientSocket& NetworkConnectionsManager::ManagedTLSSocketImpl::socket()
 }
 
 NetworkConnectionsManager::RegistrationImpl::RegistrationImpl(NativeSocketHandle socket_handle,
-    ConnectionCallbacks* callbacks, void* callback_data)
-    : m_socket_handle{socket_handle}, m_callbacks{callbacks}, m_callback_data{callback_data}
+    void(*event_handler)(Event evt, void* data), void* event_handler_data)
+    : m_socket_handle{socket_handle}, m_event_handler{event_handler}, m_event_handler_data{event_handler_data}
 {
 }
