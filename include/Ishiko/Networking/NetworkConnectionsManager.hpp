@@ -6,6 +6,7 @@
 
 #include "Hostname.hpp"
 #include "IPv4Address.hpp"
+#include "NativeSocketHandle.hpp"
 #include "Port.hpp"
 #include "TCPClientSocket.hpp"
 #include "TLSClientSocket.hpp"
@@ -24,7 +25,28 @@ namespace Ishiko
     // buffers may be needed.
     class NetworkConnectionsManager
     {
+    private:
+        // TODO: get rid of this forward declaration?
+        class SocketAndCallbacks;
+        // TODO: get rid of this forward declaration?
+        class SharedState;
+
     public:
+        // TODO: better name?
+        // TODO: I feel I can merge Registration and SocketAndCallbacks
+        class Registration
+        {
+        public:
+            // TODO: public function depends on 2 private classes BAD
+            Registration(SocketAndCallbacks* socket_and_callbacks, SharedState* shared_state);
+
+            void setWaitingForConnection();
+
+        private:
+            SocketAndCallbacks* m_socket_and_callbacks;
+            SharedState* m_shared_state;
+        };
+
         // TODO: find a better name for this, although maybe it's OK?
         // TODO: Need to be able to close and shutdown the connection
         class ManagedSocket
@@ -43,6 +65,15 @@ namespace Ishiko
         {
         public:
             virtual void onConnectionEstablished(ManagedSocket& socket) = 0;
+            virtual void onReadReady() = 0;
+            virtual void onWriteReady() = 0;
+        };
+
+        // TODO: rename this when I remove ConnectionCallbacks(1)
+        class ConnectionCallbacks2
+        {
+        public:
+            virtual void onConnectionEstablished() = 0;
             virtual void onReadReady() = 0;
             virtual void onWriteReady() = 0;
         };
@@ -79,6 +110,8 @@ namespace Ishiko
         NetworkConnectionsManager& operator=(NetworkConnectionsManager&& other) = delete;
         ~NetworkConnectionsManager() = default;
 
+        Registration registerSocketAndCallbacks(NativeSocketHandle socket_handle, ConnectionCallbacks2& callbacks);
+
         void connect(IPv4Address address, Port port, ConnectionCallbacks& callbacks, Error& error);
         void connectWithTLS(IPv4Address address, Port port, const Hostname& hostname,
             TLSConnectionCallbacks& callbacks, Error& error);
@@ -87,6 +120,7 @@ namespace Ishiko
         bool idle() const;
 
     private:
+        class SocketAndCallbacks;
         class ManagedSocketImpl;
         class ManagedTLSSocketImpl;
 
@@ -95,12 +129,16 @@ namespace Ishiko
         class SharedState
         {
         public:
+            void setWaitingForConnection(SocketAndCallbacks* socket_and_callbacks);
+
             void setWaitingForConnection(ManagedSocketImpl* managed_socket);
             void setWaitingForRead(ManagedSocketImpl* managed_socket);
             void setWaitingForWrite(ManagedSocketImpl* managed_socket);
             void setWaitingForConnection(ManagedTLSSocketImpl* managed_socket);
             void setWaitingForRead(ManagedTLSSocketImpl* managed_socket);
             void setWaitingForWrite(ManagedTLSSocketImpl* managed_socket);
+
+            std::set<SocketAndCallbacks*> m_new_waiting_for_connection3;
 
             std::set<ManagedSocketImpl*> m_new_waiting_for_connection;
             std::set<ManagedSocketImpl*> m_new_waiting_for_read;
@@ -176,6 +214,20 @@ namespace Ishiko
             State m_state;
         };
 
+        class SocketAndCallbacks
+        {
+        public:
+            SocketAndCallbacks(NativeSocketHandle socket_handle, ConnectionCallbacks2* callbacks);
+
+        public: // TODO
+            NativeSocketHandle m_socket_handle;
+            ConnectionCallbacks2* m_callbacks;
+        };
+
+        // TODO: replace this with stable collection, maybe a hive? Unless I make the clients of this class agnostic
+        // of the actual memory location.
+        std::vector<SocketAndCallbacks> m_sockets_and_callbaks;
+
         // TODO: replace this with stable collection, maybe a hive? Unless I make the clients of this class agnostic
         // of the actual memory location.
         std::vector<ManagedSocketImpl> m_managed_sockets;
@@ -189,6 +241,7 @@ namespace Ishiko
         std::set<ManagedTLSSocketImpl*> m_waiting_for_connection2;
         std::set<ManagedTLSSocketImpl*> m_waiting_for_read2;
         std::set<ManagedTLSSocketImpl*> m_waiting_for_write2;
+        std::set<SocketAndCallbacks*> m_waiting_for_connection3;
     };
 }
 
