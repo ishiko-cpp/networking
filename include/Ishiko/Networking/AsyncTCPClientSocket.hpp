@@ -37,6 +37,8 @@ namespace Ishiko
 
         void connect(IPv4Address address, Port port) noexcept;
 
+        int read(char* buffer, int count);
+
         void write(const char* buffer, int count);
 
         void close() noexcept;

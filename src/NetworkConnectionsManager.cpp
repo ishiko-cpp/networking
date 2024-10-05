@@ -20,6 +20,11 @@ void NetworkConnectionsManager::Registration::setWaitingForConnection()
     m_shared_state->setWaitingForConnection(m_socket_and_callbacks);
 }
 
+void NetworkConnectionsManager::Registration::setWaitingForRead()
+{
+    m_shared_state->setWaitingForRead(m_socket_and_callbacks);
+}
+
 void NetworkConnectionsManager::Registration::setWaitingForWrite()
 {
     m_shared_state->setWaitingForWrite(m_socket_and_callbacks);
@@ -91,6 +96,9 @@ void NetworkConnectionsManager::run(bool (*stop_function)(NetworkConnectionsMana
         m_waiting_for_connection3.insert(m_shared_state.m_new_waiting_for_connection3.begin(),
             m_shared_state.m_new_waiting_for_connection3.end());
         m_shared_state.m_new_waiting_for_connection3.clear();
+        m_waiting_for_read3.insert(m_shared_state.m_new_waiting_for_read3.begin(),
+            m_shared_state.m_new_waiting_for_read3.end());
+        m_shared_state.m_new_waiting_for_read3.clear();
         m_waiting_for_write3.insert(m_shared_state.m_new_waiting_for_write3.begin(),
             m_shared_state.m_new_waiting_for_write3.end());
         m_shared_state.m_new_waiting_for_write3.clear();
@@ -138,6 +146,10 @@ void NetworkConnectionsManager::run(bool (*stop_function)(NetworkConnectionsMana
             FD_SET(managed_socket->socket().socket().nativeHandle(), &fd_exception);
         }
 
+        for (SocketAndCallbacks* managed_socket : m_waiting_for_read3)
+        {
+            FD_SET(managed_socket->m_socket_handle, &fd_read_ready);
+        }
         for (ManagedSocketImpl* managed_socket : m_waiting_for_read)
         {
             FD_SET(managed_socket->socket().nativeHandle(), &fd_read_ready);
@@ -146,7 +158,11 @@ void NetworkConnectionsManager::run(bool (*stop_function)(NetworkConnectionsMana
         {
             FD_SET(managed_socket->socket().socket().nativeHandle(), &fd_read_ready);
         }
-                
+        
+        for (SocketAndCallbacks* managed_socket : m_waiting_for_write3)
+        {
+            FD_SET(managed_socket->m_socket_handle, &fd_write_ready);
+        }
         for (ManagedSocketImpl* managed_socket : m_waiting_for_write)
         {
             FD_SET(managed_socket->socket().nativeHandle(), &fd_write_ready);
@@ -184,13 +200,27 @@ void NetworkConnectionsManager::run(bool (*stop_function)(NetworkConnectionsMana
             }
         }
 
+        for (std::set<SocketAndCallbacks*>::iterator it = m_waiting_for_read3.begin(); it != m_waiting_for_read3.end();)
+        {
+            SocketAndCallbacks* managed_socket = *it;
+            if (FD_ISSET(managed_socket->m_socket_handle, &fd_read_ready))
+            {
+                managed_socket->m_callbacks->onReadReady(managed_socket->m_callback_data);
+                it = m_waiting_for_read3.erase(it);
+            }
+            else
+            {
+                ++it;
+            }
+        }
+
         for (std::set<SocketAndCallbacks*>::iterator it = m_waiting_for_write3.begin(); it != m_waiting_for_write3.end();)
         {
             SocketAndCallbacks* managed_socket = *it;
             if (FD_ISSET(managed_socket->m_socket_handle, &fd_write_ready))
             {
                 managed_socket->m_callbacks->onWriteReady(managed_socket->m_callback_data);
-                it = m_waiting_for_connection3.erase(it);
+                it = m_waiting_for_write3.erase(it);
             }
             else
             {
@@ -303,12 +333,18 @@ bool NetworkConnectionsManager::idle() const
         && m_waiting_for_connection.empty() && m_waiting_for_read.empty() && m_waiting_for_write.empty()
         && m_waiting_for_connection2.empty() && m_waiting_for_read2.empty() && m_waiting_for_write2.empty()
         && m_waiting_for_connection3.empty() && m_shared_state.m_new_waiting_for_connection3.empty()
+        && m_waiting_for_read3.empty() && m_shared_state.m_new_waiting_for_read3.empty()
         && m_waiting_for_write3.empty() && m_shared_state.m_new_waiting_for_write3.empty());
 }
 
 void NetworkConnectionsManager::SharedState::setWaitingForConnection(SocketAndCallbacks* socket_and_callbacks)
 {
     m_new_waiting_for_connection3.insert(socket_and_callbacks);
+}
+
+void NetworkConnectionsManager::SharedState::setWaitingForRead(SocketAndCallbacks* socket_and_callbacks)
+{
+    m_new_waiting_for_read3.insert(socket_and_callbacks);
 }
 
 void NetworkConnectionsManager::SharedState::setWaitingForWrite(SocketAndCallbacks* socket_and_callbacks)

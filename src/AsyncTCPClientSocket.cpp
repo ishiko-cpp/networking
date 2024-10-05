@@ -58,6 +58,22 @@ void AsyncTCPClientSocket::connect(IPv4Address address, Port port) noexcept
     }
 }
 
+int AsyncTCPClientSocket::read(char* buffer, int count)
+{
+    // TODO: error handling
+    Error error;
+    int n = m_socket.read(buffer, count, error);
+    if (error)
+    {
+        if (error.code() == NetworkingErrorCategory::Value::would_block)
+        {
+            // TODO: thread safety
+            m_registration.setWaitingForRead();
+        }
+    }
+    return n;
+}
+
 void AsyncTCPClientSocket::write(const char* buffer, int count)
 {
     // TODO: error handling

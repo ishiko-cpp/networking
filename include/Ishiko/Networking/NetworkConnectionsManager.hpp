@@ -41,6 +41,7 @@ namespace Ishiko
             Registration(SocketAndCallbacks* socket_and_callbacks, SharedState* shared_state);
 
             void setWaitingForConnection();
+            void setWaitingForRead();
             void setWaitingForWrite();
 
         private:
@@ -132,6 +133,7 @@ namespace Ishiko
         {
         public:
             void setWaitingForConnection(SocketAndCallbacks* socket_and_callbacks);
+            void setWaitingForRead(SocketAndCallbacks* socket_and_callbacks);
             void setWaitingForWrite(SocketAndCallbacks* socket_and_callbacks);
 
             void setWaitingForConnection(ManagedSocketImpl* managed_socket);
@@ -142,6 +144,7 @@ namespace Ishiko
             void setWaitingForWrite(ManagedTLSSocketImpl* managed_socket);
 
             std::set<SocketAndCallbacks*> m_new_waiting_for_connection3;
+            std::set<SocketAndCallbacks*> m_new_waiting_for_read3;
             std::set<SocketAndCallbacks*> m_new_waiting_for_write3;
 
             std::set<ManagedSocketImpl*> m_new_waiting_for_connection;
@@ -247,6 +250,7 @@ namespace Ishiko
         std::set<ManagedTLSSocketImpl*> m_waiting_for_read2;
         std::set<ManagedTLSSocketImpl*> m_waiting_for_write2;
         std::set<SocketAndCallbacks*> m_waiting_for_connection3;
+        std::set<SocketAndCallbacks*> m_waiting_for_read3;
         std::set<SocketAndCallbacks*> m_waiting_for_write3;
     };
 }
