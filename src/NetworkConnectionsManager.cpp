@@ -9,39 +9,43 @@
 
 using namespace Ishiko;
 
-NetworkConnectionsManager::Registration::Registration(SocketAndCallbacks* socket_and_callbacks,
-    SharedState* shared_state)
-    : m_socket_and_callbacks{socket_and_callbacks}, m_shared_state{shared_state}
+NetworkConnectionsManager::Registration::Registration()
+    : m_connections_manager{nullptr}, m_impl{nullptr}
+{
+}
+
+NetworkConnectionsManager::Registration::Registration(NetworkConnectionsManager* connections_manager, void* impl)
+    : m_connections_manager{connections_manager}, m_impl{impl}
 {
 }
 
 void NetworkConnectionsManager::Registration::setWaitingForConnection()
 {
-    m_shared_state->setWaitingForConnection(m_socket_and_callbacks);
+    m_connections_manager->m_shared_state.setWaitingForConnection(static_cast<RegistrationImpl*>(m_impl));
 }
 
 void NetworkConnectionsManager::Registration::setWaitingForRead()
 {
-    m_shared_state->setWaitingForRead(m_socket_and_callbacks);
+    m_connections_manager->m_shared_state.setWaitingForRead(static_cast<RegistrationImpl*>(m_impl));
 }
 
 void NetworkConnectionsManager::Registration::setWaitingForWrite()
 {
-    m_shared_state->setWaitingForWrite(m_socket_and_callbacks);
+    m_connections_manager->m_shared_state.setWaitingForWrite(static_cast<RegistrationImpl*>(m_impl));
 }
 
 NetworkConnectionsManager::NetworkConnectionsManager()
 {
     // TODO: just to avoid reallocations however even that isn't working well
-    m_sockets_and_callbacks.reserve(100);
+    m_registrations.reserve(100);
 }
 
 NetworkConnectionsManager::Registration NetworkConnectionsManager::registerSocketAndCallbacks(
-    NativeSocketHandle socket_handle, ConnectionCallbacks2& callbacks, void* callback_data)
+    NativeSocketHandle socket_handle, void (*event_handler)(Event evt, void* data), void* event_handler_data)
 {
     // TODO: duplicate and error management
-    m_sockets_and_callbacks.emplace_back(socket_handle, &callbacks, callback_data);
-    return Registration{&m_sockets_and_callbacks.back(), &m_shared_state};
+    m_registrations.emplace_back(socket_handle, event_handler, event_handler_data);
+    return Registration{this, &m_registrations.back()};
 }
 
 void NetworkConnectionsManager::connectWithTLS(IPv4Address address, Port port, const Hostname& hostname,
@@ -99,7 +103,7 @@ void NetworkConnectionsManager::run(bool (*stop_function)(NetworkConnectionsMana
         fd_set fd_exception;
         FD_ZERO(&fd_exception);
 
-        for (SocketAndCallbacks* managed_socket : m_waiting_for_connection3)
+        for (RegistrationImpl* managed_socket : m_waiting_for_connection3)
         {
             FD_SET(managed_socket->m_socket_handle, &fd_write_ready);
             FD_SET(managed_socket->m_socket_handle, &fd_exception);
@@ -110,7 +114,7 @@ void NetworkConnectionsManager::run(bool (*stop_function)(NetworkConnectionsMana
             FD_SET(managed_socket->socket().socket().nativeHandle(), &fd_exception);
         }
 
-        for (SocketAndCallbacks* managed_socket : m_waiting_for_read3)
+        for (RegistrationImpl* managed_socket : m_waiting_for_read3)
         {
             FD_SET(managed_socket->m_socket_handle, &fd_read_ready);
         }
@@ -119,7 +123,7 @@ void NetworkConnectionsManager::run(bool (*stop_function)(NetworkConnectionsMana
             FD_SET(managed_socket->socket().socket().nativeHandle(), &fd_read_ready);
         }
         
-        for (SocketAndCallbacks* managed_socket : m_waiting_for_write3)
+        for (RegistrationImpl* managed_socket : m_waiting_for_write3)
         {
             FD_SET(managed_socket->m_socket_handle, &fd_write_ready);
         }
@@ -136,18 +140,18 @@ void NetworkConnectionsManager::run(bool (*stop_function)(NetworkConnectionsMana
         // TODO: check for ret error
         // TODO: if it is 0 then timeout occurred
 
-        for (std::set<SocketAndCallbacks*>::iterator it = m_waiting_for_connection3.begin(); it != m_waiting_for_connection3.end();)
+        for (std::set<RegistrationImpl*>::iterator it = m_waiting_for_connection3.begin(); it != m_waiting_for_connection3.end();)
         {
-            SocketAndCallbacks* managed_socket = *it;
+            RegistrationImpl* managed_socket = *it;
             if (FD_ISSET(managed_socket->m_socket_handle, &fd_write_ready))
             {
-                managed_socket->m_callbacks->onConnectionEstablished(managed_socket->m_callback_data);
+                managed_socket->m_event_handler(Event::connection_ready, managed_socket->m_event_handler_data);
                 it = m_waiting_for_connection3.erase(it);
             }
             else if (FD_ISSET(managed_socket->m_socket_handle, &fd_exception))
             {
                 // TODO: report error
-                managed_socket->m_callbacks->onConnectionEstablished(managed_socket->m_callback_data);
+                managed_socket->m_event_handler(Event::connection_ready, managed_socket->m_event_handler_data);
                 it = m_waiting_for_connection3.erase(it);
             }
             else
@@ -156,12 +160,12 @@ void NetworkConnectionsManager::run(bool (*stop_function)(NetworkConnectionsMana
             }
         }
 
-        for (std::set<SocketAndCallbacks*>::iterator it = m_waiting_for_read3.begin(); it != m_waiting_for_read3.end();)
+        for (std::set<RegistrationImpl*>::iterator it = m_waiting_for_read3.begin(); it != m_waiting_for_read3.end();)
         {
-            SocketAndCallbacks* managed_socket = *it;
+            RegistrationImpl* managed_socket = *it;
             if (FD_ISSET(managed_socket->m_socket_handle, &fd_read_ready))
             {
-                managed_socket->m_callbacks->onReadReady(managed_socket->m_callback_data);
+                managed_socket->m_event_handler(Event::read_ready, managed_socket->m_event_handler_data);
                 it = m_waiting_for_read3.erase(it);
             }
             else
@@ -170,12 +174,12 @@ void NetworkConnectionsManager::run(bool (*stop_function)(NetworkConnectionsMana
             }
         }
 
-        for (std::set<SocketAndCallbacks*>::iterator it = m_waiting_for_write3.begin(); it != m_waiting_for_write3.end();)
+        for (std::set<RegistrationImpl*>::iterator it = m_waiting_for_write3.begin(); it != m_waiting_for_write3.end();)
         {
-            SocketAndCallbacks* managed_socket = *it;
+            RegistrationImpl* managed_socket = *it;
             if (FD_ISSET(managed_socket->m_socket_handle, &fd_write_ready))
             {
-                managed_socket->m_callbacks->onWriteReady(managed_socket->m_callback_data);
+                managed_socket->m_event_handler(Event::write_ready, managed_socket->m_event_handler_data);
                 it = m_waiting_for_write3.erase(it);
             }
             else
@@ -243,17 +247,17 @@ bool NetworkConnectionsManager::idle() const
         && m_waiting_for_write3.empty() && m_shared_state.m_new_waiting_for_write3.empty());
 }
 
-void NetworkConnectionsManager::SharedState::setWaitingForConnection(SocketAndCallbacks* socket_and_callbacks)
+void NetworkConnectionsManager::SharedState::setWaitingForConnection(RegistrationImpl* socket_and_callbacks)
 {
     m_new_waiting_for_connection3.insert(socket_and_callbacks);
 }
 
-void NetworkConnectionsManager::SharedState::setWaitingForRead(SocketAndCallbacks* socket_and_callbacks)
+void NetworkConnectionsManager::SharedState::setWaitingForRead(RegistrationImpl* socket_and_callbacks)
 {
     m_new_waiting_for_read3.insert(socket_and_callbacks);
 }
 
-void NetworkConnectionsManager::SharedState::setWaitingForWrite(SocketAndCallbacks* socket_and_callbacks)
+void NetworkConnectionsManager::SharedState::setWaitingForWrite(RegistrationImpl* socket_and_callbacks)
 {
     m_new_waiting_for_write3.insert(socket_and_callbacks);
 }
@@ -396,8 +400,8 @@ TLSClientSocket& NetworkConnectionsManager::ManagedTLSSocketImpl::socket()
     return m_socket;
 }
 
-NetworkConnectionsManager::SocketAndCallbacks::SocketAndCallbacks(NativeSocketHandle socket_handle,
-    ConnectionCallbacks2* callbacks, void* callback_data)
-    : m_socket_handle{socket_handle}, m_callbacks{callbacks}, m_callback_data{callback_data}
+NetworkConnectionsManager::RegistrationImpl::RegistrationImpl(NativeSocketHandle socket_handle,
+    void(*event_handler)(Event evt, void* data), void* event_handler_data)
+    : m_socket_handle{socket_handle}, m_event_handler{event_handler}, m_event_handler_data{event_handler_data}
 {
 }

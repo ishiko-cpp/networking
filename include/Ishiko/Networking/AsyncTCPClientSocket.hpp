@@ -14,17 +14,12 @@ namespace Ishiko
     class AsyncTCPClientSocket
     {
     public:
-        class Callbacks : public NetworkConnectionsManager::ConnectionCallbacks2
+        class Callbacks
         {
         public:
             virtual void onConnectionEstablished(const Error& error, AsyncTCPClientSocket& socket) = 0;
             virtual void onReadReady(const Error& error, AsyncTCPClientSocket& socket) = 0;
             virtual void onWriteReady(const Error& error, AsyncTCPClientSocket& socket) = 0;
-
-        private:
-            void onConnectionEstablished(void* callback_data) override;
-            void onReadReady(void* callback_data) override;
-            void onWriteReady(void* callback_data) override;
         };
 
         AsyncTCPClientSocket(NetworkConnectionsManager& connections_manager, Callbacks& callbacks,
@@ -44,9 +39,9 @@ namespace Ishiko
         void close() noexcept;
 
     private:
+        static void EventHandler(NetworkConnectionsManager::Event evt, void* data);
+
         TCPClientSocket m_socket;
-        // TODO: can I reduce the number of members here since a lot will be contained in the registration object
-        NetworkConnectionsManager& m_connections_manager;
         NetworkConnectionsManager::Registration m_registration;
         Callbacks& m_callbacks;
     };
