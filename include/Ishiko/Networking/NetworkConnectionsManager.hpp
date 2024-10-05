@@ -49,28 +49,6 @@ namespace Ishiko
             SharedState* m_shared_state;
         };
 
-        // TODO: find a better name for this, although maybe it's OK?
-        // TODO: Need to be able to close and shutdown the connection
-        class ManagedSocket
-        {
-        public:
-            virtual int read(ByteBuffer& buffer, size_t count, Error& error) = 0;
-            virtual int read(char* buffer, int count, Error& error) = 0;
-
-            virtual void write(const char* buffer, int count, Error& error) = 0;
-
-            virtual void shutdown(Error& error) = 0;
-            virtual void close() = 0;
-        };
-
-        class ConnectionCallbacks
-        {
-        public:
-            virtual void onConnectionEstablished(ManagedSocket& socket) = 0;
-            virtual void onReadReady() = 0;
-            virtual void onWriteReady() = 0;
-        };
-
         // TODO: rename this when I remove ConnectionCallbacks(1)
         class ConnectionCallbacks2
         {
@@ -115,7 +93,6 @@ namespace Ishiko
         Registration registerSocketAndCallbacks(NativeSocketHandle socket_handle, ConnectionCallbacks2& callbacks,
             void* callback_data);
 
-        void connect(IPv4Address address, Port port, ConnectionCallbacks& callbacks, Error& error);
         void connectWithTLS(IPv4Address address, Port port, const Hostname& hostname,
             TLSConnectionCallbacks& callbacks, Error& error);
 
@@ -124,7 +101,6 @@ namespace Ishiko
 
     private:
         class SocketAndCallbacks;
-        class ManagedSocketImpl;
         class ManagedTLSSocketImpl;
 
         // TODO: the things that are shared between the manager and the sockets
@@ -136,9 +112,6 @@ namespace Ishiko
             void setWaitingForRead(SocketAndCallbacks* socket_and_callbacks);
             void setWaitingForWrite(SocketAndCallbacks* socket_and_callbacks);
 
-            void setWaitingForConnection(ManagedSocketImpl* managed_socket);
-            void setWaitingForRead(ManagedSocketImpl* managed_socket);
-            void setWaitingForWrite(ManagedSocketImpl* managed_socket);
             void setWaitingForConnection(ManagedTLSSocketImpl* managed_socket);
             void setWaitingForRead(ManagedTLSSocketImpl* managed_socket);
             void setWaitingForWrite(ManagedTLSSocketImpl* managed_socket);
@@ -147,44 +120,9 @@ namespace Ishiko
             std::set<SocketAndCallbacks*> m_new_waiting_for_read3;
             std::set<SocketAndCallbacks*> m_new_waiting_for_write3;
 
-            std::set<ManagedSocketImpl*> m_new_waiting_for_connection;
-            std::set<ManagedSocketImpl*> m_new_waiting_for_read;
-            std::set<ManagedSocketImpl*> m_new_waiting_for_write;
             std::set<ManagedTLSSocketImpl*> m_new_waiting_for_connection2;
             std::set<ManagedTLSSocketImpl*> m_new_waiting_for_read2;
             std::set<ManagedTLSSocketImpl*> m_new_waiting_for_write2;
-        };
-
-        class ManagedSocketImpl : public ManagedSocket
-        {
-        public:
-            ManagedSocketImpl(SharedState& shared_state, TCPClientSocket&& socket, ConnectionCallbacks& callbacks);
-
-            void connect(IPv4Address address, Port port, Error& error);
-
-            int read(ByteBuffer& buffer, size_t count, Error& error) override;
-            int read(char* buffer, int count, Error& error) override;
-
-            void write(const char* buffer, int count, Error& error) override;
-
-            void shutdown(Error& error) override;
-            void close() override;
-
-            void callback();
-
-            TCPClientSocket& socket();
-
-        private:
-            enum class State
-            {
-                waiting_for_connection,
-                waiting_for_read,
-                waiting_for_write
-            };
-            SharedState& m_shared_state;
-            TCPClientSocket m_socket;
-            ConnectionCallbacks& m_callbacks;
-            State m_state;
         };
 
         class ManagedTLSSocketImpl : public ManagedTLSSocket
@@ -234,18 +172,12 @@ namespace Ishiko
 
         // TODO: replace this with stable collection, maybe a hive? Unless I make the clients of this class agnostic
         // of the actual memory location.
-        std::vector<SocketAndCallbacks> m_sockets_and_callbaks;
+        std::vector<SocketAndCallbacks> m_sockets_and_callbacks;
 
-        // TODO: replace this with stable collection, maybe a hive? Unless I make the clients of this class agnostic
-        // of the actual memory location.
-        std::vector<ManagedSocketImpl> m_managed_sockets;
         // TODO: replace this with stable collection, maybe a hive? Unless I make the clients of this class agnostic
         // of the actual memory location.
         std::vector<ManagedTLSSocketImpl> m_managed_tls_sockets;
         SharedState m_shared_state;
-        std::set<ManagedSocketImpl*> m_waiting_for_connection;
-        std::set<ManagedSocketImpl*> m_waiting_for_read;
-        std::set<ManagedSocketImpl*> m_waiting_for_write;
         std::set<ManagedTLSSocketImpl*> m_waiting_for_connection2;
         std::set<ManagedTLSSocketImpl*> m_waiting_for_read2;
         std::set<ManagedTLSSocketImpl*> m_waiting_for_write2;
