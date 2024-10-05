@@ -73,6 +73,11 @@ namespace Ishiko
         };
 
         NetworkConnectionsManager();
+        NetworkConnectionsManager(const NetworkConnectionsManager& other) = delete;
+        NetworkConnectionsManager& operator=(const NetworkConnectionsManager& other) = delete;
+        NetworkConnectionsManager(NetworkConnectionsManager&& other) = delete;
+        NetworkConnectionsManager& operator=(NetworkConnectionsManager&& other) = delete;
+        ~NetworkConnectionsManager() = default;
 
         void connect(IPv4Address address, Port port, ConnectionCallbacks& callbacks, Error& error);
         void connectWithTLS(IPv4Address address, Port port, const Hostname& hostname,

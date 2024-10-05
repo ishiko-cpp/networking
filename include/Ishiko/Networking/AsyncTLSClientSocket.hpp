@@ -31,6 +31,11 @@ namespace Ishiko
 
         AsyncTLSClientSocket(NetworkConnectionsManager& connections_manager, Callbacks& callbacks,
             Error& error) noexcept;
+        AsyncTLSClientSocket(const AsyncTLSClientSocket& other) = delete;
+        AsyncTLSClientSocket& operator=(const AsyncTLSClientSocket& other) = delete;
+        AsyncTLSClientSocket(AsyncTLSClientSocket&& other) = delete;
+        AsyncTLSClientSocket& operator=(AsyncTLSClientSocket&& other) = delete;
+        ~AsyncTLSClientSocket() = default;
 
         void connect(IPv4Address address, Port port, const Hostname& hostname) noexcept;
 
