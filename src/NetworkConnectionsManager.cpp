@@ -9,25 +9,9 @@
 
 using namespace Ishiko;
 
-NetworkConnectionsManager::Registration::Registration(RegistrationImpl* socket_and_callbacks,
-    SharedState* shared_state)
-    : m_socket_and_callbacks{socket_and_callbacks}, m_shared_state{shared_state}
+NetworkConnectionsManager::Registration::Registration(RegistrationImpl* socket_and_callbacks)
+    : m_impl{socket_and_callbacks}
 {
-}
-
-void NetworkConnectionsManager::Registration::setWaitingForConnection()
-{
-    m_shared_state->setWaitingForConnection(m_socket_and_callbacks);
-}
-
-void NetworkConnectionsManager::Registration::setWaitingForRead()
-{
-    m_shared_state->setWaitingForRead(m_socket_and_callbacks);
-}
-
-void NetworkConnectionsManager::Registration::setWaitingForWrite()
-{
-    m_shared_state->setWaitingForWrite(m_socket_and_callbacks);
 }
 
 NetworkConnectionsManager::NetworkConnectionsManager()
@@ -41,7 +25,23 @@ NetworkConnectionsManager::Registration NetworkConnectionsManager::registerSocke
 {
     // TODO: duplicate and error management
     m_registrations.emplace_back(socket_handle, &callbacks, callback_data);
-    return Registration{&m_registrations.back(), &m_shared_state};
+    return Registration{&m_registrations.back()};
+}
+
+
+void NetworkConnectionsManager::setWaitingForConnection(Registration registration)
+{
+    m_shared_state.setWaitingForConnection(registration.m_impl);
+}
+
+void NetworkConnectionsManager::setWaitingForRead(Registration registration)
+{
+    m_shared_state.setWaitingForRead(registration.m_impl);
+}
+
+void NetworkConnectionsManager::setWaitingForWrite(Registration registration)
+{
+    m_shared_state.setWaitingForWrite(registration.m_impl);
 }
 
 void NetworkConnectionsManager::connectWithTLS(IPv4Address address, Port port, const Hostname& hostname,

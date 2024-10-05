@@ -30,7 +30,7 @@ void AsyncTCPClientSocket::Callbacks::onWriteReady(void* callback_data)
 AsyncTCPClientSocket::AsyncTCPClientSocket(NetworkConnectionsManager& connections_manager, Callbacks& callbacks,
     Error& error) noexcept
     : m_socket{SocketOption::non_blocking, error}, m_connections_manager{connections_manager},
-    m_registration{nullptr, nullptr}, m_callbacks{callbacks}
+    m_registration{nullptr}, m_callbacks{callbacks}
 {
     if (!error)
     {
@@ -49,7 +49,7 @@ void AsyncTCPClientSocket::connect(IPv4Address address, Port port) noexcept
         if (error.code() == NetworkingErrorCategory::Value::would_block)
         {
             // TODO: thread safety
-            m_registration.setWaitingForConnection();
+            m_connections_manager.setWaitingForConnection(m_registration);
         }
     }
     else
@@ -68,7 +68,7 @@ int AsyncTCPClientSocket::read(char* buffer, int count)
         if (error.code() == NetworkingErrorCategory::Value::would_block)
         {
             // TODO: thread safety
-            m_registration.setWaitingForRead();
+            m_connections_manager.setWaitingForRead(m_registration);
         }
     }
     return n;
@@ -84,7 +84,7 @@ void AsyncTCPClientSocket::write(const char* buffer, int count)
         if (error.code() == NetworkingErrorCategory::Value::would_block)
         {
             // TODO: thread safety
-            m_registration.setWaitingForWrite();
+            m_connections_manager.setWaitingForWrite(m_registration);
         }
     }
 }
