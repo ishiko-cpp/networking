@@ -25,12 +25,6 @@ namespace Ishiko
     // buffers may be needed.
     class NetworkConnectionsManager
     {
-    private:
-        // TODO: get rid of this forward declaration?
-        class RegistrationImpl;
-        // TODO: get rid of this forward declaration?
-        class SharedState;
-
     public:
         // TODO: better name?
         // TODO: I feel I can merge Registration and SocketAndCallbacks
@@ -39,7 +33,7 @@ namespace Ishiko
         public:
             Registration();
             // TODO: public function depends on a private classes BAD
-            Registration(NetworkConnectionsManager* connections_manager, RegistrationImpl* socket_and_callbacks);
+            Registration(NetworkConnectionsManager* connections_manager, void* impl);
 
             void setWaitingForConnection();
             void setWaitingForRead();
@@ -47,7 +41,7 @@ namespace Ishiko
 
         public: // TODO: back to private
             NetworkConnectionsManager* m_connections_manager;
-            RegistrationImpl* m_impl;
+            void* m_impl;
         };
 
         class ConnectionCallbacks
@@ -93,10 +87,6 @@ namespace Ishiko
         Registration registerSocketAndCallbacks(NativeSocketHandle socket_handle, ConnectionCallbacks& callbacks,
             void* callback_data);
 
-        void setWaitingForConnection(RegistrationImpl* registration);
-        void setWaitingForRead(RegistrationImpl* registration);
-        void setWaitingForWrite(RegistrationImpl* registration);
-
         void connectWithTLS(IPv4Address address, Port port, const Hostname& hostname,
             TLSConnectionCallbacks& callbacks, Error& error);
 
@@ -105,6 +95,17 @@ namespace Ishiko
 
     private:
         class ManagedTLSSocketImpl;
+
+        class RegistrationImpl
+        {
+        public:
+            RegistrationImpl(NativeSocketHandle socket_handle, ConnectionCallbacks* callbacks, void* callback_data);
+
+        public: // TODO
+            NativeSocketHandle m_socket_handle;
+            ConnectionCallbacks* m_callbacks;
+            void* m_callback_data;
+        };
 
         // TODO: the things that are shared between the manager and the sockets
         // TODO: this is an experiment: can I isolate everything that may suffer data races
@@ -162,17 +163,6 @@ namespace Ishiko
             State m_state;
         };
 
-        class RegistrationImpl
-        {
-        public:
-            RegistrationImpl(NativeSocketHandle socket_handle, ConnectionCallbacks* callbacks, void* callback_data);
-
-        public: // TODO
-            NativeSocketHandle m_socket_handle;
-            ConnectionCallbacks* m_callbacks;
-            void* m_callback_data;
-        };
-
         // TODO: replace this with stable collection, maybe a hive? Unless I make the clients of this class agnostic
         // of the actual memory location.
         std::vector<RegistrationImpl> m_registrations;
@@ -180,7 +170,9 @@ namespace Ishiko
         // TODO: replace this with stable collection, maybe a hive? Unless I make the clients of this class agnostic
         // of the actual memory location.
         std::vector<ManagedTLSSocketImpl> m_managed_tls_sockets;
+    public: // TODO: back to private
         SharedState m_shared_state;
+    private:
         std::set<ManagedTLSSocketImpl*> m_waiting_for_connection2;
         std::set<ManagedTLSSocketImpl*> m_waiting_for_read2;
         std::set<ManagedTLSSocketImpl*> m_waiting_for_write2;
