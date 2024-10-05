@@ -33,15 +33,15 @@ void NetworkConnectionsManager::Registration::setWaitingForWrite()
 NetworkConnectionsManager::NetworkConnectionsManager()
 {
     // TODO: just to avoid reallocations however even that isn't working well
-    m_sockets_and_callbacks.reserve(100);
+    m_registrations.reserve(100);
 }
 
 NetworkConnectionsManager::Registration NetworkConnectionsManager::registerSocketAndCallbacks(
     NativeSocketHandle socket_handle, ConnectionCallbacks& callbacks, void* callback_data)
 {
     // TODO: duplicate and error management
-    m_sockets_and_callbacks.emplace_back(socket_handle, &callbacks, callback_data);
-    return Registration{&m_sockets_and_callbacks.back(), &m_shared_state};
+    m_registrations.emplace_back(socket_handle, &callbacks, callback_data);
+    return Registration{&m_registrations.back(), &m_shared_state};
 }
 
 void NetworkConnectionsManager::connectWithTLS(IPv4Address address, Port port, const Hostname& hostname,

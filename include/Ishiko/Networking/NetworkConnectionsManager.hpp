@@ -170,7 +170,7 @@ namespace Ishiko
 
         // TODO: replace this with stable collection, maybe a hive? Unless I make the clients of this class agnostic
         // of the actual memory location.
-        std::vector<RegistrationImpl> m_sockets_and_callbacks;
+        std::vector<RegistrationImpl> m_registrations;
 
         // TODO: replace this with stable collection, maybe a hive? Unless I make the clients of this class agnostic
         // of the actual memory location.
