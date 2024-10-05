@@ -6,38 +6,91 @@
 
 using namespace Ishiko;
 
-void AsyncTCPClientSocket::Callbacks::onConnectionEstablished(NetworkConnectionsManager::ManagedSocket& socket)
+void AsyncTCPClientSocket::Callbacks::onConnectionEstablished(void* callback_data)
 {
-    m_socket = &socket;
-
     // TODO: error?
     Error error;
-    onConnectionEstablished(error);
+    onConnectionEstablished(error, *static_cast<AsyncTCPClientSocket*>(callback_data));
 }
 
-void AsyncTCPClientSocket::Callbacks::onReadReady()
+void AsyncTCPClientSocket::Callbacks::onReadReady(void* callback_data)
 {
+    // TODO: error?
+    Error error;
+    onReadReady(error, *static_cast<AsyncTCPClientSocket*>(callback_data));
 }
 
-void AsyncTCPClientSocket::Callbacks::onWriteReady()
+void AsyncTCPClientSocket::Callbacks::onWriteReady(void* callback_data)
 {
+    // TODO: error?
+    Error error;
+    onWriteReady(error, *static_cast<AsyncTCPClientSocket*>(callback_data));
 }
 
 AsyncTCPClientSocket::AsyncTCPClientSocket(NetworkConnectionsManager& connections_manager, Callbacks& callbacks,
     Error& error) noexcept
-    : m_connections_manager{connections_manager}, m_callbacks{callbacks}
+    : m_socket{SocketOption::non_blocking, error}, m_connections_manager{connections_manager},
+    m_registration{nullptr, nullptr}, m_callbacks{callbacks}
 {
-    // TODO: socket creation should happen here, none of that managed socket stuff
+    if (!error)
+    {
+        // TODO: need to unregister somewhere
+        m_registration = m_connections_manager.registerSocketAndCallbacks(m_socket.nativeHandle(), m_callbacks, this);
+    }
 }
 
 void AsyncTCPClientSocket::connect(IPv4Address address, Port port) noexcept
 {
+    // TODO: error handling
     Error error;
-    m_connections_manager.connect(address, port, m_callbacks, error);
-    // TODO: even if there is no error the NetworkConnectionsManager will trigger the callback
+    m_socket.connect(address, port, error);
+    if (error)
+    {
+        if (error.code() == NetworkingErrorCategory::Value::would_block)
+        {
+            // TODO: thread safety
+            m_registration.setWaitingForConnection();
+        }
+    }
+    else
+    {
+        // TODO: we need to get the callback executed from the NetworkConnectionsManager::run function
+    }
+}
+
+int AsyncTCPClientSocket::read(char* buffer, int count)
+{
+    // TODO: error handling
+    Error error;
+    int n = m_socket.read(buffer, count, error);
+    if (error)
+    {
+        if (error.code() == NetworkingErrorCategory::Value::would_block)
+        {
+            // TODO: thread safety
+            m_registration.setWaitingForRead();
+        }
+    }
+    return n;
+}
+
+void AsyncTCPClientSocket::write(const char* buffer, int count)
+{
+    // TODO: error handling
+    Error error;
+    m_socket.write(buffer, count, error);
+    if (error)
+    {
+        if (error.code() == NetworkingErrorCategory::Value::would_block)
+        {
+            // TODO: thread safety
+            m_registration.setWaitingForWrite();
+        }
+    }
 }
 
 void AsyncTCPClientSocket::close() noexcept
 {
-    m_callbacks.m_socket->close();
+    m_socket.close();
+    // TODO: unregister
 }
