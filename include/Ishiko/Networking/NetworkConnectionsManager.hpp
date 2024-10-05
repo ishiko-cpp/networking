@@ -27,7 +27,7 @@ namespace Ishiko
     {
     private:
         // TODO: get rid of this forward declaration?
-        class SocketAndCallbacks;
+        class RegistrationImpl;
         // TODO: get rid of this forward declaration?
         class SharedState;
 
@@ -38,14 +38,14 @@ namespace Ishiko
         {
         public:
             // TODO: public function depends on 2 private classes BAD
-            Registration(SocketAndCallbacks* socket_and_callbacks, SharedState* shared_state);
+            Registration(RegistrationImpl* socket_and_callbacks, SharedState* shared_state);
 
             void setWaitingForConnection();
             void setWaitingForRead();
             void setWaitingForWrite();
 
         private:
-            SocketAndCallbacks* m_socket_and_callbacks;
+            RegistrationImpl* m_socket_and_callbacks;
             SharedState* m_shared_state;
         };
 
@@ -99,7 +99,6 @@ namespace Ishiko
         bool idle() const;
 
     private:
-        class SocketAndCallbacks;
         class ManagedTLSSocketImpl;
 
         // TODO: the things that are shared between the manager and the sockets
@@ -107,17 +106,17 @@ namespace Ishiko
         class SharedState
         {
         public:
-            void setWaitingForConnection(SocketAndCallbacks* socket_and_callbacks);
-            void setWaitingForRead(SocketAndCallbacks* socket_and_callbacks);
-            void setWaitingForWrite(SocketAndCallbacks* socket_and_callbacks);
+            void setWaitingForConnection(RegistrationImpl* socket_and_callbacks);
+            void setWaitingForRead(RegistrationImpl* socket_and_callbacks);
+            void setWaitingForWrite(RegistrationImpl* socket_and_callbacks);
 
             void setWaitingForConnection(ManagedTLSSocketImpl* managed_socket);
             void setWaitingForRead(ManagedTLSSocketImpl* managed_socket);
             void setWaitingForWrite(ManagedTLSSocketImpl* managed_socket);
 
-            std::set<SocketAndCallbacks*> m_new_waiting_for_connection3;
-            std::set<SocketAndCallbacks*> m_new_waiting_for_read3;
-            std::set<SocketAndCallbacks*> m_new_waiting_for_write3;
+            std::set<RegistrationImpl*> m_new_waiting_for_connection3;
+            std::set<RegistrationImpl*> m_new_waiting_for_read3;
+            std::set<RegistrationImpl*> m_new_waiting_for_write3;
 
             std::set<ManagedTLSSocketImpl*> m_new_waiting_for_connection2;
             std::set<ManagedTLSSocketImpl*> m_new_waiting_for_read2;
@@ -158,10 +157,10 @@ namespace Ishiko
             State m_state;
         };
 
-        class SocketAndCallbacks
+        class RegistrationImpl
         {
         public:
-            SocketAndCallbacks(NativeSocketHandle socket_handle, ConnectionCallbacks* callbacks, void* callback_data);
+            RegistrationImpl(NativeSocketHandle socket_handle, ConnectionCallbacks* callbacks, void* callback_data);
 
         public: // TODO
             NativeSocketHandle m_socket_handle;
@@ -171,7 +170,7 @@ namespace Ishiko
 
         // TODO: replace this with stable collection, maybe a hive? Unless I make the clients of this class agnostic
         // of the actual memory location.
-        std::vector<SocketAndCallbacks> m_sockets_and_callbacks;
+        std::vector<RegistrationImpl> m_sockets_and_callbacks;
 
         // TODO: replace this with stable collection, maybe a hive? Unless I make the clients of this class agnostic
         // of the actual memory location.
@@ -180,9 +179,9 @@ namespace Ishiko
         std::set<ManagedTLSSocketImpl*> m_waiting_for_connection2;
         std::set<ManagedTLSSocketImpl*> m_waiting_for_read2;
         std::set<ManagedTLSSocketImpl*> m_waiting_for_write2;
-        std::set<SocketAndCallbacks*> m_waiting_for_connection3;
-        std::set<SocketAndCallbacks*> m_waiting_for_read3;
-        std::set<SocketAndCallbacks*> m_waiting_for_write3;
+        std::set<RegistrationImpl*> m_waiting_for_connection3;
+        std::set<RegistrationImpl*> m_waiting_for_read3;
+        std::set<RegistrationImpl*> m_waiting_for_write3;
     };
 }
 
