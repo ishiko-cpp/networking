@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2021-2024 Xavier Leclercq
+// SPDX-FileCopyrightText: 2005-2024 Xavier Leclercq
 // SPDX-License-Identifier: BSL-1.0
 
 #ifndef GUARD_ISHIKO_CPP_NETWORKING_WINDOWS_TCPSERVERSOCKET_HPP
@@ -25,7 +25,9 @@ namespace Ishiko
         TCPServerSocket(IPv4Address address, Port port, int socket_options, Error& error) noexcept;
         TCPServerSocket(IPv6Address address, Port port, int socket_options = SocketOption::none);
         TCPServerSocket(const TCPServerSocket& other) = delete;
+        TCPServerSocket& operator=(const TCPServerSocket& other) = delete;
         TCPServerSocket(TCPServerSocket&& other) noexcept;
+        TCPServerSocket& operator=(TCPServerSocket&& other) = delete;
         ~TCPServerSocket();
 
         TCPClientSocket accept();

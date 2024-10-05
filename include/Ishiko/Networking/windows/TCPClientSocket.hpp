@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2021-2024 Xavier Leclercq
+// SPDX-FileCopyrightText: 2005-2024 Xavier Leclercq
 // SPDX-License-Identifier: BSL-1.0
 
 #ifndef GUARD_ISHIKO_CPP_NETWORKING_WINDOWS_TCPCLIENTSOCKET_HPP
@@ -21,7 +21,9 @@ namespace Ishiko
         TCPClientSocket(int socket_options, Error& error) noexcept;
         TCPClientSocket(SOCKET socket) noexcept;
         TCPClientSocket(const TCPClientSocket& other) = delete;
+        TCPClientSocket& operator=(const TCPClientSocket& other) = delete;
         TCPClientSocket(TCPClientSocket&& other);
+        TCPClientSocket& operator=(TCPClientSocket&& other) = delete;
         ~TCPClientSocket();
 
         void connect(IPv4Address address, Port port, Error& error) noexcept;
