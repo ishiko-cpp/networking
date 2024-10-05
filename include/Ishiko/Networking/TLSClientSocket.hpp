@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2021-2024 Xavier Leclercq
+// SPDX-FileCopyrightText: 2005-2024 Xavier Leclercq
 // SPDX-License-Identifier: BSL-1.0
 
 #ifndef GUARD_ISHIKO_CPP_NETWORKING_TLSCLIENTSOCKET_HPP
@@ -21,7 +21,9 @@ public:
     TLSClientSocket(TCPClientSocket&& socket, const std::string& keyPath, const std::string& certificatePath,
         Error& error) noexcept;
     TLSClientSocket(const TLSClientSocket& other) = delete;
+    TLSClientSocket& operator=(const TLSClientSocket& other) = delete;
     TLSClientSocket(TLSClientSocket&& other) noexcept = default;
+    TLSClientSocket& operator=(TLSClientSocket&& other) = delete;
     ~TLSClientSocket() = default;
 
     // TODO: hostname is for SNI. Should I provide an overload for when SNI is not needed? The caller can just leave it
