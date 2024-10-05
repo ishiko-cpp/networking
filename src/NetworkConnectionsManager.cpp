@@ -9,9 +9,30 @@
 
 using namespace Ishiko;
 
-NetworkConnectionsManager::Registration::Registration(RegistrationImpl* socket_and_callbacks)
-    : m_impl{socket_and_callbacks}
+NetworkConnectionsManager::Registration::Registration()
+    : m_connections_manager{nullptr}, m_impl{nullptr}
 {
+}
+
+NetworkConnectionsManager::Registration::Registration(NetworkConnectionsManager* connections_manager,
+    RegistrationImpl* socket_and_callbacks)
+    : m_connections_manager{connections_manager}, m_impl{socket_and_callbacks}
+{
+}
+
+void NetworkConnectionsManager::Registration::setWaitingForConnection()
+{
+    m_connections_manager->setWaitingForConnection(m_impl);
+}
+
+void NetworkConnectionsManager::Registration::setWaitingForRead()
+{
+    m_connections_manager->setWaitingForRead(m_impl);
+}
+
+void NetworkConnectionsManager::Registration::setWaitingForWrite()
+{
+    m_connections_manager->setWaitingForWrite(m_impl);
 }
 
 NetworkConnectionsManager::NetworkConnectionsManager()
@@ -25,23 +46,22 @@ NetworkConnectionsManager::Registration NetworkConnectionsManager::registerSocke
 {
     // TODO: duplicate and error management
     m_registrations.emplace_back(socket_handle, &callbacks, callback_data);
-    return Registration{&m_registrations.back()};
+    return Registration{this, &m_registrations.back()};
 }
 
-
-void NetworkConnectionsManager::setWaitingForConnection(Registration registration)
+void NetworkConnectionsManager::setWaitingForConnection(RegistrationImpl* registration)
 {
-    m_shared_state.setWaitingForConnection(registration.m_impl);
+    m_shared_state.setWaitingForConnection(registration);
 }
 
-void NetworkConnectionsManager::setWaitingForRead(Registration registration)
+void NetworkConnectionsManager::setWaitingForRead(RegistrationImpl* registration)
 {
-    m_shared_state.setWaitingForRead(registration.m_impl);
+    m_shared_state.setWaitingForRead(registration);
 }
 
-void NetworkConnectionsManager::setWaitingForWrite(Registration registration)
+void NetworkConnectionsManager::setWaitingForWrite(RegistrationImpl* registration)
 {
-    m_shared_state.setWaitingForWrite(registration.m_impl);
+    m_shared_state.setWaitingForWrite(registration);
 }
 
 void NetworkConnectionsManager::connectWithTLS(IPv4Address address, Port port, const Hostname& hostname,

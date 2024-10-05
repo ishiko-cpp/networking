@@ -37,10 +37,16 @@ namespace Ishiko
         class Registration
         {
         public:
-            // TODO: public function depends on 2 private classes BAD
-            Registration(RegistrationImpl* socket_and_callbacks);
+            Registration();
+            // TODO: public function depends on a private classes BAD
+            Registration(NetworkConnectionsManager* connections_manager, RegistrationImpl* socket_and_callbacks);
+
+            void setWaitingForConnection();
+            void setWaitingForRead();
+            void setWaitingForWrite();
 
         public: // TODO: back to private
+            NetworkConnectionsManager* m_connections_manager;
             RegistrationImpl* m_impl;
         };
 
@@ -87,9 +93,9 @@ namespace Ishiko
         Registration registerSocketAndCallbacks(NativeSocketHandle socket_handle, ConnectionCallbacks& callbacks,
             void* callback_data);
 
-        void setWaitingForConnection(Registration registration);
-        void setWaitingForRead(Registration registration);
-        void setWaitingForWrite(Registration registration);
+        void setWaitingForConnection(RegistrationImpl* registration);
+        void setWaitingForRead(RegistrationImpl* registration);
+        void setWaitingForWrite(RegistrationImpl* registration);
 
         void connectWithTLS(IPv4Address address, Port port, const Hostname& hostname,
             TLSConnectionCallbacks& callbacks, Error& error);
