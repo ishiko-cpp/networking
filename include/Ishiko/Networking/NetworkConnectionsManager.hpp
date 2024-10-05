@@ -41,6 +41,7 @@ namespace Ishiko
             Registration(SocketAndCallbacks* socket_and_callbacks, SharedState* shared_state);
 
             void setWaitingForConnection();
+            void setWaitingForWrite();
 
         private:
             SocketAndCallbacks* m_socket_and_callbacks;
@@ -73,9 +74,9 @@ namespace Ishiko
         class ConnectionCallbacks2
         {
         public:
-            virtual void onConnectionEstablished() = 0;
-            virtual void onReadReady() = 0;
-            virtual void onWriteReady() = 0;
+            virtual void onConnectionEstablished(void* callback_data) = 0;
+            virtual void onReadReady(void* callback_data) = 0;
+            virtual void onWriteReady(void* callback_data) = 0;
         };
 
         // TODO: find a better name for this, although maybe it's OK?
@@ -110,7 +111,8 @@ namespace Ishiko
         NetworkConnectionsManager& operator=(NetworkConnectionsManager&& other) = delete;
         ~NetworkConnectionsManager() = default;
 
-        Registration registerSocketAndCallbacks(NativeSocketHandle socket_handle, ConnectionCallbacks2& callbacks);
+        Registration registerSocketAndCallbacks(NativeSocketHandle socket_handle, ConnectionCallbacks2& callbacks,
+            void* callback_data);
 
         void connect(IPv4Address address, Port port, ConnectionCallbacks& callbacks, Error& error);
         void connectWithTLS(IPv4Address address, Port port, const Hostname& hostname,
@@ -130,6 +132,7 @@ namespace Ishiko
         {
         public:
             void setWaitingForConnection(SocketAndCallbacks* socket_and_callbacks);
+            void setWaitingForWrite(SocketAndCallbacks* socket_and_callbacks);
 
             void setWaitingForConnection(ManagedSocketImpl* managed_socket);
             void setWaitingForRead(ManagedSocketImpl* managed_socket);
@@ -139,6 +142,7 @@ namespace Ishiko
             void setWaitingForWrite(ManagedTLSSocketImpl* managed_socket);
 
             std::set<SocketAndCallbacks*> m_new_waiting_for_connection3;
+            std::set<SocketAndCallbacks*> m_new_waiting_for_write3;
 
             std::set<ManagedSocketImpl*> m_new_waiting_for_connection;
             std::set<ManagedSocketImpl*> m_new_waiting_for_read;
@@ -217,11 +221,12 @@ namespace Ishiko
         class SocketAndCallbacks
         {
         public:
-            SocketAndCallbacks(NativeSocketHandle socket_handle, ConnectionCallbacks2* callbacks);
+            SocketAndCallbacks(NativeSocketHandle socket_handle, ConnectionCallbacks2* callbacks, void* callback_data);
 
         public: // TODO
             NativeSocketHandle m_socket_handle;
             ConnectionCallbacks2* m_callbacks;
+            void* m_callback_data;
         };
 
         // TODO: replace this with stable collection, maybe a hive? Unless I make the clients of this class agnostic
@@ -242,6 +247,7 @@ namespace Ishiko
         std::set<ManagedTLSSocketImpl*> m_waiting_for_read2;
         std::set<ManagedTLSSocketImpl*> m_waiting_for_write2;
         std::set<SocketAndCallbacks*> m_waiting_for_connection3;
+        std::set<SocketAndCallbacks*> m_waiting_for_write3;
     };
 }
 

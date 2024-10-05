@@ -6,19 +6,25 @@
 
 using namespace Ishiko;
 
-void AsyncTCPClientSocket::Callbacks::onConnectionEstablished()
+void AsyncTCPClientSocket::Callbacks::onConnectionEstablished(void* callback_data)
 {
     // TODO: error?
     Error error;
-    onConnectionEstablished(error);
+    onConnectionEstablished(error, *static_cast<AsyncTCPClientSocket*>(callback_data));
 }
 
-void AsyncTCPClientSocket::Callbacks::onReadReady()
+void AsyncTCPClientSocket::Callbacks::onReadReady(void* callback_data)
 {
+    // TODO: error?
+    Error error;
+    onReadReady(error, *static_cast<AsyncTCPClientSocket*>(callback_data));
 }
 
-void AsyncTCPClientSocket::Callbacks::onWriteReady()
+void AsyncTCPClientSocket::Callbacks::onWriteReady(void* callback_data)
 {
+    // TODO: error?
+    Error error;
+    onWriteReady(error, *static_cast<AsyncTCPClientSocket*>(callback_data));
 }
 
 AsyncTCPClientSocket::AsyncTCPClientSocket(NetworkConnectionsManager& connections_manager, Callbacks& callbacks,
@@ -29,7 +35,7 @@ AsyncTCPClientSocket::AsyncTCPClientSocket(NetworkConnectionsManager& connection
     if (!error)
     {
         // TODO: need to unregister somewhere
-        m_registration = m_connections_manager.registerSocketAndCallbacks(m_socket.nativeHandle(), m_callbacks);
+        m_registration = m_connections_manager.registerSocketAndCallbacks(m_socket.nativeHandle(), m_callbacks, this);
     }
 }
 
@@ -49,6 +55,21 @@ void AsyncTCPClientSocket::connect(IPv4Address address, Port port) noexcept
     else
     {
         // TODO: we need to get the callback executed from the NetworkConnectionsManager::run function
+    }
+}
+
+void AsyncTCPClientSocket::write(const char* buffer, int count)
+{
+    // TODO: error handling
+    Error error;
+    m_socket.write(buffer, count, error);
+    if (error)
+    {
+        if (error.code() == NetworkingErrorCategory::Value::would_block)
+        {
+            // TODO: thread safety
+            m_registration.setWaitingForWrite();
+        }
     }
 }
 

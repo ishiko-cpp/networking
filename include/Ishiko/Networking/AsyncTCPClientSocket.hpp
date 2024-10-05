@@ -17,14 +17,14 @@ namespace Ishiko
         class Callbacks : public NetworkConnectionsManager::ConnectionCallbacks2
         {
         public:
-            virtual void onConnectionEstablished(const Error& error) = 0;
-            virtual void onReadReady(const Error& error) = 0;
-            virtual void onWriteReady(const Error& error) = 0;
+            virtual void onConnectionEstablished(const Error& error, AsyncTCPClientSocket& socket) = 0;
+            virtual void onReadReady(const Error& error, AsyncTCPClientSocket& socket) = 0;
+            virtual void onWriteReady(const Error& error, AsyncTCPClientSocket& socket) = 0;
 
         private:
-            void onConnectionEstablished() override;
-            void onReadReady() override;
-            void onWriteReady() override;
+            void onConnectionEstablished(void* callback_data) override;
+            void onReadReady(void* callback_data) override;
+            void onWriteReady(void* callback_data) override;
         };
 
         AsyncTCPClientSocket(NetworkConnectionsManager& connections_manager, Callbacks& callbacks,
@@ -36,6 +36,8 @@ namespace Ishiko
         ~AsyncTCPClientSocket() = default;
 
         void connect(IPv4Address address, Port port) noexcept;
+
+        void write(const char* buffer, int count);
 
         void close() noexcept;
 

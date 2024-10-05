@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2021-2024 Xavier Leclercq
+// SPDX-FileCopyrightText: 2005-2024 Xavier Leclercq
 // SPDX-License-Identifier: BSL-1.0
 
 #include "TCPClientSocketTests.hpp"

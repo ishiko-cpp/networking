@@ -20,6 +20,11 @@ void NetworkConnectionsManager::Registration::setWaitingForConnection()
     m_shared_state->setWaitingForConnection(m_socket_and_callbacks);
 }
 
+void NetworkConnectionsManager::Registration::setWaitingForWrite()
+{
+    m_shared_state->setWaitingForWrite(m_socket_and_callbacks);
+}
+
 NetworkConnectionsManager::NetworkConnectionsManager()
 {
     // TODO: just to avoid reallocations however even that isn't working well
@@ -27,10 +32,10 @@ NetworkConnectionsManager::NetworkConnectionsManager()
 }
 
 NetworkConnectionsManager::Registration NetworkConnectionsManager::registerSocketAndCallbacks(
-    NativeSocketHandle socket_handle, ConnectionCallbacks2& callbacks)
+    NativeSocketHandle socket_handle, ConnectionCallbacks2& callbacks, void* callback_data)
 {
     // TODO: duplicate and error management
-    m_sockets_and_callbaks.emplace_back(socket_handle, &callbacks);
+    m_sockets_and_callbaks.emplace_back(socket_handle, &callbacks, callback_data);
     return Registration{&m_sockets_and_callbaks.back(), &m_shared_state};
 }
 
@@ -86,6 +91,9 @@ void NetworkConnectionsManager::run(bool (*stop_function)(NetworkConnectionsMana
         m_waiting_for_connection3.insert(m_shared_state.m_new_waiting_for_connection3.begin(),
             m_shared_state.m_new_waiting_for_connection3.end());
         m_shared_state.m_new_waiting_for_connection3.clear();
+        m_waiting_for_write3.insert(m_shared_state.m_new_waiting_for_write3.begin(),
+            m_shared_state.m_new_waiting_for_write3.end());
+        m_shared_state.m_new_waiting_for_write3.clear();
 
         m_waiting_for_connection.insert(m_shared_state.m_new_waiting_for_connection.begin(),
             m_shared_state.m_new_waiting_for_connection.end());
@@ -161,13 +169,27 @@ void NetworkConnectionsManager::run(bool (*stop_function)(NetworkConnectionsMana
             SocketAndCallbacks* managed_socket = *it;
             if (FD_ISSET(managed_socket->m_socket_handle, &fd_write_ready))
             {
-                managed_socket->m_callbacks->onConnectionEstablished();
+                managed_socket->m_callbacks->onConnectionEstablished(managed_socket->m_callback_data);
                 it = m_waiting_for_connection3.erase(it);
             }
             else if (FD_ISSET(managed_socket->m_socket_handle, &fd_exception))
             {
                 // TODO: report error
-                managed_socket->m_callbacks->onConnectionEstablished();
+                managed_socket->m_callbacks->onConnectionEstablished(managed_socket->m_callback_data);
+                it = m_waiting_for_connection3.erase(it);
+            }
+            else
+            {
+                ++it;
+            }
+        }
+
+        for (std::set<SocketAndCallbacks*>::iterator it = m_waiting_for_write3.begin(); it != m_waiting_for_write3.end();)
+        {
+            SocketAndCallbacks* managed_socket = *it;
+            if (FD_ISSET(managed_socket->m_socket_handle, &fd_write_ready))
+            {
+                managed_socket->m_callbacks->onWriteReady(managed_socket->m_callback_data);
                 it = m_waiting_for_connection3.erase(it);
             }
             else
@@ -280,12 +302,18 @@ bool NetworkConnectionsManager::idle() const
         && m_shared_state.m_new_waiting_for_write2.empty() && m_shared_state.m_new_waiting_for_connection2.empty()
         && m_waiting_for_connection.empty() && m_waiting_for_read.empty() && m_waiting_for_write.empty()
         && m_waiting_for_connection2.empty() && m_waiting_for_read2.empty() && m_waiting_for_write2.empty()
-        && m_waiting_for_connection3.empty() && m_shared_state.m_new_waiting_for_connection3.empty());
+        && m_waiting_for_connection3.empty() && m_shared_state.m_new_waiting_for_connection3.empty()
+        && m_waiting_for_write3.empty() && m_shared_state.m_new_waiting_for_write3.empty());
 }
 
 void NetworkConnectionsManager::SharedState::setWaitingForConnection(SocketAndCallbacks* socket_and_callbacks)
 {
     m_new_waiting_for_connection3.insert(socket_and_callbacks);
+}
+
+void NetworkConnectionsManager::SharedState::setWaitingForWrite(SocketAndCallbacks* socket_and_callbacks)
+{
+    m_new_waiting_for_write3.insert(socket_and_callbacks);
 }
 
 void NetworkConnectionsManager::SharedState::setWaitingForConnection(ManagedSocketImpl* managed_socket)
@@ -541,7 +569,7 @@ TLSClientSocket& NetworkConnectionsManager::ManagedTLSSocketImpl::socket()
 }
 
 NetworkConnectionsManager::SocketAndCallbacks::SocketAndCallbacks(NativeSocketHandle socket_handle,
-    ConnectionCallbacks2* callbacks)
-    : m_socket_handle{socket_handle}, m_callbacks{callbacks}
+    ConnectionCallbacks2* callbacks, void* callback_data)
+    : m_socket_handle{socket_handle}, m_callbacks{callbacks}, m_callback_data{callback_data}
 {
 }
