@@ -25,37 +25,27 @@ namespace Ishiko
     // buffers may be needed.
     class NetworkConnectionsManager
     {
-    private:
-        // TODO: get rid of this forward declaration?
-        class SocketAndCallbacks;
-        // TODO: get rid of this forward declaration?
-        class SharedState;
-
     public:
-        // TODO: better name?
-        // TODO: I feel I can merge Registration and SocketAndCallbacks
+        enum class Event
+        {
+            connection_ready,
+            read_ready,
+            write_ready
+        };
+
         class Registration
         {
         public:
-            // TODO: public function depends on 2 private classes BAD
-            Registration(SocketAndCallbacks* socket_and_callbacks, SharedState* shared_state);
+            Registration();
+            Registration(NetworkConnectionsManager* connections_manager, void* impl);
 
             void setWaitingForConnection();
             void setWaitingForRead();
             void setWaitingForWrite();
 
         private:
-            SocketAndCallbacks* m_socket_and_callbacks;
-            SharedState* m_shared_state;
-        };
-
-        // TODO: rename this when I remove ConnectionCallbacks(1)
-        class ConnectionCallbacks2
-        {
-        public:
-            virtual void onConnectionEstablished(void* callback_data) = 0;
-            virtual void onReadReady(void* callback_data) = 0;
-            virtual void onWriteReady(void* callback_data) = 0;
+            NetworkConnectionsManager* m_connections_manager;
+            void* m_impl;
         };
 
         // TODO: find a better name for this, although maybe it's OK?
@@ -90,8 +80,8 @@ namespace Ishiko
         NetworkConnectionsManager& operator=(NetworkConnectionsManager&& other) = delete;
         ~NetworkConnectionsManager() = default;
 
-        Registration registerSocketAndCallbacks(NativeSocketHandle socket_handle, ConnectionCallbacks2& callbacks,
-            void* callback_data);
+        Registration registerSocketAndCallbacks(NativeSocketHandle socket_handle,
+            void (*event_handler)(Event evt, void* data), void* event_handler_data);
 
         void connectWithTLS(IPv4Address address, Port port, const Hostname& hostname,
             TLSConnectionCallbacks& callbacks, Error& error);
@@ -100,25 +90,36 @@ namespace Ishiko
         bool idle() const;
 
     private:
-        class SocketAndCallbacks;
         class ManagedTLSSocketImpl;
+
+        class RegistrationImpl
+        {
+        public:
+            RegistrationImpl(NativeSocketHandle socket_handle, void (*event_handler)(Event evt, void* data),
+                void* event_handler_data);
+
+        public: // TODO
+            NativeSocketHandle m_socket_handle;
+            void (*m_event_handler)(Event evt, void* data);
+            void* m_event_handler_data;
+        };
 
         // TODO: the things that are shared between the manager and the sockets
         // TODO: this is an experiment: can I isolate everything that may suffer data races
         class SharedState
         {
         public:
-            void setWaitingForConnection(SocketAndCallbacks* socket_and_callbacks);
-            void setWaitingForRead(SocketAndCallbacks* socket_and_callbacks);
-            void setWaitingForWrite(SocketAndCallbacks* socket_and_callbacks);
+            void setWaitingForConnection(RegistrationImpl* socket_and_callbacks);
+            void setWaitingForRead(RegistrationImpl* socket_and_callbacks);
+            void setWaitingForWrite(RegistrationImpl* socket_and_callbacks);
 
             void setWaitingForConnection(ManagedTLSSocketImpl* managed_socket);
             void setWaitingForRead(ManagedTLSSocketImpl* managed_socket);
             void setWaitingForWrite(ManagedTLSSocketImpl* managed_socket);
 
-            std::set<SocketAndCallbacks*> m_new_waiting_for_connection3;
-            std::set<SocketAndCallbacks*> m_new_waiting_for_read3;
-            std::set<SocketAndCallbacks*> m_new_waiting_for_write3;
+            std::set<RegistrationImpl*> m_new_waiting_for_connection3;
+            std::set<RegistrationImpl*> m_new_waiting_for_read3;
+            std::set<RegistrationImpl*> m_new_waiting_for_write3;
 
             std::set<ManagedTLSSocketImpl*> m_new_waiting_for_connection2;
             std::set<ManagedTLSSocketImpl*> m_new_waiting_for_read2;
@@ -159,31 +160,22 @@ namespace Ishiko
             State m_state;
         };
 
-        class SocketAndCallbacks
-        {
-        public:
-            SocketAndCallbacks(NativeSocketHandle socket_handle, ConnectionCallbacks2* callbacks, void* callback_data);
-
-        public: // TODO
-            NativeSocketHandle m_socket_handle;
-            ConnectionCallbacks2* m_callbacks;
-            void* m_callback_data;
-        };
-
         // TODO: replace this with stable collection, maybe a hive? Unless I make the clients of this class agnostic
         // of the actual memory location.
-        std::vector<SocketAndCallbacks> m_sockets_and_callbacks;
+        std::vector<RegistrationImpl> m_registrations;
 
         // TODO: replace this with stable collection, maybe a hive? Unless I make the clients of this class agnostic
         // of the actual memory location.
         std::vector<ManagedTLSSocketImpl> m_managed_tls_sockets;
+    public: // TODO: back to private
         SharedState m_shared_state;
+    private:
         std::set<ManagedTLSSocketImpl*> m_waiting_for_connection2;
         std::set<ManagedTLSSocketImpl*> m_waiting_for_read2;
         std::set<ManagedTLSSocketImpl*> m_waiting_for_write2;
-        std::set<SocketAndCallbacks*> m_waiting_for_connection3;
-        std::set<SocketAndCallbacks*> m_waiting_for_read3;
-        std::set<SocketAndCallbacks*> m_waiting_for_write3;
+        std::set<RegistrationImpl*> m_waiting_for_connection3;
+        std::set<RegistrationImpl*> m_waiting_for_read3;
+        std::set<RegistrationImpl*> m_waiting_for_write3;
     };
 }
 
