@@ -7,6 +7,7 @@
 #include "IPv4Address.hpp"
 #include "NetworkConnectionsManager.hpp"
 #include "Port.hpp"
+#include "TCPClientSocket.hpp"
 #include <Ishiko/Errors.hpp>
 
 namespace Ishiko
