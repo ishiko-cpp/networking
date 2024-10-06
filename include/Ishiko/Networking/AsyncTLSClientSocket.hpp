@@ -7,6 +7,7 @@
 #include "IPv4Address.hpp"
 #include "NetworkConnectionsManager.hpp"
 #include "Port.hpp"
+#include "TLSClientSocket.hpp"
 #include <Ishiko/Errors.hpp>
 
 namespace Ishiko
@@ -14,19 +15,13 @@ namespace Ishiko
     class AsyncTLSClientSocket
     {
     public:
-        class Callbacks : public NetworkConnectionsManager::TLSConnectionCallbacks
+        class Callbacks
         {
         public:
-            virtual void onConnectionEstablished(const Error& error) = 0;
-
-        private:
-            void onConnectionEstablished(NetworkConnectionsManager::ManagedTLSSocket& socket) override;
-            void onHandshake() override;
-            void onReadReady() override;
-            void onWriteReady() override;
-
-        public: // TODO
-            NetworkConnectionsManager::ManagedTLSSocket* m_socket;
+            virtual void onConnectionEstablished(const Error& error, AsyncTLSClientSocket& socket) = 0;
+            virtual void onHandshake(const Error& error, AsyncTLSClientSocket& socket) = 0;
+            virtual void onReadReady(const Error& error, AsyncTLSClientSocket& socket) = 0;
+            virtual void onWriteReady(const Error& error, AsyncTLSClientSocket& socket) = 0;
         };
 
         AsyncTLSClientSocket(NetworkConnectionsManager& connections_manager, Callbacks& callbacks,
@@ -39,11 +34,30 @@ namespace Ishiko
 
         void connect(IPv4Address address, Port port, const Hostname& hostname) noexcept;
 
+        void handshake() noexcept;
+
+        int read(char* buffer, int length);
+
+        void write(const char* buffer, int length);
+
         void close() noexcept;
 
     private:
-        NetworkConnectionsManager& m_connections_manager;
+        static void EventHandler(NetworkConnectionsManager::Event evt, void* data);
+
+        enum class State
+        {
+            init,
+            waiting_for_connection,
+            waiting_for_handshake,
+            waiting_for_read,
+            waiting_for_write
+        };
+
+        TLSClientSocket m_socket;
+        NetworkConnectionsManager::Registration m_registration;
         Callbacks& m_callbacks;
+        State m_state;
     };
 }
 
