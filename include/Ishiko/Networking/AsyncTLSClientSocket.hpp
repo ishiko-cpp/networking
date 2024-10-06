@@ -44,20 +44,12 @@ namespace Ishiko
 
     private:
         static void EventHandler(NetworkConnectionsManager::Event evt, void* data);
-
-        enum class State
-        {
-            init,
-            waiting_for_connection,
-            waiting_for_handshake,
-            waiting_for_read,
-            waiting_for_write
-        };
-
+        
         TLSClientSocket m_socket;
         NetworkConnectionsManager::Registration m_registration;
         Callbacks& m_callbacks;
-        State m_state;
+        // TODO: use the underlying socket state itself to know whether the handshake has been completed or not
+        bool m_handshake_in_progress;
     };
 }
 

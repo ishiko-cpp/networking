@@ -8,7 +8,7 @@ using namespace Ishiko;
 
 AsyncTLSClientSocket::AsyncTLSClientSocket(NetworkConnectionsManager& connections_manager, Callbacks& callbacks,
     Error& error) noexcept
-    : m_socket{SocketOption::non_blocking, error}, m_callbacks{callbacks}, m_state{State::init}
+    : m_socket{SocketOption::non_blocking, error}, m_callbacks{callbacks}, m_handshake_in_progress{false}
 {
     if (!error)
     {
@@ -46,9 +46,7 @@ void AsyncTLSClientSocket::handshake() noexcept
     {
         if (error.code() == NetworkingErrorCategory::Value::would_block)
         {
-            // TODO: not sure but this may cause a race condition with run() since state and the call are separate steps
-            // TODO: make this work with TLS
-            m_state = State::waiting_for_handshake;
+            m_handshake_in_progress = true;
             m_registration.setWaitingForRead();
         }
     }
@@ -63,8 +61,6 @@ int AsyncTLSClientSocket::read(char* buffer, int length)
     {
         if (error.code() == NetworkingErrorCategory::Value::would_block)
         {
-            // TODO: not sure but this may cause a race condition with run() since state and the call are separate steps
-            m_state = State::waiting_for_read;
             m_registration.setWaitingForRead();
         }
     }
@@ -80,8 +76,6 @@ void AsyncTLSClientSocket::write(const char* buffer, int length)
     {
         if (error.code() == NetworkingErrorCategory::Value::would_block)
         {
-            // TODO: not sure but this may cause a race condition with run() since state and the call are separate steps
-            m_state = State::waiting_for_write;
             m_registration.setWaitingForWrite();
         }
     }
@@ -106,7 +100,7 @@ void AsyncTLSClientSocket::EventHandler(NetworkConnectionsManager::Event evt, vo
         break;
 
     case NetworkConnectionsManager::Event::read_ready:
-        if (socket->m_state == State::waiting_for_handshake)
+        if (socket->m_handshake_in_progress)
         {
             // TODO: if the socket gets connected here it means the connect call blocked and the TLS handshaked wasn't
             // completed. Call onCallback to continue the handshake.
@@ -123,6 +117,7 @@ void AsyncTLSClientSocket::EventHandler(NetworkConnectionsManager::Event evt, vo
             }
             else
             {
+                socket->m_handshake_in_progress = false;
                 socket->m_callbacks.onHandshake(error, *socket);
             }
         }
