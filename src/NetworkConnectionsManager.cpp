@@ -6,6 +6,9 @@
 #include <boost/utility/string_view.hpp>
 #include <chrono>
 #include <thread>
+#if ISHIKO_OS == ISHIKO_OS_LINUX
+#include <sys/select.h>
+#endif
 
 using namespace Ishiko;
 
