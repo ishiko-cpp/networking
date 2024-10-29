@@ -5,14 +5,13 @@ import $(ishikopath)/memory/include/Ishiko/Memory.bkl;
 import $(ishikopath)/text/include/Ishiko/Text.bkl;
 import $(ishikopath)/third-party-glue/include/Ishiko/ThirdParty/Botan.bkl;
 
-toolsets = gnu vs2022 vs2019 vs2017 vs2015 vs2013;
+toolsets = gnu vs2022 vs2019 vs2017 vs2015;
 
 gnu.makefile = ../gnumake/GNUmakefile;
 vs2022.solutionfile = ../vc17/IshikoNetworking.sln;
 vs2019.solutionfile = ../vc16/IshikoNetworking.sln;
 vs2017.solutionfile = ../vc15/IshikoNetworking.sln;
 vs2015.solutionfile = ../vc14/IshikoNetworking.sln;
-vs2013.solutionfile = ../vc12/IshikoNetworking.sln;
 
 library IshikoNetworking : IshikoText, IshikoMemory, IshikoErrors, IshikoBasePlatform, Botan
 {
