@@ -56,7 +56,7 @@ int TLSClientSocketBotanClientImpl::read(char* buffer, int length, Error& error)
     }
 
     // TODO: buffer size?
-    ByteBuffer localBuffer(10 * 1024);
+    HeapByteBuffer localBuffer(10 * 1024);
     // TODO: handle error
     int n = m_socket.read(localBuffer, localBuffer.capacity(), error);
     if (error)
@@ -163,7 +163,7 @@ void TLSClientSocketBotanClientImpl::doHandshake(Error& error)
         // TODO: what if a write blocks during this loop?
 
         // TODO: buffer size?
-        ByteBuffer buffer(10 * 1024);
+        HeapByteBuffer buffer(10 * 1024);
 
         // TODO: handle error
         int n = m_socket.read(buffer, buffer.capacity(), error);

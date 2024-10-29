@@ -1,8 +1,5 @@
-/*
-    Copyright (c) 2021-2022 Xavier Leclercq
-    Released under the MIT License
-    See https://github.com/ishiko-cpp/networking/blob/main/LICENSE.txt
-*/
+// SPDX-FileCopyrightText: 2000-2024 Xavier Leclercq
+// SPDX-License-Identifier: BSL-1.0
 
 #include "IPv6Address.hpp"
 #include "NetworkingErrorCategory.hpp"
@@ -17,7 +14,7 @@ IPv6Address::IPv6Address()
 }
 
 IPv6Address::IPv6Address(const Byte* bytes)
-    : m_address(FixedByteBuffer<16>::From(bytes))
+    : m_address(StackByteBuffer<16>::From(bytes))
 {
 }
 
@@ -189,7 +186,7 @@ IPv6Address IPv6Address::Unspecified()
     return result;
 }
 
-const FixedByteBuffer<16>& IPv6Address::value() const
+const StackByteBuffer<16>& IPv6Address::value() const
 {
     return m_address;
 }
