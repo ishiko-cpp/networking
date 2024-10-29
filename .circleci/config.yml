@@ -56,7 +56,7 @@ jobs:
           command: cd /workspace/projects/ishiko/cpp && git clone https://github.com/ishiko-cpp/test-framework.git && cd test-framework/core/build-files/gnumake && make
       - run:
           name: "Test: Ishiko/C++ Networking"
-          command: cd /workspace/projects/ishiko/cpp/networking/tests/build/gnumake && make && ./IshikoNetworkingTests --persistent-storage=/build/test-output --junit-xml-test-report=/build/test-results/IshikoNetworking.xml
+          command: cd /workspace/projects/ishiko/cpp/networking/tests/build-files/gnumake && make && ./IshikoNetworkingTests --persistent-storage=/build/test-output --junit-xml-test-report=/build/test-results/IshikoNetworking.xml
       - store_artifacts:
           name: Upload test output files
           path: /build/test-output
