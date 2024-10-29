@@ -3,6 +3,7 @@
 
 #include "NetworkConnectionsManager.hpp"
 #include "NetworkingErrorCategory.hpp"
+#include <Ishiko/BasePlatform.hpp>
 #include <boost/utility/string_view.hpp>
 #include <chrono>
 #include <thread>
