@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2000-2024 Xavier Leclercq
+// SPDX-FileCopyrightText: 2000-2025 Xavier Leclercq
 // SPDX-License-Identifier: BSL-1.0
 
 #include "IPv6Address.hpp"
@@ -14,7 +14,7 @@ IPv6Address::IPv6Address()
 }
 
 IPv6Address::IPv6Address(const Byte* bytes)
-    : m_address(StackByteBuffer<16>::From(bytes))
+    : m_address(InplaceOctetBuffer<16>::From(bytes))
 {
 }
 
@@ -186,7 +186,7 @@ IPv6Address IPv6Address::Unspecified()
     return result;
 }
 
-const StackByteBuffer<16>& IPv6Address::value() const
+const InplaceOctetBuffer<16>& IPv6Address::value() const
 {
     return m_address;
 }
