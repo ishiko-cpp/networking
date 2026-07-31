@@ -6,6 +6,11 @@
 
 using namespace Ishiko;
 
+NetworkingErrorCategory::NetworkingErrorCategory() noexcept
+    : ErrorCategory(ID(0x90b81adf90c145f2ULL, 0x9d9a4f3d35aca0faULL)) // 90b81adf-90c1-45f2-9d9a-4f3d35aca0fa
+{
+}
+
 const NetworkingErrorCategory& NetworkingErrorCategory::Get() noexcept
 {
     static NetworkingErrorCategory theCategory;
@@ -55,7 +60,7 @@ void Ishiko::Fail(NativeSocketError native_error, const std::string& message, co
 
 bool Ishiko::operator==(const ErrorCode& error, NetworkingErrorCategory::Value value)
 {
-    return ((&error.category() == &NetworkingErrorCategory::Get()) && (error.value() == static_cast<int>(value)));
+    return ((error.category().id() == NetworkingErrorCategory::Get().id()) && (error.value() == static_cast<int>(value)));
 }
 
 bool Ishiko::operator!=(const ErrorCode& error, NetworkingErrorCategory::Value value)

@@ -26,7 +26,7 @@ public:
     const char* message(int ev, char* buffer, size_t len) const noexcept override;
 
 private:
-    NetworkingErrorCategory() noexcept = default;
+    NetworkingErrorCategory() noexcept;
 };
 
 void Throw(NetworkingErrorCategory::Value value, const std::string& message, const char* file, int line);
